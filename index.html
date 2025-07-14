@@ -366,7 +366,6 @@
                     // Nach 5 Sekunden Erfolgsmeldung ausblenden
                     setTimeout(() => {
                         document.getElementById('successMessage').style.display = 'none';
-            }
                     }, 5000);
                 } else {
                     throw new Error('HTTP ' + response.status);
@@ -378,7 +377,6 @@
                 document.getElementById('errorMessage').style.display = 'block';
                 document.getElementById('successMessage').style.display = 'none';
             }
-        });
         });
 
         updateContributionsList();
