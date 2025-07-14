@@ -333,6 +333,7 @@
             if (!formData.name || !formData.email || !formData.contribution || !formData.quantity) {
                 document.getElementById('errorMessage').style.display = 'block';
                 document.getElementById('successMessage').style.display = 'none';
+            }
                 return;
 
             try {
@@ -365,6 +366,7 @@
                     // Nach 5 Sekunden Erfolgsmeldung ausblenden
                     setTimeout(() => {
                         document.getElementById('successMessage').style.display = 'none';
+            }
                     }, 5000);
                 } else {
                     throw new Error('HTTP ' + response.status);
@@ -375,10 +377,10 @@
                 document.getElementById('errorMessage').textContent = 'Fehler beim Senden der Anmeldung. Bitte versuchen Sie es später erneut.';
                 document.getElementById('errorMessage').style.display = 'block';
                 document.getElementById('successMessage').style.display = 'none';
+            }
         });
         });
 
-        // Initial die Liste aktualisieren
         updateContributionsList();
     </script>
 </body>
