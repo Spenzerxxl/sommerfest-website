@@ -324,6 +324,7 @@
                 email: document.getElementById('email').value,
                 lodge: document.getElementById('lodge').value,
                 companions: document.getElementById('companions').value,
+                companions: document.getElementById('companions').value,
                 contribution: document.getElementById('contribution').value,
                 quantity: document.getElementById('quantity').value,
                 timestamp: new Date().toISOString()
@@ -338,12 +339,10 @@
 
             try {
                 // CORS-FIX: Normale POST-Request über nginx-Proxy
-                const response = await fetch(N8N_WEBHOOK_URL, {
-                    method: 'POST',
+                const params = new URLSearchParams(formData);                const urlWithParams = N8N_WEBHOOK_URL + "?" + params.toString();                const response = await fetch(urlWithParams, {
+                    method: 'GET',
                     headers: {
-                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(formData)
                 });
 
                 if (response.ok) {
