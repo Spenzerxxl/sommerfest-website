@@ -333,8 +333,8 @@
             if (!formData.name || !formData.email || !formData.contribution || !formData.quantity) {
                 document.getElementById('errorMessage').style.display = 'block';
                 document.getElementById('successMessage').style.display = 'none';
-            }
                 return;
+            }
 
             try {
                 // CORS-FIX: Normale POST-Request über nginx-Proxy
