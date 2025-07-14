@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sommerfest 2025 - Orga-Team Bereich</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #f5f7fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: #1e3a5f;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+        }
+
+        .header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logout-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+
+        /* Login Form */
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .login-form h2 {
+            text-align: center;
+            color: #1e3a5f;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #1e3a5f;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: #2c5282;
+        }
+
+        .btn {
+            background-color: #2c5282;
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: #1e3a5f;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: #1e3a5f;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .data-section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .data-section h2 {
+            color: #1e3a5f;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .export-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .export-btn:hover {
+            background-color: #1e7e34;
+        }
+
+        .refresh-btn {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .refresh-btn:hover {
+            background-color: #117a8b;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: #1e3a5f;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .buffet-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .buffet-item:last-child {
+            border-bottom: none;
+        }
+
+        .buffet-item strong {
+            color: #1e3a5f;
+        }
+
+        .quantity {
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Form -->
+    <div id="loginContainer" class="login-container">
+        <form id="loginForm" class="login-form">
+            <h2>Orga-Team Bereich</h2>
+            <h3>Sommerfest 2025</h3>
+            
+            <div id="errorMessage" class="error-message">
+                Ungültiger Name oder Passwort
+            </div>
+
+            <div class="form-group">
+                <label for="username">Name:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Passwort:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="btn">Anmelden</button>
+        </form>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="dashboard">
+        <div class="container">
+            <div class="header">
+                <h1>Sommerfest 2025 - Orga-Team Bereich</h1>
+                <div class="user-info">
+                    <span>Angemeldet als: <strong id="currentUser"></strong></span>
+                    <button id="logoutBtn" class="logout-btn">Abmelden</button>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="totalParticipants">-</h3>
+                    <p>Angemeldete Personen</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalBuffetItems">-</h3>
+                    <p>Buffet-Beiträge</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalHelpers">-</h3>
+                    <p>Helfer (Auf-/Abbau)</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalRevenue">-</h3>
+                    <p>Geschätzte Einnahmen</p>
+                </div>
+            </div>
+
+            <!-- Participant List -->
+            <div class="data-section">
+                <h2>
+                    Teilnehmer-Liste
+                    <div>
+                        <button id="refreshParticipants" class="refresh-btn">Aktualisieren</button>
+                        <button id="exportParticipants" class="export-btn">CSV Export</button>
+                    </div>
+                </h2>
+                <div id="participantsLoading" class="loading">Lade Teilnehmerdaten...</div>
+                <table id="participantsTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Datum</th>
+                            <th>Name</th>
+                            <th>E-Mail</th>
+                            <th>Personen</th>
+                            <th>Gäste</th>
+                            <th>Buffet-Beitrag</th>
+                            <th>Portionen</th>
+                            <th>Aufbau-Hilfe</th>
+                            <th>Abbau-Hilfe</th>
+                        </tr>
+                    </thead>
+                    <tbody id="participantsBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Buffet Overview -->
+            <div class="data-section">
+                <h2>
+                    Buffet-Übersicht
+                    <button id="exportBuffet" class="export-btn">CSV Export</button>
+                </h2>
+                <div id="buffetList" class="loading">Lade Buffet-Daten...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Orga-Team Login über n8n + Google Sheets
+        const LOGIN_API_URL = 'https://automatisierung.frankrath.de/webhook/orga-login';
+
+        // Login-System
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch(LOGIN_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Login erfolgreich - Daten aus Google Sheets
+                    localStorage.setItem('currentUser', result.user.name);
+                    localStorage.setItem('userRole', result.user.role);
+                    localStorage.setItem('userEmail', result.user.email);
+                    showDashboard();
+                } else {
+                    // Login fehlgeschlagen
+                    document.getElementById('errorMessage').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Login-Fehler:', error);
+                document.getElementById('errorMessage').textContent = 'Verbindungsfehler. Bitte versuchen Sie es später erneut.';
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('userRole');
+            showLogin();
+        });
+
+        // Dashboard anzeigen
+        function showDashboard() {
+            const currentUser = localStorage.getItem('currentUser');
+            document.getElementById('currentUser').textContent = currentUser;
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            
+            // Daten laden
+            loadDashboardData();
+        }
+
+        // Login anzeigen
+        function showLogin() {
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        // Google Sheets API über n8n
+        const PARTICIPANTS_API_URL = 'https://automatisierung.frankrath.de/webhook/get-participants';
+
+        // Dashboard-Daten laden (echte Google Sheets Daten)
+        async function loadDashboardData() {
+            try {
+                // Echte Teilnehmer-Daten aus Google Sheets laden
+                const response = await fetch(PARTICIPANTS_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    displayStatistics(data.participants || []);
+                    displayParticipants(data.participants || []);
+                    displayBuffetOverview(data.participants || []);
+                } else {
+                    // Fallback zu Mock-Daten bei Fehlern
+                    loadMockData();
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden der Teilnehmer-Daten:', error);
+                loadMockData();
+            }
+        }
+
+        // Fallback Mock-Daten (für Entwicklung/Tests)
+        function loadMockData() {
+            const mockData = {
+                participants: [
+                    {
+                        datum: '2025-07-10',
+                        name: 'Frank Rath',
+                        email: 'logenmeister@zum-fuellhorn.de',
+                        personen: '2',
+                        gaeste: 'Anna Rath',
+                        buffet: 'Kartoffelsalat',
+                        portionen: '6',
+                        aufbau: 'Ja',
+                        abbau: 'Nein'
+                    },
+                    {
+                        datum: '2025-07-12',
+                        name: 'Anne Hormsatt',
+                        email: 'anne.hormsatt@online.de',
+                        personen: '1',
+                        gaeste: '',
+                        buffet: 'Frikadellen',
+                        portionen: '30 Stück',
+                        aufbau: 'Ja',
+                        abbau: 'Ja'
+                    },
+                    {
+                        datum: '2025-07-13',
+                        name: 'Nina vom Ende',
+                        email: 'nina@vomende.de',
+                        personen: '3',
+                        gaeste: 'Max Ende, Lisa Ende',
+                        buffet: 'Nudelsalat',
+                        portionen: '4',
+                        aufbau: 'Nein',
+                        abbau: 'Ja'
+                    }
+                ]
+            };
+
+            displayStatistics(mockData.participants);
+            displayParticipants(mockData.participants);
+            displayBuffetOverview(mockData.participants);
+        }
+
+        // Statistiken anzeigen
+        function displayStatistics(participants) {
+            const totalParticipants = participants.reduce((sum, p) => sum + parseInt(p.personen), 0);
+            const totalBuffetItems = participants.length;
+            const totalHelpers = participants.filter(p => p.aufbau === 'Ja' || p.abbau === 'Ja').length;
+            const totalRevenue = totalParticipants * 18; // 18€ pro Person
+
+            document.getElementById('totalParticipants').textContent = totalParticipants;
+            document.getElementById('totalBuffetItems').textContent = totalBuffetItems;
+            document.getElementById('totalHelpers').textContent = totalHelpers;
+            document.getElementById('totalRevenue').textContent = totalRevenue + ' €';
+        }
+
+        // Teilnehmer-Tabelle anzeigen
+        function displayParticipants(participants) {
+            const tbody = document.getElementById('participantsBody');
+            tbody.innerHTML = '';
+
+            participants.forEach(participant => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${participant.datum}</td>
+                    <td><strong>${participant.name}</strong></td>
+                    <td>${participant.email}</td>
+                    <td>${participant.personen}</td>
+                    <td>${participant.gaeste || '-'}</td>
+                    <td>${participant.buffet}</td>
+                    <td>${participant.portionen}</td>
+                    <td>${participant.aufbau}</td>
+                    <td>${participant.abbau}</td>
+                `;
+            });
+
+            document.getElementById('participantsLoading').style.display = 'none';
+            document.getElementById('participantsTable').style.display = 'table';
+        }
+
+        // Buffet-Übersicht anzeigen
+        function displayBuffetOverview(participants) {
+            const buffetList = document.getElementById('buffetList');
+            buffetList.innerHTML = '';
+
+            participants.forEach(participant => {
+                const buffetItem = document.createElement('div');
+                buffetItem.className = 'buffet-item';
+                buffetItem.innerHTML = `
+                    <div>
+                        <strong>${participant.buffet}</strong><br>
+                        <small>von ${participant.name}</small>
+                    </div>
+                    <div class="quantity">${participant.portionen}</div>
+                `;
+                buffetList.appendChild(buffetItem);
+            });
+        }
+
+        // CSV Export
+        function exportToCSV(data, filename) {
+            const csvContent = "data:text/csv;charset=utf-8," 
+                + Object.keys(data[0]).join(",") + "\n"
+                + data.map(row => Object.values(row).join(",")).join("\n");
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Event Listeners für Buttons
+        document.getElementById('refreshParticipants').addEventListener('click', loadDashboardData);
+        
+        document.getElementById('exportParticipants').addEventListener('click', async function() {
+            try {
+                const response = await fetch(PARTICIPANTS_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.participants && data.participants.length > 0) {
+                        exportToCSV(data.participants, 'sommerfest_teilnehmer.csv');
+                    } else {
+                        alert('Keine Teilnehmer-Daten für Export verfügbar.');
+                    }
+                } else {
+                    alert('Fehler beim Laden der Export-Daten.');
+                }
+            } catch (error) {
+                console.error('Export-Fehler:', error);
+                alert('Fehler beim Export. Bitte versuchen Sie es später erneut.');
+            }
+        });
+
+        document.getElementById('exportBuffet').addEventListener('click', async function() {
+            try {
+                const response = await fetch(PARTICIPANTS_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.participants && data.participants.length > 0) {
+                        const buffetData = data.participants.map(p => ({
+                            name: p.name,
+                            buffet: p.buffet,
+                            portionen: p.portionen,
+                            email: p.email
+                        }));
+                        exportToCSV(buffetData, 'sommerfest_buffet.csv');
+                    } else {
+                        alert('Keine Buffet-Daten für Export verfügbar.');
+                    }
+                } else {
+                    alert('Fehler beim Laden der Export-Daten.');
+                }
+            } catch (error) {
+                console.error('Buffet-Export-Fehler:', error);
+                alert('Fehler beim Buffet-Export. Bitte versuchen Sie es später erneut.');
+            }
+        });
+
+        // Initial Check: Ist User bereits eingeloggt?
+        window.addEventListener('load', function() {
+            const currentUser = localStorage.getItem('currentUser');
+            const userRole = localStorage.getItem('userRole');
+            if (currentUser && userRole) {
+                showDashboard();
+            } else {
+                showLogin();
+            }
+        });
+    </script>
+</body>
+</html>
