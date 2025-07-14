@@ -194,16 +194,13 @@
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
-            }
             
             .sidebar {
                 width: 100%;
                 order: 2;
-            }
             
             .main-content {
                 order: 1;
-            }
         }
     </style>
 </head>
@@ -337,7 +334,6 @@
                 document.getElementById('errorMessage').style.display = 'block';
                 document.getElementById('successMessage').style.display = 'none';
                 return;
-            }
 
             try {
                 // CORS-FIX: Normale POST-Request über nginx-Proxy
@@ -379,9 +375,7 @@
                 document.getElementById('errorMessage').textContent = 'Fehler beim Senden der Anmeldung. Bitte versuchen Sie es später erneut.';
                 document.getElementById('errorMessage').style.display = 'block';
                 document.getElementById('successMessage').style.display = 'none';
-            }
         });
-            }
         });
 
         // Initial die Liste aktualisieren
