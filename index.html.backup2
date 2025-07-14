@@ -319,32 +319,14 @@
             e.preventDefault();
             
             // Formulardaten sammeln
-            // AUTOMATISCHE BERECHNUNGEN
-            const companionsValue = document.getElementById('companions').value || '';
-            const gaesteArray = companionsValue ? companionsValue.split(',').map(s => s.trim()).filter(s => s.length > 0) : [];
-            const anzahlGaeste = gaesteArray.length;
-            const gesamtPersonen = 1 + anzahlGaeste;
-            
-            // Debug-Ausgabe für Berechnungen
-            console.log('Gäste-Berechnung:', {
-                'Original companions': companionsValue,
-                'Gäste Array': gaesteArray,
-                'Anzahl Gäste': anzahlGaeste,
-                'Gesamt Personen': gesamtPersonen
-            });
-            
             const formData = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
-                loge: document.getElementById('lodge').value,
-                gaesteNamen: companionsValue,
-                anzahlGaeste: anzahlGaeste,
-                gesamtPersonen: gesamtPersonen,
-                buffet: document.getElementById('contribution').value,
-                portionen: document.getElementById('quantity').value,
-                aufbau: 'Noch nicht angegeben',
-                abbau: 'Noch nicht angegeben',
-                bemerkungen: 'Noch nicht angegeben',
+                lodge: document.getElementById('lodge').value,
+                companions: document.getElementById('companions').value,
+                companions: document.getElementById('companions').value,
+                contribution: document.getElementById('contribution').value,
+                quantity: document.getElementById('quantity').value,
                 timestamp: new Date().toISOString()
             };
 
