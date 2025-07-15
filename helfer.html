@@ -486,6 +486,14 @@
         document.getElementById('helperForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
+            // Button sofort deaktivieren
+            const submitButton = document.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = "Wird übertragen...";
+            submitButton.style.backgroundColor = "#6c757d";
+            submitButton.style.cursor = "not-allowed";
+            
             // Helfer-Daten sammeln
             const aufbauValue = document.querySelector('input[name="aufbau"]:checked')?.value;
             const abbauValue = document.querySelector('input[name="abbau"]:checked')?.value;
@@ -493,6 +501,12 @@
 
             // Validierung
             if (!aufbauValue || !abbauValue) {
+                // Button wieder aktivieren bei Fehler
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
+                submitButton.style.backgroundColor = "#2c5282";
+                submitButton.style.cursor = "pointer";
+                
                 document.getElementById("errorMessage").style.display = "block";
                 document.getElementById("successMessage").style.display = "none";
                 return;
@@ -523,6 +537,9 @@
                     document.getElementById('successMessage').style.display = 'block';
                     document.getElementById('errorMessage').style.display = 'none';
                     
+                    // Button-Text ändern
+                    submitButton.textContent = "Erfolgreich! Weiterleitung...";
+                    
                     // Weiterleitung zur Abschlussseite nach 2 Sekunden
                     setTimeout(() => {
                         const abschlussParams = new URLSearchParams(completeData);
@@ -535,6 +552,13 @@
                 
             } catch (error) {
                 console.error('Fehler beim Senden:', error);
+                
+                // Button wieder aktivieren bei Fehler
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
+                submitButton.style.backgroundColor = "#2c5282";
+                submitButton.style.cursor = "pointer";
+                
                 document.getElementById('errorMessage').textContent = 'Fehler beim Senden der Helfer-Angaben. Bitte versuche es später erneut.';
                 document.getElementById('errorMessage').style.display = 'block';
                 document.getElementById('successMessage').style.display = 'none';
