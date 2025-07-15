@@ -350,11 +350,11 @@
             };
 
             // Validierung
-            if (!formData.name || !formData.contribution || !formData.quantity) {
-                document.getElementById('errorMessage').style.display = 'block';
-                document.getElementById('successMessage').style.display = 'none';
-            }
+            if (!formData.name || !formData.buffet || !formData.portionen) {
+                document.getElementById("errorMessage").style.display = "block";
+                document.getElementById("successMessage").style.display = "none";
                 return;
+            }
 
             try {
                 // CORS-FIX: Normale POST-Request über nginx-Proxy
@@ -377,6 +377,9 @@
                     // Erfolgsanzeige
                     document.getElementById('successMessage').style.display = 'block';
                     document.getElementById('errorMessage').style.display = 'none';
+                return;
+                return;
+                return;
 
                     // Formular zurücksetzen
                     this.reset();
