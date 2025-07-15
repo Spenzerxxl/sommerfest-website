@@ -259,7 +259,6 @@
                 <div class="form-group">
                     <label for="contribution">Was möchtest du mitbringen? *</label>
                     <small style="color: #666; font-size: 14px;">Hinweis: Mehrere Beiträge bitte durch Komma trennen (z.B. "Kartoffelsalat, Brötchen")</small>
-                    <small style="color: #666; font-size: 14px;">Hinweis: Mehrere Beiträge bitte durch Komma trennen (z.B. "Kartoffelsalat, Brötchen")</small>
                     <input type="text" id="contribution" name="contribution" placeholder="z.B. Kartoffelsalat">
                 </div>
 
@@ -330,20 +329,6 @@
             submitButton.textContent = "Wird verarbeitet...";
             submitButton.style.backgroundColor = "#6c757d";
             submitButton.style.cursor = "not-allowed";
-            
-            // Button sofort deaktivieren
-            const submitButton = document.querySelector("button[type="submit"]");
-            const originalText = submitButton.textContent;
-            submitButton.disabled = true;
-            submitButton.textContent = "Wird verarbeitet...";
-            submitButton.style.backgroundColor = "#6c757d";
-            submitButton.style.cursor = "not-allowed";
-            
-            // Button sofort deaktivieren
-            const submitButton = document.querySelector("button[type="submit"]");
-            submitButton.disabled = true;
-            submitButton.textContent = "Wird verarbeitet...";
-            submitButton.style.backgroundColor = "#6c757d";
             
             // Formulardaten sammeln
             const companionsValue = document.getElementById('companions').value || '';
