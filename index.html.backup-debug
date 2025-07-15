@@ -367,7 +367,7 @@
                 // Weiterleitung zur Helferseite nach 2 Sekunden
                 setTimeout(() => {
                     const params = new URLSearchParams(formData);
-                    window.location.href = `helfer-debug.html?${params.toString()}`;
+                    window.location.href = `helfer.html?${params.toString()}`;
                 }, 2000);
                 
             } catch (error) {

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEBUG - Helfer - Sommerfest 2025</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .debug-box {
+            background-color: white;
+            border: 2px solid #007bff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .debug-box h3 {
+            color: #007bff;
+            margin-top: 0;
+        }
+        .param-item {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 4px solid #28a745;
+            border-radius: 4px;
+        }
+        .param-missing {
+            border-left-color: #dc3545;
+            background-color: #fff5f5;
+        }
+        .param-name {
+            font-weight: bold;
+            color: #333;
+        }
+        .param-value {
+            color: #666;
+            font-family: monospace;
+        }
+        .continue-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .continue-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 DEBUG MODE - Helfer Seite</h1>
+    
+    <div class="debug-box">
+        <h3>URL-Parameter Debug</h3>
+        <div id="url-debug"></div>
+    </div>
+    
+    <div class="debug-box">
+        <h3>Alle 12 erforderlichen Felder:</h3>
+        <div id="fields-debug"></div>
+    </div>
+    
+    <button class="continue-btn" onclick="continueToNormal()">
+        Weiter zur normalen Helfer-Seite
+    </button>
+    
+    <script>
+        // URL-Parameter lesen
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentUrl = window.location.href;
+        
+        // Debug-Ausgabe der URL
+        document.getElementById('url-debug').innerHTML = `
+            <div class="param-item">
+                <span class="param-name">Komplette URL:</span><br>
+                <span class="param-value">${currentUrl}</span>
+            </div>
+            <div class="param-item">
+                <span class="param-name">URL-Parameter Count:</span><br>
+                <span class="param-value">${Array.from(urlParams.entries()).length} Parameter</span>
+            </div>
+        `;
+        
+        // Alle 12 erforderlichen Felder
+        const requiredFields = [
+            'name', 'email', 'loge', 'gaesteNamen', 'anzahlGaeste', 
+            'gesamtPersonen', 'buffet', 'portionen', 'aufbau', 'abbau', 
+            'bemerkungen', 'timestamp'
+        ];
+        
+        let fieldsHtml = '';
+        let missingCount = 0;
+        
+        requiredFields.forEach(field => {
+            const value = urlParams.get(field);
+            const isEmpty = !value || value === 'null' || value === 'undefined' || value === '';
+            
+            if (isEmpty) missingCount++;
+            
+            fieldsHtml += `
+                <div class="param-item ${isEmpty ? 'param-missing' : ''}">
+                    <span class="param-name">${field}:</span><br>
+                    <span class="param-value">${isEmpty ? '❌ FEHLT/LEER' : '✅ ' + value}</span>
+                </div>
+            `;
+        });
+        
+        document.getElementById('fields-debug').innerHTML = `
+            <div class="param-item">
+                <span class="param-name">Status:</span><br>
+                <span class="param-value">${missingCount === 0 ? '✅ Alle Felder vorhanden' : '❌ ' + missingCount + ' Felder fehlen'}</span>
+            </div>
+            ${fieldsHtml}
+        `;
+        
+        // Automatische Weiterleitung nach 30 Sekunden
+        setTimeout(() => {
+            continueToNormal();
+        }, 30000);
+        
+        function continueToNormal() {
+            // Alle Parameter zur normalen helfer.html weiterleiten
+            window.location.href = `helfer.html?${urlParams.toString()}`;
+        }
+        
+        // Console-Ausgabe für detaillierte Analyse
+        console.log('=== HELFER DEBUG ===');
+        console.log('URL:', currentUrl);
+        console.log('Parameter:', Object.fromEntries(urlParams.entries()));
+        console.log('Missing fields:', missingCount);
+    </script>
+</body>
+</html>
