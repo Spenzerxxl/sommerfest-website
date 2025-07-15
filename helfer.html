@@ -108,7 +108,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .help-option {
@@ -173,6 +173,51 @@
         .radio-option.declined {
             background-color: #f8d7da;
             border: 1px solid #f5c6cb;
+        }
+
+        .abbau-hint {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+            font-style: italic;
+        }
+
+        .termine-section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .termine-section h3 {
+            color: #1e3a5f;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        .termine-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .termin-item {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 3px solid #2c5282;
+        }
+
+        .termin-item strong {
+            color: #1e3a5f;
+            display: block;
+            margin-bottom: 5px;
         }
 
         label {
@@ -268,6 +313,10 @@
             .help-options {
                 grid-template-columns: 1fr;
             }
+
+            .termine-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -283,21 +332,21 @@
             </div>
             
             <div class="welcome-text">
-                <p>Lieber Bruder! Vielen Dank für Ihre Anmeldung zum Sommerfest 2025!</p>
-                <p>Eine Gemeinschaft funktioniert nur, wenn alle mithelfen und ihren Beitrag leisten. Deshalb möchten wir Sie fragen, ob Sie uns bei der Vorbereitung und dem Aufräumen unterstützen können.</p>
-                <p>Ihre Mithilfe macht das Fest zu einem besonderen Erlebnis für alle Beteiligten.</p>
+                <p>Lieber Bruder! Vielen Dank für deine Anmeldung zum Sommerfest 2025!</p>
+                <p>Eine Gemeinschaft funktioniert nur, wenn alle mithelfen und ihren Beitrag leisten. Deshalb möchten wir dich fragen, ob du uns bei der Vorbereitung und dem Aufräumen unterstützen kannst.</p>
+                <p>Deine Mithilfe macht das Fest zu einem besonderen Erlebnis für alle Beteiligten.</p>
             </div>
 
             <div id="successMessage" class="success-message">
-                Ihre Helfer-Angaben wurden erfolgreich übermittelt!
+                Deine Helfer-Angaben wurden erfolgreich übermittelt!
             </div>
 
             <div id="errorMessage" class="error-message">
-                Bitte geben Sie an, ob Sie beim Aufbau und/oder Abbau helfen können.
+                Bitte gib an, ob du beim Aufbau und/oder Abbau helfen kannst.
             </div>
 
             <form id="helperForm">
-                <h2>Können Sie uns helfen?</h2>
+                <h2>Kannst du uns helfen?</h2>
                 
                 <div class="help-options">
                     <div class="help-option">
@@ -331,46 +380,68 @@
                     </div>
                 </div>
 
+                <div class="abbau-hint">
+                    💡 <strong>Hinweis:</strong> Beim Abbautag grillen wir traditionell die Reste und machen eine "Inventur" der Getränkebestände...
+                </div>
+
                 <div class="form-group">
-                    <label for="bemerkungen">Haben Sie noch eine Mitteilung an das Organisationsteam?</label>
-                    <textarea id="bemerkungen" name="bemerkungen" placeholder="Hier können Sie uns weitere Informationen, Wünsche oder Anregungen mitteilen..."></textarea>
+                    <label for="bemerkungen">Hast du noch Hinweise an das Organisationsteam?</label>
+                    <textarea id="bemerkungen" name="bemerkungen" placeholder="Hier kannst du uns weitere Informationen, Wünsche oder Anregungen mitteilen..."></textarea>
                 </div>
 
                 <button type="submit" class="button">Helfer-Angaben absenden</button>
             </form>
+
+            <div class="termine-section">
+                <h3>Wichtige Termine</h3>
+                <div class="termine-grid">
+                    <div class="termin-item">
+                        <strong>Aufbautag</strong>
+                        Freitag, 22. August 2025 ab 16:00 Uhr
+                    </div>
+                    <div class="termin-item">
+                        <strong>Sommerfest</strong>
+                        Samstag, 23. August 2025 ab 18:00 Uhr
+                    </div>
+                    <div class="termin-item">
+                        <strong>Abbautag</strong>
+                        Sonntag, 24. August 2025 ab 14:00 Uhr
+                    </div>
+                    <div class="termin-item">
+                        <strong>Anmeldeschluss</strong>
+                        Donnerstag, 14. August 2025
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="sidebar">
-            <h3>Wichtige Termine</h3>
+            <h3>Bisherige Buffet-Beiträge</h3>
             <div class="info-item">
-                <strong>Gartentag</strong><br>
-                15. August 2025 ab 11:00 Uhr
+                <strong>Kartoffelsalat</strong><br>
+                Menge: für 15 Personen
             </div>
             <div class="info-item">
-                <strong>Aufbautag</strong><br>
-                22. August 2025 ab 16:00 Uhr
+                <strong>Frikadellen</strong><br>
+                Menge: 40 Stück
             </div>
             <div class="info-item">
-                <strong>Sommerfest</strong><br>
-                23. August 2025 ab 18:00 Uhr
-            </div>
-            <div class="info-item">
-                <strong>Abbautag</strong><br>
-                24. August 2025 ab 14:00 Uhr
+                <strong>Gemischter Salat</strong><br>
+                Menge: 2 große Schüsseln
             </div>
             
-            <h3>Warum Helfen?</h3>
+            <h3>Veranstaltungsinfo</h3>
             <div class="info-item">
-                <strong>Gemeinschaft</strong><br>
-                Gemeinsam schaffen wir mehr
+                <strong>Eintrittspreis</strong><br>
+                18,00 € pro Person
             </div>
             <div class="info-item">
-                <strong>Tradition</strong><br>
-                Seit Jahren bewährt
+                <strong>Getränke</strong><br>
+                2,00 € pro Wertbon
             </div>
             <div class="info-item">
-                <strong>Freude</strong><br>
-                Arbeit verbindet
+                <strong>Kleiderordnung</strong><br>
+                Smart Casual
             </div>
         </div>
     </div>
@@ -418,7 +489,7 @@
             // Helfer-Daten sammeln
             const aufbauValue = document.querySelector('input[name="aufbau"]:checked')?.value;
             const abbauValue = document.querySelector('input[name="abbau"]:checked')?.value;
-            const bemerkungenValue = document.getElementById('bemerkungen').value || 'Keine besonderen Anmerkungen';
+            const bemerkungenValue = document.getElementById('bemerkungen').value || 'Keine besonderen Hinweise';
 
             // Validierung
             if (!aufbauValue || !abbauValue) {
@@ -464,7 +535,7 @@
                 
             } catch (error) {
                 console.error('Fehler beim Senden:', error);
-                document.getElementById('errorMessage').textContent = 'Fehler beim Senden der Helfer-Angaben. Bitte versuchen Sie es später erneut.';
+                document.getElementById('errorMessage').textContent = 'Fehler beim Senden der Helfer-Angaben. Bitte versuche es später erneut.';
                 document.getElementById('errorMessage').style.display = 'block';
                 document.getElementById('successMessage').style.display = 'none';
             }

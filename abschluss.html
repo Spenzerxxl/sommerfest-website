@@ -225,6 +225,10 @@
             color: #a0c4ff;
         }
 
+        .hidden {
+            display: none;
+        }
+
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -263,11 +267,11 @@
             
             <div class="welcome-text">
                 <h2>Lieber Bruder!</h2>
-                <p>Vielen Dank! Wir haben Ihre Anmeldung zum Sommerfest 2025 erfolgreich aufgenommen und freuen uns sehr auf Sie!</p>
+                <p>Vielen Dank! Wir haben deine Anmeldung zum Sommerfest 2025 erfolgreich aufgenommen und freuen uns sehr auf dich!</p>
             </div>
 
             <div class="summary-section">
-                <h3>Ihre Anmeldedaten</h3>
+                <h3>Deine Anmeldedaten</h3>
                 <div class="summary-row">
                     <span class="summary-label">Name:</span>
                     <span class="summary-value" id="display-name">-</span>
@@ -294,8 +298,8 @@
                 </div>
             </div>
 
-            <div class="summary-section">
-                <h3>Ihr Buffet-Beitrag</h3>
+            <div id="buffet-section" class="summary-section">
+                <h3>Dein Buffet-Beitrag</h3>
                 <div class="summary-row">
                     <span class="summary-label">Beitrag:</span>
                     <span class="summary-value" id="display-buffet">-</span>
@@ -306,8 +310,8 @@
                 </div>
             </div>
 
-            <div class="summary-section">
-                <h3>Ihre Helfer-Bereitschaft</h3>
+            <div id="helfer-section" class="summary-section">
+                <h3>Deine Helfer-Bereitschaft</h3>
                 <div class="summary-row">
                     <span class="summary-label">Aufbau (22. August):</span>
                     <span class="summary-value" id="display-aufbau">-</span>
@@ -316,22 +320,25 @@
                     <span class="summary-label">Abbau (24. August):</span>
                     <span class="summary-value" id="display-abbau">-</span>
                 </div>
+            </div>
+
+            <div id="hinweise-section" class="summary-section">
+                <h3>Deine Hinweise an das Organisationsteam</h3>
                 <div class="summary-row">
-                    <span class="summary-label">Bemerkungen:</span>
                     <span class="summary-value" id="display-bemerkungen">-</span>
                 </div>
             </div>
 
             <div class="contact-info">
                 <h3>Weitere Informationen</h3>
-                <p>Sie erhalten nun eine E-Mail-Bestätigung mit allen Ihren Angaben.</p>
-                <p>Etwa eine Woche vor dem Fest erhalten Sie eine Erinnerungs-Mail.</p>
-                <p>Falls Sie noch Fragen oder Ideen haben, können Sie uns gerne eine E-Mail schicken unter: <a href="mailto:sommerfest@zum-fuellhorn.de">sommerfest@zum-fuellhorn.de</a></p>
+                <p>Du erhältst nun eine E-Mail-Bestätigung mit allen deinen Angaben.</p>
+                <p>Etwa eine Woche vor dem Fest erhältst du eine Erinnerungs-Mail.</p>
+                <p>Falls du noch Fragen oder Ideen hast, kannst du uns gerne eine E-Mail schicken unter: <a href="mailto:sommerfest@zum-fuellhorn.de">sommerfest@zum-fuellhorn.de</a></p>
             </div>
 
             <div class="footer-signature">
                 <p><strong>Mit herzlichen und brüderlichen Grüßen,<br>
-                Ihr Organisationsteam</strong></p>
+                Dein Organisationsteam der Freimaurer von Lübeck</strong></p>
             </div>
         </div>
 
@@ -356,10 +363,6 @@
             </div>
             
             <h3>Wichtige Termine</h3>
-            <div class="info-item">
-                <strong>Gartentag</strong><br>
-                15. August 2025 ab 11:00 Uhr
-            </div>
             <div class="info-item">
                 <strong>Aufbautag</strong><br>
                 22. August 2025 ab 16:00 Uhr
@@ -389,11 +392,11 @@
             gaesteNamen: urlParams.get('gaesteNamen') || 'Keine Begleitung',
             anzahlGaeste: urlParams.get('anzahlGaeste') || '0',
             gesamtPersonen: urlParams.get('gesamtPersonen') || '1',
-            buffet: urlParams.get('buffet') || 'Nicht angegeben',
-            portionen: urlParams.get('portionen') || 'Nicht angegeben',
-            aufbau: urlParams.get('aufbau') || 'Nicht angegeben',
-            abbau: urlParams.get('abbau') || 'Nicht angegeben',
-            bemerkungen: urlParams.get('bemerkungen') || 'Keine besonderen Anmerkungen'
+            buffet: urlParams.get('buffet') || '',
+            portionen: urlParams.get('portionen') || '',
+            aufbau: urlParams.get('aufbau') || '',
+            abbau: urlParams.get('abbau') || '',
+            bemerkungen: urlParams.get('bemerkungen') || 'Keine besonderen Hinweise'
         };
 
         // Daten in die Anzeige einfügen
@@ -403,28 +406,53 @@
         document.getElementById('display-gaeste').textContent = data.gaesteNamen;
         document.getElementById('display-anzahl').textContent = data.anzahlGaeste;
         document.getElementById('display-gesamt').textContent = data.gesamtPersonen;
-        document.getElementById('display-buffet').textContent = data.buffet;
-        document.getElementById('display-portionen').textContent = data.portionen;
         document.getElementById('display-bemerkungen').textContent = data.bemerkungen;
 
-        // Helfer-Status mit Styling
-        const aufbauElement = document.getElementById('display-aufbau');
-        const abbauElement = document.getElementById('display-abbau');
-        
-        if (data.aufbau.includes('Ja')) {
-            aufbauElement.innerHTML = '<span class="helper-status helper-yes">' + data.aufbau + '</span>';
+        // Buffet-Sektion nur anzeigen wenn Buffet-Beitrag vorhanden
+        if (data.buffet && data.buffet.trim() !== '' && data.buffet !== 'Nicht angegeben') {
+            document.getElementById('display-buffet').textContent = data.buffet;
+            document.getElementById('display-portionen').textContent = data.portionen;
         } else {
-            aufbauElement.innerHTML = '<span class="helper-status helper-no">' + data.aufbau + '</span>';
+            document.getElementById('buffet-section').classList.add('hidden');
         }
-        
-        if (data.abbau.includes('Ja')) {
-            abbauElement.innerHTML = '<span class="helper-status helper-yes">' + data.abbau + '</span>';
+
+        // Helfer-Sektion nur anzeigen wenn mindestens eine Helfer-Angabe gemacht wurde
+        const hatHelferAngabe = (data.aufbau && data.aufbau.trim() !== '' && data.aufbau !== 'Nicht angegeben') ||
+                                (data.abbau && data.abbau.trim() !== '' && data.abbau !== 'Nicht angegeben');
+
+        if (hatHelferAngabe) {
+            // Helfer-Status mit Styling
+            const aufbauElement = document.getElementById('display-aufbau');
+            const abbauElement = document.getElementById('display-abbau');
+            
+            if (data.aufbau && data.aufbau.includes('Ja')) {
+                aufbauElement.innerHTML = '<span class="helper-status helper-yes">' + data.aufbau + '</span>';
+            } else if (data.aufbau) {
+                aufbauElement.innerHTML = '<span class="helper-status helper-no">' + data.aufbau + '</span>';
+            } else {
+                aufbauElement.textContent = 'Keine Angabe';
+            }
+            
+            if (data.abbau && data.abbau.includes('Ja')) {
+                abbauElement.innerHTML = '<span class="helper-status helper-yes">' + data.abbau + '</span>';
+            } else if (data.abbau) {
+                abbauElement.innerHTML = '<span class="helper-status helper-no">' + data.abbau + '</span>';
+            } else {
+                abbauElement.textContent = 'Keine Angabe';
+            }
         } else {
-            abbauElement.innerHTML = '<span class="helper-status helper-no">' + data.abbau + '</span>';
+            // Helfer-Sektion ausblenden
+            document.getElementById('helfer-section').classList.add('hidden');
+        }
+
+        // Hinweise-Sektion: Titel anpassen wenn keine Helfer-Angabe gemacht wurde
+        if (!hatHelferAngabe) {
+            document.querySelector('#hinweise-section h3').textContent = 'Deine Hinweise an das Organisationsteam';
         }
 
         // Debug-Ausgabe
         console.log('Empfangene Daten:', data);
+        console.log('Hat Helfer-Angabe:', hatHelferAngabe);
     </script>
 </body>
 </html>

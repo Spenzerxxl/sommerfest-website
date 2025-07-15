@@ -219,22 +219,22 @@
             </div>
             
             <div class="welcome-text">
-                <p>Schön, dass du dich anmeldest! Mit deiner Teilnahme trägst du zur Stärkung der Bruderkette und des Lübecker Modells bei. Gemeinsam gestalten wir einen unvergesslichen Abend.</p>
+                <p>Schön, dass Sie sich anmelden! Mit Ihrer Teilnahme tragen Sie zur Stärkung der Bruderkette und des Lübecker Modells bei. Gemeinsam gestalten wir einen unvergesslichen Abend.</p>
             </div>
 
             <div id="successMessage" class="success-message">
-                Deine Anmeldung wurde erfolgreich übermittelt! Du erhältst in Kürze eine Bestätigung per E-Mail.
+                Ihre Anmeldung wurde erfolgreich übermittelt! Sie werden gleich zur Helferseite weitergeleitet.
             </div>
 
             <div id="errorMessage" class="error-message">
-                Bitte fülle alle Pflichtfelder aus (Name, Buffet-Beitrag, Menge).
+                Bitte füllen Sie alle Pflichtfelder aus (Name, Buffet-Beitrag, Menge).
             </div>
 
             <form id="registrationForm">
-                <h2>Deine Anmeldung zum Sommerfest 2025</h2>
+                <h2>Ihre Anmeldung zum Sommerfest 2025</h2>
                 
                 <div class="form-group">
-                    <label for="name">Dein Name *</label>
+                    <label for="name">Ihr Name *</label>
                     <input type="text" id="name" name="name" required>
                 </div>
 
@@ -254,10 +254,10 @@
                     <input type="text" id="companions" name="companions" placeholder="z.B. Max Mustermann, Erika Musterfrau">
                 </div>
 
-                <h2>Dein Beitrag zum Buffet</h2>
+                <h2>Ihr Beitrag zum Buffet</h2>
                 
                 <div class="form-group">
-                    <label for="contribution">Was möchtest du mitbringen? *</label>
+                    <label for="contribution">Was möchten Sie mitbringen? *</label>
                     <input type="text" id="contribution" name="contribution" placeholder="z.B. Kartoffelsalat">
                 </div>
 
@@ -372,7 +372,7 @@
                 
             } catch (error) {
                 console.error('Fehler beim Verarbeiten:', error);
-                document.getElementById('errorMessage').textContent = 'Fehler beim Verarbeiten der Anmeldung. Bitte versuche es später erneut.';
+                document.getElementById('errorMessage').textContent = 'Fehler beim Verarbeiten der Anmeldung. Bitte versuchen Sie es später erneut.';
                 document.getElementById('errorMessage').style.display = 'block';
                 document.getElementById('successMessage').style.display = 'none';
             }
