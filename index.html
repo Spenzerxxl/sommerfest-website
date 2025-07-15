@@ -315,7 +315,53 @@
 
         // Formular-Submit Handler
         // Formular-Submit Handler
-        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+
+        let buffetItemCount = 1;
+
+        function addBuffetItem() {
+            buffetItemCount++;
+            const container = document.getElementById("quantity").parentNode;
+            const newItem = document.createElement("div");
+            newItem.className = "form-group";
+            newItem.innerHTML = `
+                <label for="contribution${buffetItemCount}">Weiterer Beitrag ${buffetItemCount} *</label>
+                <input type="text" id="contribution${buffetItemCount}" name="contribution${buffetItemCount}" required placeholder="z.B. Kartoffelsalat">
+                <label for="quantity${buffetItemCount}">Menge/Anzahl *</label>
+                <input type="text" id="quantity${buffetItemCount}" name="quantity${buffetItemCount}" required placeholder="z.B. für 10 Personen">
+                <button type="button" onclick="removeBuffetItem(this)" class="button-secondary">Entfernen</button>
+            `;
+            container.parentNode.insertBefore(newItem, container.nextSibling);
+        }
+        
+        function removeBuffetItem(button) {
+            button.parentNode.remove();
+        }
+
+        // Funktion zum Sammeln aller Buffet-Beiträge
+        function collectAllBuffetItems() {
+            const buffetItems = [];
+            
+            // Hauptbeitrag
+            const mainItem = document.getElementById("contribution").value;
+            const mainQuantity = document.getElementById("quantity").value;
+            if (mainItem && mainQuantity) {
+                buffetItems.push({ item: mainItem, quantity: mainQuantity });
+            }
+            
+            // Zusätzliche Beiträge
+            for (let i = 2; i <= buffetItemCount; i++) {
+                const itemElement = document.getElementById(`contribution${i}`);
+                const quantityElement = document.getElementById(`quantity${i}`);
+                if (itemElement && quantityElement && itemElement.value && quantityElement.value) {
+                    buffetItems.push({ item: itemElement.value, quantity: quantityElement.value });
+                }
+            }
+            
+            return JSON.stringify(buffetItems);
+        }
+
+        // Formular-Submit Handler
+                document.getElementById('registrationForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             // Formulardaten sammeln
@@ -353,3 +399,39 @@
                 });
 
                 // Bei no-cors können wir Status nicht prüfen - daher Success annehmen
+                console.log('Anmeldung gesendet:', formData);
+                
+                // Neue Beiträge zur lokalen Liste hinzufügen
+                const buffetItems = JSON.parse(formData.contribution);
+                buffetItems.forEach(item => {
+                    contributions.push({
+                        item: item.item,
+                        quantity: item.quantity
+                    });
+                });
+                updateContributionsList();
+
+                // Erfolgsanzeige
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('errorMessage').style.display = 'none';
+
+                // Formular zurücksetzen
+                this.reset();
+                
+                // Dynamische Buffet-Felder zurücksetzen
+                const dynamicItems = document.querySelectorAll("[id^=contribution][id!=contribution], [id^=quantity][id!=quantity]");
+                dynamicItems.forEach(item => item.parentNode.remove());
+                buffetItemCount = 1;
+                
+                // Nach 5 Sekunden Erfolgsmeldung ausblenden
+                setTimeout(() => {
+                    document.getElementById('successMessage').style.display = 'none';
+                }, 5000);
+                
+            } catch (error) {
+                console.error('Fehler beim Senden:', error);
+                document.getElementById("errorMessage").textContent = "Fehler beim Senden der Anmeldung. Bitte versuchen Sie es erneut.";
+                document.getElementById("errorMessage").style.display = "block";
+                document.getElementById("successMessage").style.display = "none";
+            }
+        });
