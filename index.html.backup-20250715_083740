@@ -194,16 +194,13 @@
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
-            }
             
             .sidebar {
                 width: 100%;
                 order: 2;
-            }
             
             .main-content {
                 order: 1;
-            }
         }
     </style>
 </head>
@@ -223,7 +220,7 @@
             </div>
 
             <div id="successMessage" class="success-message">
-                Ihre Anmeldung wurde erfolgreich übermittelt! Sie werden gleich zur Helferseite weitergeleitet.
+                Ihre Anmeldung wurde erfolgreich übermittelt! Sie erhalten in Kürze eine Bestätigung per E-Mail.
             </div>
 
             <div id="errorMessage" class="error-message">
@@ -318,14 +315,24 @@
         const N8N_WEBHOOK_URL = 'https://automatisierung.frankrath.de/webhook/sommerfest-anmeldung';
 
         // Formular-Submit Handler
+        // Formular-Submit Handler
         document.getElementById('registrationForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             // Formulardaten sammeln
+            // AUTOMATISCHE BERECHNUNGEN
             const companionsValue = document.getElementById('companions').value || '';
             const gaesteArray = companionsValue ? companionsValue.split(',').map(s => s.trim()).filter(s => s.length > 0) : [];
             const anzahlGaeste = gaesteArray.length;
             const gesamtPersonen = 1 + anzahlGaeste;
+            
+            // Debug-Ausgabe für Berechnungen
+            console.log('Gäste-Berechnung:', {
+                'Original companions': companionsValue,
+                'Gäste Array': gaesteArray,
+                'Anzahl Gäste': anzahlGaeste,
+                'Gesamt Personen': gesamtPersonen
+            });
             
             const formData = {
                 name: document.getElementById('name').value,
@@ -343,42 +350,55 @@
             };
 
             // Validierung
-            if (!formData.name || !formData.buffet || !formData.portionen) {
-                document.getElementById("errorMessage").style.display = "block";
-                document.getElementById("successMessage").style.display = "none";
-                return;
+            if (!formData.name || !formData.contribution || !formData.quantity) {
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('successMessage').style.display = 'none';
             }
+                return;
 
             try {
-                // HINWEIS: Das Senden an n8n erfolgt erst von der Helferseite!
-                // Hier nur lokale Verarbeitung und Weiterleitung
-                
-                // Neuen Beitrag zur Liste hinzufügen
-                contributions.push({
-                    item: formData.buffet,
-                    quantity: formData.portionen
+                // CORS-FIX: Normale POST-Request über nginx-Proxy
+                const params = new URLSearchParams(formData);                const urlWithParams = N8N_WEBHOOK_URL + "?" + params.toString();                const response = await fetch(urlWithParams, {
+                    method: 'GET',
+                    headers: {
+                    },
                 });
-                updateContributionsList();
 
-                // Erfolgsanzeige
-                document.getElementById('successMessage').style.display = 'block';
-                document.getElementById('errorMessage').style.display = 'none';
-                
-                // Weiterleitung zur Helferseite nach 2 Sekunden
-                setTimeout(() => {
-                    const params = new URLSearchParams(formData);
-                    window.location.href = `helfer.html?${params.toString()}`;
-                }, 2000);
+                if (response.ok) {
+                    console.log('Anmeldung gesendet:', formData);
+                    
+                    // Neuen Beitrag zur Liste hinzufügen
+                    contributions.push({
+                        item: formData.contribution,
+                        quantity: formData.quantity
+                    });
+                    updateContributionsList();
+
+                    // Erfolgsanzeige
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('errorMessage').style.display = 'none';
+
+                    // Formular zurücksetzen
+                    this.reset();
+                    
+                    // Nach 5 Sekunden Erfolgsmeldung ausblenden
+                    setTimeout(() => {
+                        document.getElementById('successMessage').style.display = 'none';
+            }
+                    }, 5000);
+                } else {
+                    throw new Error('HTTP ' + response.status);
+                }
                 
             } catch (error) {
-                console.error('Fehler beim Verarbeiten:', error);
-                document.getElementById('errorMessage').textContent = 'Fehler beim Verarbeiten der Anmeldung. Bitte versuchen Sie es später erneut.';
+                console.error('Fehler beim Senden:', error);
+                document.getElementById('errorMessage').textContent = 'Fehler beim Senden der Anmeldung. Bitte versuchen Sie es später erneut.';
                 document.getElementById('errorMessage').style.display = 'block';
                 document.getElementById('successMessage').style.display = 'none';
             }
         });
+        });
 
-        // Beitragsliste beim Laden initialisieren
         updateContributionsList();
     </script>
 </body>
