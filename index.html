@@ -343,20 +343,13 @@
             };
 
             // Validierung
-<<<<<<< HEAD
             if (!formData.name || !formData.buffet || !formData.portionen) {
                 document.getElementById("errorMessage").style.display = "block";
                 document.getElementById("successMessage").style.display = "none";
-=======
-            if (!formData.name || !formData.email || !formData.contribution || !formData.quantity) {
-                document.getElementById('errorMessage').style.display = 'block';
-                document.getElementById('successMessage').style.display = 'none';
->>>>>>> 596880cfe23ebd86dae28142b67a0a14bf6b5d35
                 return;
             }
 
             try {
-<<<<<<< HEAD
                 // HINWEIS: Das Senden an n8n erfolgt erst von der Helferseite!
                 // Hier nur lokale Verarbeitung und Weiterleitung
                 
@@ -364,19 +357,9 @@
                 contributions.push({
                     item: formData.buffet,
                     quantity: formData.portionen
-=======
-                // CORS-FIX: Normale POST-Request über nginx-Proxy
-                // URL-Parameter für GET-Request erstellen
-                const params = new URLSearchParams(formData);
-                const urlWithParams = N8N_WEBHOOK_URL + "?" + params.toString();
-                
-                const response = await fetch(urlWithParams, {
-                    method: "GET",
->>>>>>> 596880cfe23ebd86dae28142b67a0a14bf6b5d35
                 });
                 updateContributionsList();
 
-<<<<<<< HEAD
                 // Erfolgsanzeige
                 document.getElementById('successMessage').style.display = 'block';
                 document.getElementById('errorMessage').style.display = 'none';
@@ -384,34 +367,8 @@
                 // Weiterleitung zur Helferseite nach 2 Sekunden
                 setTimeout(() => {
                     const params = new URLSearchParams(formData);
-                    window.location.href = `helfer-debug.html?${params.toString()}`;
+                    window.location.href = `helfer.html?${params.toString()}`;
                 }, 2000);
-=======
-                if (response.ok) {
-                    console.log('Anmeldung gesendet:', formData);
-                    
-                    // Neuen Beitrag zur Liste hinzufügen
-                    contributions.push({
-                        item: formData.contribution,
-                        quantity: formData.quantity
-                    });
-                    updateContributionsList();
-
-                    // Erfolgsanzeige
-                    document.getElementById('successMessage').style.display = 'block';
-                    document.getElementById('errorMessage').style.display = 'none';
-
-                    // Formular zurücksetzen
-                    this.reset();
-                    
-                    // Nach 5 Sekunden Erfolgsmeldung ausblenden
-                    setTimeout(() => {
-                        document.getElementById('successMessage').style.display = 'none';
-                    }, 5000);
-                } else {
-                    throw new Error('HTTP ' + response.status);
-                }
->>>>>>> 596880cfe23ebd86dae28142b67a0a14bf6b5d35
                 
             } catch (error) {
                 console.error('Fehler beim Verarbeiten:', error);
