@@ -232,19 +232,19 @@
             </div>
             
             <div class="welcome-text">
-                <p>Schön, dass Sie sich anmelden! Mit Ihrer Teilnahme tragen Sie zur Stärkung der Bruderkette und des Lübecker Modells bei. Gemeinsam gestalten wir einen unvergesslichen Abend.</p>
+                <p>Schön, dass du dich anmeldest! Mit deiner Teilnahme trägst du zur Stärkung der Bruderkette und des Lübecker Modells bei. Gemeinsam gestalten wir einen unvergesslichen Abend.</p>
             </div>
 
             <div id="successMessage" class="success-message">
-                Ihre Anmeldung wurde erfolgreich übermittelt! Sie erhalten in Kürze eine Bestätigung per E-Mail.
+                Deine Anmeldung wurde erfolgreich übermittelt! Du erhältst in Kürze eine Bestätigung per E-Mail.
             </div>
 
             <div id="errorMessage" class="error-message">
-                Bitte füllen Sie alle Pflichtfelder aus.
+                Bitte fülle alle Pflichtfelder aus.
             </div>
 
             <form id="registrationForm">
-                <h2>Ihre Anmeldung zum Sommerfest 2025</h2>
+                <h2>Deine Anmeldung zum Sommerfest 2025</h2>
                 
                 <div class="form-group">
                     <label for="name">Ihr Name *</label>
@@ -269,7 +269,7 @@
                 <h2>Ihr Beitrag zum Buffet</h2>
                 
                 <div class="form-group">
-                    <label for="contribution">Was möchten Sie mitbringen? *</label>
+                    <label for="contribution">Was möchtest du mitbringen? *</label>
                     <input type="text" id="contribution" name="contribution" required placeholder="z.B. Kartoffelsalat">
                 </div>
 
@@ -377,7 +377,7 @@
             // Validierung
             const buffetData = JSON.parse(formData.contribution);
             if (!formData.name || !formData.email || buffetData.length === 0) {
-                document.getElementById("errorMessage").textContent = "Bitte füllen Sie alle Pflichtfelder aus.";
+                document.getElementById("errorMessage").textContent = "Bitte fülle alle Pflichtfelder aus.";
                 document.getElementById("errorMessage").style.display = "block";
                 document.getElementById("successMessage").style.display = "none";
                 return;
@@ -430,7 +430,7 @@
                 
             } catch (error) {
                 console.error('Fehler beim Senden:', error);
-                document.getElementById("errorMessage").textContent = "Fehler beim Senden der Anmeldung. Bitte versuchen Sie es erneut.";
+                document.getElementById("errorMessage").textContent = "Fehler beim Senden der Anmeldung. Bitte versuche es erneut.";
                 document.getElementById("errorMessage").style.display = "block";
                 document.getElementById("successMessage").style.display = "none";
             }
