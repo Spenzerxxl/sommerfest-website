@@ -205,132 +205,6 @@
                 order: 1;
             }
         }
-
-/* Live Buffet Sidebar Styles */
-.buffet-live-section {
-    margin-bottom: 30px;
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.buffet-live-section h3 {
-    color: #ffffff;
-    font-size: 1.2em;
-    margin-bottom: 15px;
-    text-align: center;
-}
-
-.buffet-status {
-    font-size: 0.8em;
-    text-align: center;
-    margin-bottom: 10px;
-    padding: 4px 8px;
-    border-radius: 4px;
-}
-
-.buffet-status.loading {
-    background-color: rgba(255, 193, 7, 0.3);
-    color: #ffc107;
-}
-
-.buffet-status.success {
-    background-color: rgba(40, 167, 69, 0.3);
-    color: #28a745;
-}
-
-.buffet-status.error {
-    background-color: rgba(220, 53, 69, 0.3);
-    color: #dc3545;
-}
-
-.buffet-item-live {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 12px;
-    margin-bottom: 5px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    border-left: 3px solid #4CAF50;
-}
-
-.buffet-item-live:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-.buffet-name {
-    color: #ffffff;
-    font-size: 0.9em;
-    flex-grow: 1;
-}
-
-.buffet-count {
-    font-weight: bold;
-    font-size: 0.8em;
-    padding: 2px 6px;
-    border-radius: 3px;
-    min-width: 20px;
-    text-align: center;
-}
-
-.buffet-count.count-low {
-    background-color: #ffc107;
-    color: #212529;
-}
-
-.buffet-count.count-medium {
-    background-color: #17a2b8;
-    color: #ffffff;
-}
-
-.buffet-count.count-high {
-    background-color: #28a745;
-    color: #ffffff;
-}
-
-.buffet-item-placeholder {
-    text-align: center;
-    color: rgba(255, 255, 255, 0.7);
-    font-style: italic;
-    padding: 20px;
-}
-
-.buffet-stats {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.buffet-stat {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.8em;
-    margin-bottom: 5px;
-    text-align: center;
-}
-
-#buffet-live-liste {
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-#buffet-live-liste::-webkit-scrollbar {
-    width: 4px;
-}
-
-#buffet-live-liste::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-#buffet-live-liste::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 2px;
-}
-
-#buffet-live-liste::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.5);
-}
     </style>
 </head>
 <body>
@@ -398,12 +272,22 @@
         </div>
 
         <div class="sidebar">
-            <div class="buffet-live-section">
-                <h3>🍽️ Live Buffet-Übersicht</h3>
-                <div id="buffet-status" class="buffet-status">Lädt...</div>
-                <div id="buffet-live-liste"></div>
-                <div id="buffet-stats" class="buffet-stats"></div>
-            </div>
+            <h3>Bisherige Buffet-Beiträge</h3>
+            <ul id="contributionsList" class="contribution-list">
+                <!-- Beispieleinträge - werden dynamisch ersetzt -->
+                <li class="contribution-item">
+                    <strong>Kartoffelsalat</strong><br>
+                    Menge: für 15 Personen
+                </li>
+                <li class="contribution-item">
+                    <strong>Frikadellen</strong><br>
+                    Menge: 40 Stück
+                </li>
+                <li class="contribution-item">
+                    <strong>Gemischter Salat</strong><br>
+                    Menge: 2 große Schüsseln
+                </li>
+            </ul>
         </div>
     </div>
 
@@ -491,130 +375,6 @@
                 });
                 updateContributionsList();
 
-        // Live Buffet Sidebar JavaScript
-        let buffetData = {};
-        let updateInterval;
-        let isUpdating = false;
-        
-        const BUFFET_API_URL = "https://automatisierung.frankrath.de/webhook/buffet-uebersicht";
-        
-        async function loadBuffetData() {
-            if (isUpdating) return;
-            
-            try {
-                isUpdating = true;
-                showLoadingState();
-                
-                const response = await fetch(BUFFET_API_URL, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Cache-Control": "no-cache"
-                    }
-                });
-        
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-        
-                const data = await response.json();
-                buffetData = data;
-                
-                updateBuffetDisplay();
-                showSuccessState();
-                
-            } catch (error) {
-                console.error("Fehler beim Laden der Buffet-Daten:", error);
-                showErrorState(error.message);
-            } finally {
-                isUpdating = false;
-            }
-        }
-        
-        function updateBuffetDisplay() {
-            const buffetContainer = document.getElementById("buffet-live-liste");
-            if (!buffetContainer) return;
-        
-            if (!buffetData || Object.keys(buffetData).length === 0) {
-                buffetContainer.innerHTML = "<div class="buffet-item-placeholder">Noch keine Anmeldungen</div>";
-                return;
-            }
-        
-            const sortedEntries = Object.entries(buffetData)
-                .sort(([,a], [,b]) => b - a)
-                .filter(([name, count]) => name && count > 0);
-        
-            const buffetHTML = sortedEntries.map(([name, count]) => {
-                const countClass = count >= 20 ? "count-high" : count >= 10 ? "count-medium" : "count-low";
-                return `
-                    <div class="buffet-item-live">
-                        <span class="buffet-name">${name}</span>
-                        <span class="buffet-count ${countClass}">${count}</span>
-                    </div>
-                `;
-            }).join("");
-        
-            buffetContainer.innerHTML = buffetHTML;
-            
-            const totalBeitraege = sortedEntries.length;
-            const totalPortionen = sortedEntries.reduce((sum, [,count]) => sum + count, 0);
-            
-            const statsContainer = document.getElementById("buffet-stats");
-            if (statsContainer) {
-                statsContainer.innerHTML = `
-                    <div class="buffet-stat">${totalBeitraege} verschiedene Beiträge</div>
-                    <div class="buffet-stat">${totalPortionen} Portionen insgesamt</div>
-                `;
-            }
-        }
-        
-        function showLoadingState() {
-            const statusIndicator = document.getElementById("buffet-status");
-            if (statusIndicator) {
-                statusIndicator.textContent = "Aktualisiere...";
-                statusIndicator.className = "buffet-status loading";
-            }
-        }
-        
-        function showSuccessState() {
-            const statusIndicator = document.getElementById("buffet-status");
-            if (statusIndicator) {
-                statusIndicator.textContent = `Aktualisiert: ${new Date().toLocaleTimeString()}`;
-                statusIndicator.className = "buffet-status success";
-            }
-        }
-        
-        function showErrorState(message) {
-            const statusIndicator = document.getElementById("buffet-status");
-            if (statusIndicator) {
-                statusIndicator.textContent = "Fehler beim Laden";
-                statusIndicator.className = "buffet-status error";
-            }
-        }
-        
-        function startAutoRefresh() {
-            if (updateInterval) {
-                clearInterval(updateInterval);
-            }
-        
-            loadBuffetData();
-            updateInterval = setInterval(() => {
-                loadBuffetData();
-            }, 30000);
-        }
-        
-        // Starte Auto-Refresh für Live-Buffet-Sidebar
-        if (document.getElementById("buffet-live-liste")) {
-            startAutoRefresh();
-        }
-        
-        // Stoppe Auto-Refresh beim Verlassen der Seite
-        window.addEventListener("beforeunload", function() {
-            if (updateInterval) {
-                clearInterval(updateInterval);
-            }
-        });
-
                 // Erfolgsanzeige
                 document.getElementById('successMessage').style.display = 'block';
                 document.getElementById('errorMessage').style.display = 'none';
@@ -645,130 +405,6 @@
 
         // Beitragsliste beim Laden initialisieren
         updateContributionsList();
-
-        // Live Buffet Sidebar JavaScript
-        let buffetData = {};
-        let updateInterval;
-        let isUpdating = false;
-        
-        const BUFFET_API_URL = "https://automatisierung.frankrath.de/webhook/buffet-uebersicht";
-        
-        async function loadBuffetData() {
-            if (isUpdating) return;
-            
-            try {
-                isUpdating = true;
-                showLoadingState();
-                
-                const response = await fetch(BUFFET_API_URL, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Cache-Control": "no-cache"
-                    }
-                });
-        
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-        
-                const data = await response.json();
-                buffetData = data;
-                
-                updateBuffetDisplay();
-                showSuccessState();
-                
-            } catch (error) {
-                console.error("Fehler beim Laden der Buffet-Daten:", error);
-                showErrorState(error.message);
-            } finally {
-                isUpdating = false;
-            }
-        }
-        
-        function updateBuffetDisplay() {
-            const buffetContainer = document.getElementById("buffet-live-liste");
-            if (!buffetContainer) return;
-        
-            if (!buffetData || Object.keys(buffetData).length === 0) {
-                buffetContainer.innerHTML = "<div class="buffet-item-placeholder">Noch keine Anmeldungen</div>";
-                return;
-            }
-        
-            const sortedEntries = Object.entries(buffetData)
-                .sort(([,a], [,b]) => b - a)
-                .filter(([name, count]) => name && count > 0);
-        
-            const buffetHTML = sortedEntries.map(([name, count]) => {
-                const countClass = count >= 20 ? "count-high" : count >= 10 ? "count-medium" : "count-low";
-                return `
-                    <div class="buffet-item-live">
-                        <span class="buffet-name">${name}</span>
-                        <span class="buffet-count ${countClass}">${count}</span>
-                    </div>
-                `;
-            }).join("");
-        
-            buffetContainer.innerHTML = buffetHTML;
-            
-            const totalBeitraege = sortedEntries.length;
-            const totalPortionen = sortedEntries.reduce((sum, [,count]) => sum + count, 0);
-            
-            const statsContainer = document.getElementById("buffet-stats");
-            if (statsContainer) {
-                statsContainer.innerHTML = `
-                    <div class="buffet-stat">${totalBeitraege} verschiedene Beiträge</div>
-                    <div class="buffet-stat">${totalPortionen} Portionen insgesamt</div>
-                `;
-            }
-        }
-        
-        function showLoadingState() {
-            const statusIndicator = document.getElementById("buffet-status");
-            if (statusIndicator) {
-                statusIndicator.textContent = "Aktualisiere...";
-                statusIndicator.className = "buffet-status loading";
-            }
-        }
-        
-        function showSuccessState() {
-            const statusIndicator = document.getElementById("buffet-status");
-            if (statusIndicator) {
-                statusIndicator.textContent = `Aktualisiert: ${new Date().toLocaleTimeString()}`;
-                statusIndicator.className = "buffet-status success";
-            }
-        }
-        
-        function showErrorState(message) {
-            const statusIndicator = document.getElementById("buffet-status");
-            if (statusIndicator) {
-                statusIndicator.textContent = "Fehler beim Laden";
-                statusIndicator.className = "buffet-status error";
-            }
-        }
-        
-        function startAutoRefresh() {
-            if (updateInterval) {
-                clearInterval(updateInterval);
-            }
-        
-            loadBuffetData();
-            updateInterval = setInterval(() => {
-                loadBuffetData();
-            }, 30000);
-        }
-        
-        // Starte Auto-Refresh für Live-Buffet-Sidebar
-        if (document.getElementById("buffet-live-liste")) {
-            startAutoRefresh();
-        }
-        
-        // Stoppe Auto-Refresh beim Verlassen der Seite
-        window.addEventListener("beforeunload", function() {
-            if (updateInterval) {
-                clearInterval(updateInterval);
-            }
-        });
     </script>
 </body>
 </html>
