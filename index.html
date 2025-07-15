@@ -299,7 +299,7 @@
         ];
 
         // Funktion zum Aktualisieren der Beitragsliste
-        // Ersetzt durch LiveBuffet Klasse
+        function updateContributionsList() {
             const list = document.getElementById('contributionsList');
             list.innerHTML = '';
             
@@ -374,7 +374,7 @@
                     method: "GET",
 >>>>>>> 596880cfe23ebd86dae28142b67a0a14bf6b5d35
                 });
-                // Auto-start in live-buffet.js
+                updateContributionsList();
 
 <<<<<<< HEAD
                 // Erfolgsanzeige
@@ -395,7 +395,7 @@
                         item: formData.contribution,
                         quantity: formData.quantity
                     });
-                    // Auto-start in live-buffet.js
+                    updateContributionsList();
 
                     // Erfolgsanzeige
                     document.getElementById('successMessage').style.display = 'block';
@@ -422,8 +422,7 @@
         });
 
         // Beitragsliste beim Laden initialisieren
-        // Auto-start in live-buffet.js
+        updateContributionsList();
     </script>
-<script src="live-buffet.js"></script>
 </body>
 </html>
