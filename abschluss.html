@@ -408,7 +408,14 @@
                 buffetList.appendChild(listItem);
             }
         } else {
-            document.getElementById('buffet-section').classList.add('hidden');
+            // Fallback: Zeige "Kein Buffet-Beitrag" an statt Sektion zu verstecken
+            const buffetList = document.getElementById('buffet-list');
+            const listItem = document.createElement('li');
+            listItem.className = 'buffet-item';
+            listItem.textContent = 'Kein Buffet-Beitrag angegeben';
+            listItem.style.fontStyle = 'italic';
+            listItem.style.color = '#666';
+            buffetList.appendChild(listItem);
         }
 
         // Helfer-Sektion: Neue Logik für bessere Darstellung
