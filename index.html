@@ -454,9 +454,9 @@
                     return;
                 }
                 
-                data.forEach(item => {
+                Object.entries(data).forEach(([item, quantity]) => {
                     const listItem = document.createElement("li");
-                    listItem.textContent = `${item.contribution} (${item.quantity}) - ${item.name}`;
+                    listItem.textContent = `${item} (${quantity})`;
                     liveList.appendChild(listItem);
                 });
             } catch (error) {
