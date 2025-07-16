@@ -375,28 +375,32 @@
         </div>
 
         <div class="sidebar">
-            <h3>Helfer-Statistiken</h3>
+            <h3>Bisherige Buffet-Beiträge</h3>
             <div class="info-item">
-                <strong>Aufbau-Helfer</strong><br>
-                <span id="aufbau-count">Wird geladen...</span> Brüder haben sich gemeldet
+                <strong>Kartoffelsalat</strong><br>
+                Menge: für 15 Personen
             </div>
             <div class="info-item">
-                <strong>Abbau-Helfer</strong><br>
-                <span id="abbau-count">Wird geladen...</span> Brüder haben sich gemeldet
+                <strong>Frikadellen</strong><br>
+                Menge: 40 Stück
+            </div>
+            <div class="info-item">
+                <strong>Gemischter Salat</strong><br>
+                Menge: 2 große Schüsseln
             </div>
             
-            <h3>Termine</h3>
+            <h3>Veranstaltungsinfo</h3>
             <div class="info-item">
-                <strong>Aufbautag</strong><br>
-                22. August 2025 ab 16:00 Uhr
+                <strong>Eintrittspreis</strong><br>
+                18,00 € pro Person
             </div>
             <div class="info-item">
-                <strong>Sommerfest</strong><br>
-                23. August 2025 ab 18:00 Uhr
+                <strong>Getränke</strong><br>
+                2,00 € pro Wertbon
             </div>
             <div class="info-item">
-                <strong>Abbautag</strong><br>
-                24. August 2025 ab 14:00 Uhr
+                <strong>Kleiderordnung</strong><br>
+                Smart Casual
             </div>
         </div>
     </div>
@@ -519,17 +523,6 @@
                 document.getElementById('successMessage').style.display = 'none';
             }
         });
-
-        // Helfer-Statistiken laden (Platzhalter)
-        function loadHelferStats() {
-            // TODO: Live-Daten über Webhook laden
-            document.getElementById("aufbau-count").textContent = "12";
-            document.getElementById("abbau-count").textContent = "8";
-        }
-        
-        // Beim Laden der Seite
-        loadHelferStats();
-
     </script>
 <!-- <script src="live-buffet.js"></script> -->
 </body>
