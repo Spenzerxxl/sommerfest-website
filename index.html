@@ -313,6 +313,29 @@
         // n8n Webhook URL
         const N8N_WEBHOOK_URL = 'https://automatisierung.frankrath.de/webhook/sommerfest-anmeldung';
 
+
+        // Gäste-Zahlen-Berechnung
+        function calculateGuestNumbers(companions) {
+            if (!companions || companions.trim() === '') {
+                return {
+                    anzahlGaeste: 0,
+                    gesamtPersonen: 1
+                };
+            }
+            
+            const guestList = companions.split(',')
+                .map(name => name.trim())
+                .filter(name => name.length > 0);
+            
+            const anzahlGaeste = guestList.length;
+            const gesamtPersonen = 1 + anzahlGaeste;
+            
+            return {
+                anzahlGaeste: anzahlGaeste,
+                gesamtPersonen: gesamtPersonen
+            };
+        }
+
         // Formular-Submit Handler
         // Formular-Submit Handler
 
@@ -392,8 +415,10 @@
                 searchParams.append('gaestelNamen', formData.companions);
                 searchParams.append('buffet', formData.contribution);
                 searchParams.append('portionen', formData.quantity);
-                searchParams.append('anzahlGaeste', '');
-                searchParams.append('gesamtPersonen', '');
+                // Gäste-Zahlen berechnen
+                const guestNumbers = calculateGuestNumbers(formData.companions);
+                searchParams.append('anzahlGaeste', guestNumbers.anzahlGaeste.toString());
+                searchParams.append('gesamtPersonen', guestNumbers.gesamtPersonen.toString());
                 searchParams.append('aufbau', '');
                 searchParams.append('abbau', '');
                 searchParams.append('bemerkungen', '');
@@ -437,8 +462,8 @@
                         gaesteNamen: formData.companions,
                         buffet: formData.contribution,
                         portionen: formData.quantity,
-                        anzahlGaeste: "",
-                        gesamtPersonen: "",
+                        anzahlGaeste: guestNumbers.anzahlGaeste.toString(),
+                        gesamtPersonen: guestNumbers.gesamtPersonen.toString(),
                         timestamp: new Date().toISOString()
                     });
                     window.location.href = `helfer.html?${helferParams.toString()}`;
