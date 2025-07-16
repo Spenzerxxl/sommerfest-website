@@ -210,13 +210,16 @@
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
+            }
             
             .sidebar {
                 width: 100%;
                 order: 2;
+            }
             
             .main-content {
                 order: 1;
+            }
         }
     </style>
 </head>
@@ -313,7 +316,6 @@
         // n8n Webhook URL
         const N8N_WEBHOOK_URL = 'https://automatisierung.frankrath.de/webhook/sommerfest-anmeldung';
 
-
         // Gäste-Zahlen-Berechnung
         function calculateGuestNumbers(companions) {
             if (!companions || companions.trim() === '') {
@@ -335,9 +337,6 @@
                 gesamtPersonen: gesamtPersonen
             };
         }
-
-        // Formular-Submit Handler
-        // Formular-Submit Handler
 
         let buffetItemCount = 1;
 
@@ -383,9 +382,17 @@
             return JSON.stringify(buffetItems);
         }
 
-        // Formular-Submit Handler
-                document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+        // Formular-Submit Handler mit Button-Deaktivierung
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
             e.preventDefault();
+            
+            // Button sofort deaktivieren
+            const submitButton = document.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = "Wird verarbeitet...";
+            submitButton.style.backgroundColor = "#6c757d";
+            submitButton.style.cursor = "not-allowed";
             
             // Formulardaten sammeln
             const formData = {
@@ -400,6 +407,12 @@
             // Validierung
             const buffetData = JSON.parse(formData.contribution);
             if (!formData.name || !formData.email || buffetData.length === 0) {
+                // Button wieder aktivieren bei Fehler
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
+                submitButton.style.backgroundColor = "#2c5282";
+                submitButton.style.cursor = "pointer";
+                
                 document.getElementById("errorMessage").textContent = "Bitte fülle alle Pflichtfelder aus.";
                 document.getElementById("errorMessage").style.display = "block";
                 document.getElementById("successMessage").style.display = "none";
@@ -444,6 +457,9 @@
                 // Erfolgsanzeige
                 document.getElementById('successMessage').style.display = 'block';
                 document.getElementById('errorMessage').style.display = 'none';
+                
+                // Button-Text ändern
+                submitButton.textContent = "Erfolgreich! Weiterleitung...";
 
                 // Formular zurücksetzen
                 this.reset();
@@ -471,6 +487,13 @@
                 
             } catch (error) {
                 console.error('Fehler beim Senden:', error);
+                
+                // Button wieder aktivieren bei Fehler
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
+                submitButton.style.backgroundColor = "#2c5282";
+                submitButton.style.cursor = "pointer";
+                
                 document.getElementById("errorMessage").textContent = "Fehler beim Senden der Anmeldung. Bitte versuche es erneut.";
                 document.getElementById("errorMessage").style.display = "block";
                 document.getElementById("successMessage").style.display = "none";
