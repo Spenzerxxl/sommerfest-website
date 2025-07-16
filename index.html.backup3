@@ -39,13 +39,10 @@
             box-shadow: -2px 0 10px rgba(0,0,0,0.1);
         }
 
-
-
-
         .simple-header {
             background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
             color: white;
-            padding: 25px 20px;
+            padding: 40px 20px;
             text-align: center;
             margin: -40px -40px 30px -40px;
             border-radius: 0 0 8px 8px;
@@ -54,17 +51,18 @@
 
         .simple-header .main-title {
             color: white;
-            font-size: 2.2em;
+            font-size: 2.8em;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .simple-header .event-title {
             color: #a0c4ff;
-            font-size: 1.8em;
+            font-size: 2.2em;
             margin-bottom: 0;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
         }
+
         h1 {
             color: #1e3a5f;
             font-size: 2.5em;
@@ -85,7 +83,6 @@
             border-radius: 8px;
             margin-bottom: 30px;
             border-left: 4px solid #2c5282;
-            font-size: 1.15em;
         }
 
         .form-group {
@@ -484,7 +481,7 @@
                     return;
                 }
                 
-                Object.entries(data).sort(([a], [b]) => a.localeCompare(b)).forEach(([item, quantity]) => {
+                Object.entries(data).forEach(([item, quantity]) => {
                     const listItem = document.createElement("li");
                     listItem.textContent = `${item} (${quantity})`;
                     liveList.appendChild(listItem);
