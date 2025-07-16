@@ -53,44 +53,10 @@
             font-weight: normal;
         }
 
-        .header-image {
-            position: relative;
-            margin: -40px -40px 30px -40px;
-            height: 400px;
-            overflow: hidden;
-            border-radius: 0 0 8px 8px;
-        }
 
-        .header-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-        }
 
-        .header-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(30, 58, 95, 0.95), rgba(30, 58, 95, 0.7), transparent);
-            padding: 60px 40px 30px;
-            text-align: center;
-        }
 
-        .main-title {
-            color: white;
-            font-size: 2.8em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
 
-        .event-title {
-            color: #a0c4ff;
-            font-size: 2.2em;
-            margin-bottom: 0;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-        }
 
         .welcome-text {
             background-color: #e6f2ff;
@@ -278,6 +244,14 @@
             color: #a0c4ff;
         }
 
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+        }
 
         .error-message {
             background-color: #f8d7da;
@@ -315,13 +289,6 @@
 <body>
     <div class="container">
         <div class="main-content">
-            <div class="header-image">
-                <img src="Logenhaus_blue.jpg" alt="Logenhaus Lübeck">
-                <div class="header-overlay">
-                    <h1 class="main-title">Helfer gesucht!</h1>
-                    <h2 class="event-title">Sommerfest 2025</h2>
-                </div>
-            </div>
             
             <div class="welcome-text">
                 <p>Lieber Bruder! Vielen Dank für deine Anmeldung zum Sommerfest 2025!</p>
@@ -329,6 +296,9 @@
                 <p>Deine Mithilfe macht das Fest zu einem besonderen Erlebnis für alle Beteiligten.</p>
             </div>
 
+            <div id="successMessage" class="success-message">
+                Deine Helfer-Angaben wurden erfolgreich übermittelt!
+            </div>
 
             <div id="errorMessage" class="error-message">
                 Bitte gib an, ob du beim Aufbau und/oder Abbau helfen kannst.
@@ -497,6 +467,7 @@
                 submitButton.style.cursor = "pointer";
                 
                 document.getElementById("errorMessage").style.display = "block";
+                document.getElementById("successMessage").style.display = "none";
                 return;
             }
 
@@ -522,6 +493,7 @@
                     console.log('Helfer-Daten gesendet:', completeData);
                     
                     // Erfolgsmeldung
+                    document.getElementById('successMessage').style.display = 'block';
                     document.getElementById('errorMessage').style.display = 'none';
                     
                     // Button-Text ändern
@@ -548,6 +520,7 @@
                 
                 document.getElementById('errorMessage').textContent = 'Fehler beim Senden der Helfer-Angaben. Bitte versuche es später erneut.';
                 document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('successMessage').style.display = 'none';
             }
         });
     </script>

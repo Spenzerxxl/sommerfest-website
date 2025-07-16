@@ -53,10 +53,44 @@
             font-weight: normal;
         }
 
+        .header-image {
+            position: relative;
+            margin: -40px -40px 30px -40px;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 0 0 8px 8px;
+        }
 
+        .header-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
 
+        .header-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(30, 58, 95, 0.95), rgba(30, 58, 95, 0.7), transparent);
+            padding: 60px 40px 30px;
+            text-align: center;
+        }
 
+        .main-title {
+            color: white;
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
 
+        .event-title {
+            color: #a0c4ff;
+            font-size: 2.2em;
+            margin-bottom: 0;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
 
         .welcome-text {
             background-color: #d4edda;
@@ -223,6 +257,13 @@
 <body>
     <div class="container">
         <div class="main-content">
+            <div class="header-image">
+                <img src="Logenhaus_blue.jpg" alt="Logenhaus Lübeck">
+                <div class="header-overlay">
+                    <h1 class="main-title">Vielen Dank!</h1>
+                    <h2 class="event-title">Anmeldung bestätigt</h2>
+                </div>
+            </div>
             
             <div class="welcome-text">
                 <h2>Lieber Bruder!</h2>
@@ -369,26 +410,8 @@
 
         // Buffet-Sektion nur anzeigen wenn Buffet-Beitrag vorhanden
         if (data.buffet && data.buffet.trim() !== '' && data.buffet !== 'Nicht angegeben') {
-            try {
-                // JSON-String parsen und formatiert anzeigen
-                const buffetItems = JSON.parse(data.buffet);
-                let formattedBuffet = '';
-                
-                buffetItems.forEach((item, index) => {
-                    if (index > 0) {
-                        formattedBuffet += ', ';
-                    }
-                    formattedBuffet += `${item.item} (${item.quantity})`;
-                });
-                
-                document.getElementById('display-buffet').textContent = formattedBuffet;
-                document.getElementById('display-portionen').textContent = 'Siehe oben';
-            } catch (error) {
-                // Fallback falls JSON nicht parsbar
-                console.error('JSON-Parse-Fehler:', error);
-                document.getElementById('display-buffet').textContent = data.buffet;
-                document.getElementById('display-portionen').textContent = data.portionen;
-            }
+            document.getElementById('display-buffet').textContent = data.buffet;
+            document.getElementById('display-portionen').textContent = data.portionen;
         } else {
             document.getElementById('buffet-section').classList.add('hidden');
         }
