@@ -278,6 +278,14 @@
             color: #a0c4ff;
         }
 
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+        }
 
         .error-message {
             background-color: #f8d7da;
@@ -329,6 +337,9 @@
                 <p>Deine Mithilfe macht das Fest zu einem besonderen Erlebnis für alle Beteiligten.</p>
             </div>
 
+            <div id="successMessage" class="success-message">
+                Deine Helfer-Angaben wurden erfolgreich übermittelt!
+            </div>
 
             <div id="errorMessage" class="error-message">
                 Bitte gib an, ob du beim Aufbau und/oder Abbau helfen kannst.
@@ -497,6 +508,7 @@
                 submitButton.style.cursor = "pointer";
                 
                 document.getElementById("errorMessage").style.display = "block";
+                document.getElementById("successMessage").style.display = "none";
                 return;
             }
 
@@ -522,6 +534,7 @@
                     console.log('Helfer-Daten gesendet:', completeData);
                     
                     // Erfolgsmeldung
+                    document.getElementById('successMessage').style.display = 'block';
                     document.getElementById('errorMessage').style.display = 'none';
                     
                     // Button-Text ändern
@@ -548,6 +561,7 @@
                 
                 document.getElementById('errorMessage').textContent = 'Fehler beim Senden der Helfer-Angaben. Bitte versuche es später erneut.';
                 document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('successMessage').style.display = 'none';
             }
         });
     </script>

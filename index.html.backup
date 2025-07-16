@@ -189,6 +189,14 @@
             color: #a0c4ff;
         }
 
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+        }
 
         .error-message {
             background-color: #f8d7da;
@@ -227,6 +235,9 @@
                 <p>Schön, dass du dich anmeldest! Mit deiner Teilnahme trägst du zur Stärkung der Bruderkette und des Lübecker Modells bei. Gemeinsam gestalten wir einen unvergesslichen Abend.</p>
             </div>
 
+            <div id="successMessage" class="success-message">
+                Deine Anmeldung wurde erfolgreich übermittelt! Du erhältst in Kürze eine Bestätigung per E-Mail.
+            </div>
 
             <div id="errorMessage" class="error-message">
                 Bitte fülle alle Pflichtfelder aus.
@@ -391,6 +402,7 @@
             if (!formData.name || !formData.email || buffetData.length === 0) {
                 document.getElementById("errorMessage").textContent = "Bitte fülle alle Pflichtfelder aus.";
                 document.getElementById("errorMessage").style.display = "block";
+                document.getElementById("successMessage").style.display = "none";
                 return;
             }
 
@@ -430,6 +442,7 @@
                 updateContributionsList();
 
                 // Erfolgsanzeige
+                document.getElementById('successMessage').style.display = 'block';
                 document.getElementById('errorMessage').style.display = 'none';
 
                 // Formular zurücksetzen
@@ -460,6 +473,7 @@
                 console.error('Fehler beim Senden:', error);
                 document.getElementById("errorMessage").textContent = "Fehler beim Senden der Anmeldung. Bitte versuche es erneut.";
                 document.getElementById("errorMessage").style.display = "block";
+                document.getElementById("successMessage").style.display = "none";
             }
         });
 
