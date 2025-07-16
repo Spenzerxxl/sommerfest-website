@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Veranstaltungsanmeldung</title>
+    <title>Sommerfest 2025 - Anmeldung</title>
     <style>
         * {
             margin: 0;
@@ -39,6 +39,30 @@
             box-shadow: -2px 0 10px rgba(0,0,0,0.1);
         }
 
+        .simple-header {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin: -40px -40px 30px -40px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .simple-header .main-title {
+            color: white;
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .simple-header .event-title {
+            color: #a0c4ff;
+            font-size: 2.2em;
+            margin-bottom: 0;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
         h1 {
             color: #1e3a5f;
             font-size: 2.5em;
@@ -51,45 +75,6 @@
             font-size: 1.8em;
             margin-bottom: 20px;
             font-weight: normal;
-        }
-
-        .header-image {
-            position: relative;
-            margin: -40px -40px 30px -40px;
-            height: 400px;
-            overflow: hidden;
-            border-radius: 0 0 8px 8px;
-        }
-
-        .header-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-        }
-
-        .header-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(30, 58, 95, 0.95), rgba(30, 58, 95, 0.7), transparent);
-            padding: 60px 40px 30px;
-            text-align: center;
-        }
-
-        .main-title {
-            color: white;
-            font-size: 2.8em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .event-title {
-            color: #a0c4ff;
-            font-size: 2.2em;
-            margin-bottom: 0;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
 
         .welcome-text {
@@ -226,12 +211,9 @@
 <body>
     <div class="container">
         <div class="main-content">
-            <div class="header-image">
-                <img src="Logenhaus_blue.jpg" alt="Logenhaus Lübeck">
-                <div class="header-overlay">
-                    <h1 class="main-title">Sommerfest der Lübecker Freimaurer</h1>
-                    <h2 class="event-title">Sommerfest 2025</h2>
-                </div>
+            <div class="simple-header">
+                <h1 class="main-title">Sommerfest der Lübecker Freimaurer</h1>
+                <h2 class="event-title">Sommerfest 2025</h2>
             </div>
             
             <div class="welcome-text">
