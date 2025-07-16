@@ -428,9 +428,20 @@
                 dynamicItems.forEach(item => item.parentNode.remove());
                 buffetItemCount = 1;
                 
-                // Nach 3 Sekunden zur Helferseite weiterleiten
+                // Nach 3 Sekunden zur Helferseite weiterleiten (mit Daten)
                 setTimeout(() => {
-                    window.location.href = 'helfer.html';
+                    const helferParams = new URLSearchParams({
+                        name: formData.name,
+                        email: formData.email,
+                        loge: formData.lodge,
+                        gaesteNamen: formData.companions,
+                        buffet: formData.contribution,
+                        portionen: formData.quantity,
+                        anzahlGaeste: "",
+                        gesamtPersonen: "",
+                        timestamp: new Date().toISOString()
+                    });
+                    window.location.href = `helfer.html?${helferParams.toString()}`;
                 }, 3000);
                 
             } catch (error) {
