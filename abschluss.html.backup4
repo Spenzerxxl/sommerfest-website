@@ -116,21 +116,6 @@
             flex: 1;
         }
 
-
-        .helfer-item {
-            margin-bottom: 10px;
-        }
-
-        .helfer-text {
-            font-size: 1.15em;
-            line-height: 1.4;
-            color: #1e3a5f;
-        }
-
-        #display-bemerkungen {
-            font-size: 1.15em;
-            line-height: 1.4;
-        }
         .helper-status {
             display: inline-block;
             padding: 4px 12px;
@@ -285,11 +270,14 @@
             </div>
 
             <div id="helfer-section" class="summary-section">
-                <div class="helfer-item" id="aufbau-item">
-                    <span class="helfer-text" id="display-aufbau">-</span>
+                <h3>Deine Helfer-Bereitschaft</h3>
+                <div class="summary-row">
+                    <span class="summary-label">Aufbau (22. August):</span>
+                    <span class="summary-value" id="display-aufbau">-</span>
                 </div>
-                <div class="helfer-item" id="abbau-item">
-                    <span class="helfer-text" id="display-abbau">-</span>
+                <div class="summary-row">
+                    <span class="summary-label">Abbau (24. August):</span>
+                    <span class="summary-value" id="display-abbau">-</span>
                 </div>
             </div>
 
@@ -396,38 +384,43 @@
             document.getElementById('buffet-section').classList.add('hidden');
         }
 
-        // Helfer-Sektion: Neue Logik für bessere Darstellung
-        const aufbauJa = data.aufbau && data.aufbau.includes('Ja');
-        const abbauJa = data.abbau && data.abbau.includes('Ja');
-        
-        if (aufbauJa || abbauJa) {
-            // Mindestens eine Ja-Antwort → Sektion anzeigen
+        // Helfer-Sektion nur anzeigen wenn mindestens eine Helfer-Angabe gemacht wurde
+        const hatHelferAngabe = (data.aufbau && data.aufbau.trim() !== '' && data.aufbau !== 'Nicht angegeben') ||
+                                (data.abbau && data.abbau.trim() !== '' && data.abbau !== 'Nicht angegeben');
+
+        if (hatHelferAngabe) {
+            // Helfer-Status mit Styling
             const aufbauElement = document.getElementById('display-aufbau');
             const abbauElement = document.getElementById('display-abbau');
-            const aufbauItem = document.getElementById('aufbau-item');
-            const abbauItem = document.getElementById('abbau-item');
             
-            if (aufbauJa) {
-                aufbauElement.textContent = 'Ja, ich helfe beim Aufbau am Freitag, den 22. August';
-                aufbauItem.style.display = 'block';
+            if (data.aufbau && data.aufbau.includes('Ja')) {
+                aufbauElement.innerHTML = '<span class="helper-status helper-yes">' + data.aufbau + '</span>';
+            } else if (data.aufbau) {
+                aufbauElement.innerHTML = '<span class="helper-status helper-no">' + data.aufbau + '</span>';
             } else {
-                aufbauItem.style.display = 'none';
+                aufbauElement.textContent = 'Keine Angabe';
             }
             
-            if (abbauJa) {
-                abbauElement.textContent = 'Ja, ich helfe beim Abbau am Sonntag, den 24. August';
-                abbauItem.style.display = 'block';
+            if (data.abbau && data.abbau.includes('Ja')) {
+                abbauElement.innerHTML = '<span class="helper-status helper-yes">' + data.abbau + '</span>';
+            } else if (data.abbau) {
+                abbauElement.innerHTML = '<span class="helper-status helper-no">' + data.abbau + '</span>';
             } else {
-                abbauItem.style.display = 'none';
+                abbauElement.textContent = 'Keine Angabe';
             }
         } else {
-            // Beide "Nein" oder keine Angabe → Helfer-Sektion komplett ausblenden
+            // Helfer-Sektion ausblenden
             document.getElementById('helfer-section').classList.add('hidden');
         }
 
+        // Hinweise-Sektion: Titel anpassen wenn keine Helfer-Angabe gemacht wurde
+        if (!hatHelferAngabe) {
+            document.querySelector('#hinweise-section h3').textContent = 'Deine Hinweise an das Organisationsteam';
+        }
 
         // Debug-Ausgabe
         console.log('Empfangene Daten:', data);
+        console.log('Hat Helfer-Angabe:', hatHelferAngabe);
     </script>
 </body>
 </html>

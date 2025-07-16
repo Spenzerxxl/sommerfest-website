@@ -152,10 +152,40 @@
             font-style: italic;
         }
 
+        .termine-section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
 
+        .termine-section h3 {
+            color: #1e3a5f;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
 
+        .termine-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
 
+        .termin-item {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 3px solid #2c5282;
+        }
 
+        .termin-item strong {
+            color: #1e3a5f;
+            display: block;
+            margin-bottom: 5px;
+        }
 
         label {
             display: block;
@@ -251,6 +281,9 @@
                 grid-template-columns: 1fr;
             }
 
+            .termine-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -319,6 +352,27 @@
                 <button type="submit" class="button">Helfer-Angaben absenden</button>
             </form>
 
+            <div class="termine-section">
+                <h3>Wichtige Termine</h3>
+                <div class="termine-grid">
+                    <div class="termin-item">
+                        <strong>Aufbautag</strong>
+                        Freitag, 22. August 2025 ab 16:00 Uhr
+                    </div>
+                    <div class="termin-item">
+                        <strong>Sommerfest</strong>
+                        Samstag, 23. August 2025 ab 18:00 Uhr
+                    </div>
+                    <div class="termin-item">
+                        <strong>Abbautag</strong>
+                        Sonntag, 24. August 2025 ab 14:00 Uhr
+                    </div>
+                    <div class="termin-item">
+                        <strong>Anmeldeschluss</strong>
+                        Donnerstag, 14. August 2025
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="sidebar">
