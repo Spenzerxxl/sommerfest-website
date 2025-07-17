@@ -53,11 +53,6 @@
             font-weight: normal;
         }
 
-
-
-
-
-
         .welcome-text {
             background-color: #d4edda;
             padding: 25px;
@@ -116,6 +111,29 @@
             flex: 1;
         }
 
+        /* Neue Styles für Buffet-Liste */
+        .buffet-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .buffet-item {
+            color: #2c3e50;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f3f4;
+            font-size: 1.1em;
+        }
+
+        .buffet-item:last-child {
+            border-bottom: none;
+        }
+
+        .buffet-item::before {
+            content: "•";
+            color: #1e3a5f;
+            font-weight: bold;
+            margin-right: 10px;
+        }
 
         .helfer-item {
             margin-bottom: 10px;
@@ -131,6 +149,7 @@
             font-size: 1.15em;
             line-height: 1.4;
         }
+
         .helper-status {
             display: inline-block;
             padding: 4px 12px;
@@ -274,14 +293,9 @@
 
             <div id="buffet-section" class="summary-section">
                 <h3>Dein Buffet-Beitrag</h3>
-                <div class="summary-row">
-                    <span class="summary-label">Beitrag:</span>
-                    <span class="summary-value" id="display-buffet">-</span>
-                </div>
-                <div class="summary-row">
-                    <span class="summary-label">Menge:</span>
-                    <span class="summary-value" id="display-portionen">-</span>
-                </div>
+                <ul class="buffet-list" id="buffet-list">
+                    <!-- Buffet-Items werden hier dynamisch eingefügt -->
+                </ul>
             </div>
 
             <div id="helfer-section" class="summary-section">
@@ -370,30 +384,38 @@
         document.getElementById('display-gesamt').textContent = data.gesamtPersonen;
         document.getElementById('display-bemerkungen').textContent = data.bemerkungen;
 
-        // Buffet-Sektion nur anzeigen wenn Buffet-Beitrag vorhanden
+        // Buffet-Sektion: Neue übersichtliche Darstellung
         if (data.buffet && data.buffet.trim() !== '' && data.buffet !== 'Nicht angegeben') {
             try {
-                // JSON-String parsen und formatiert anzeigen
+                // JSON-String parsen und als schöne Liste anzeigen
                 const buffetItems = JSON.parse(data.buffet);
-                let formattedBuffet = '';
+                const buffetList = document.getElementById('buffet-list');
                 
-                buffetItems.forEach((item, index) => {
-                    if (index > 0) {
-                        formattedBuffet += ', ';
-                    }
-                    formattedBuffet += `${item.item} (${item.quantity})`;
+                buffetItems.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'buffet-item';
+                    listItem.textContent = `${item.quantity} Portionen ${item.item}`;
+                    buffetList.appendChild(listItem);
                 });
                 
-                document.getElementById('display-buffet').textContent = formattedBuffet;
-                document.getElementById('display-portionen').textContent = 'Siehe oben';
             } catch (error) {
                 // Fallback falls JSON nicht parsbar
                 console.error('JSON-Parse-Fehler:', error);
-                document.getElementById('display-buffet').textContent = data.buffet;
-                document.getElementById('display-portionen').textContent = data.portionen;
+                const buffetList = document.getElementById('buffet-list');
+                const listItem = document.createElement('li');
+                listItem.className = 'buffet-item';
+                listItem.textContent = data.buffet;
+                buffetList.appendChild(listItem);
             }
         } else {
-            document.getElementById('buffet-section').classList.add('hidden');
+            // Fallback: Zeige "Kein Buffet-Beitrag" an statt Sektion zu verstecken
+            const buffetList = document.getElementById('buffet-list');
+            const listItem = document.createElement('li');
+            listItem.className = 'buffet-item';
+            listItem.textContent = 'Kein Buffet-Beitrag angegeben';
+            listItem.style.fontStyle = 'italic';
+            listItem.style.color = '#666';
+            buffetList.appendChild(listItem);
         }
 
         // Helfer-Sektion: Neue Logik für bessere Darstellung
@@ -424,7 +446,6 @@
             // Beide "Nein" oder keine Angabe → Helfer-Sektion komplett ausblenden
             document.getElementById('helfer-section').classList.add('hidden');
         }
-
 
         // Debug-Ausgabe
         console.log('Empfangene Daten:', data);

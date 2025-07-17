@@ -53,11 +53,6 @@
             font-weight: normal;
         }
 
-
-
-
-
-
         .welcome-text {
             background-color: #e6f2ff;
             padding: 25px;
@@ -152,11 +147,6 @@
             font-style: italic;
         }
 
-
-
-
-
-
         label {
             display: block;
             color: #1e3a5f;
@@ -231,6 +221,11 @@
             border-radius: 4px;
             margin-bottom: 20px;
             display: none;
+        }
+
+        .loading {
+            color: #a0c4ff;
+            font-style: italic;
         }
 
         @media (max-width: 768px) {
@@ -322,14 +317,14 @@
         </div>
 
         <div class="sidebar">
-            <h3>Helfer-Statistiken</h3>
+            <h3>Live Helfer-Statistiken</h3>
             <div class="info-item">
                 <strong>Aufbau-Helfer</strong><br>
-                <span id="aufbau-count">Wird geladen...</span> Brüder haben sich gemeldet
+                <span id="aufbau-count" class="loading">Wird geladen...</span> Brüder haben sich gemeldet
             </div>
             <div class="info-item">
                 <strong>Abbau-Helfer</strong><br>
-                <span id="abbau-count">Wird geladen...</span> Brüder haben sich gemeldet
+                <span id="abbau-count" class="loading">Wird geladen...</span> Brüder haben sich gemeldet
             </div>
             
             <h3>Termine</h3>
@@ -344,6 +339,12 @@
             <div class="info-item">
                 <strong>Abbautag</strong><br>
                 24. August 2025 ab 14:00 Uhr
+            </div>
+            
+            <h3>Kontakt</h3>
+            <div class="info-item">
+                <strong>Organisationsteam</strong><br>
+                sommerfest@zum-fuellhorn.de
             </div>
         </div>
     </div>
@@ -363,8 +364,9 @@
             timestamp: urlParams.get('timestamp') || ''
         };
 
-        // n8n Webhook URL
+        // n8n Webhook URLs
         const N8N_WEBHOOK_URL = 'https://automatisierung.frankrath.de/webhook/sommerfest-anmeldung';
+        const HELFER_STATS_URL = 'https://automatisierung.frankrath.de/webhook/helfer-statistik';
 
         // Radio-Button Styling
         document.querySelectorAll('input[type="radio"]').forEach(radio => {
@@ -467,17 +469,37 @@
             }
         });
 
-        // Helfer-Statistiken laden (Platzhalter)
-        function loadHelferStats() {
-            // TODO: Live-Daten über Webhook laden
-            document.getElementById("aufbau-count").textContent = "12";
-            document.getElementById("abbau-count").textContent = "8";
+        // Live Helfer-Statistiken laden
+        async function loadHelferStats() {
+            try {
+                const response = await fetch(HELFER_STATS_URL, {
+                    method: 'GET',
+                    headers: {}
+                });
+                
+                if (response.ok) {
+                    const stats = await response.json();
+                    document.getElementById("aufbau-count").textContent = stats.aufbau || '0';
+                    document.getElementById("abbau-count").textContent = stats.abbau || '0';
+                    
+                    // Loading-Style entfernen
+                    document.getElementById("aufbau-count").classList.remove('loading');
+                    document.getElementById("abbau-count").classList.remove('loading');
+                } else {
+                    throw new Error('HTTP ' + response.status);
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden der Helfer-Statistiken:', error);
+                document.getElementById("aufbau-count").textContent = '?';
+                document.getElementById("abbau-count").textContent = '?';
+                document.getElementById("aufbau-count").classList.remove('loading');
+                document.getElementById("abbau-count").classList.remove('loading');
+            }
         }
         
         // Beim Laden der Seite
         loadHelferStats();
 
     </script>
-<!-- <script src="live-buffet.js"></script> -->
 </body>
 </html>
