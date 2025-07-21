@@ -1190,6 +1190,20 @@
             document.head.appendChild(style);
         }
 
+        // Hilfsfunktion: "Frank Rath" → "Rath, Frank" für Kassenliste
+        function formatNameForBilling(fullName) {
+            if (!fullName || fullName === "N/A") return fullName;
+            
+            const parts = fullName.trim().split(" ");
+            if (parts.length < 2) return fullName; // Nur ein Name
+            
+            // Letzter Teil = Nachname, Rest = Vorname(n)
+            const lastName = parts[parts.length - 1];
+            const firstName = parts.slice(0, -1).join(" ");
+            
+            return `${lastName}, ${firstName}`;
+        }
+        
         // Export-Funktionen
         function exportToCSV(data, headers, filename) {
             console.log(`Erstelle CSV: ${filename} mit ${data.length} Zeilen`);
@@ -1389,7 +1403,7 @@
                 
                 // 1. HAUPTPERSON HINZUFÜGEN
                 allPersons.push({
-                    'Name': participant.name || 'N/A',
+                    'Name': formatNameForBilling(participant.name || 'N/A'),
                     'Loge/Gastgeber': lodge,
                     'Bezahlt': ''
                 });
@@ -1403,7 +1417,7 @@
                     
                     guestNames.forEach(guestName => {
                         allPersons.push({
-                            'Name': guestName,
+                            'Name': formatNameForBilling(guestName),
                             'Loge/Gastgeber': `Gast von ${participant.name}`,
                             'Bezahlt': ''
                         });
@@ -1411,19 +1425,8 @@
                 }
             });
             
-            // 3. NACH NACHNAME SORTIEREN (FÜR KASSENLISTE)
-            allPersons.sort((a, b) => {
-                // Hilfsfunktion: Nachname aus "Vorname Nachname" extrahieren
-                const getLastName = (fullName) => {
-                    const parts = fullName.trim().split(" ");
-                    return parts[parts.length - 1]; // Letzter Teil = Nachname
-                };
-                
-                const lastNameA = getLastName(a.Name);
-                const lastNameB = getLastName(b.Name);
-                
-                // Nach Nachname sortieren für Kassenliste
-                return lastNameA.localeCompare(lastNameB);
+            // 3. ALPHABETISCH SORTIEREN (Namen bereits im Format "Nachname, Vorname")
+            allPersons.sort((a, b) => a.Name.localeCompare(b.Name));
             });
             
             // 4. CSV EXPORT
