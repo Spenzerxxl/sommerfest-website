@@ -795,68 +795,13 @@
 
         // Teilnehmer-Tabelle aktualisieren
 
-        // GÄSTE-KORREKTUR basierend auf Google Sheets-Analyse
-        function correctGuestDataFromPattern(participant) {
-            const { name, email, datum } = participant;
-            
-            // Frank Rath Test-Anmeldungen (verschiedene Gäste-Kombinationen)
-            if (name === 'Frank Rath' && email === 'info@frankrath.com') {
-                if (datum && datum.includes('2025-07-16T18:41')) {
-                    return { gaeste: 'Heidi Rath, Kay Fuhrmann, Ralf Quandt', personen: 4 };
-                }
-                if (datum && datum.includes('2025-07-16T19:11')) {
-                    return { gaeste: 'Heidi Rath, Kay Fuhrmann, Ralf Quandt', personen: 4 };
-                }
-                if (datum && datum.includes('2025-07-16T19:21')) {
-                    return { gaeste: 'Heidi Rath, Lennard Rath, Stella Rath', personen: 4 };
-                }
-                if (datum && datum.includes('2025-07-17T20:39')) {
-                    return { gaeste: 'Heidi Rath, Ralf Quandt, Kay Fuhrmann', personen: 4 };
-                }
-                if (datum && datum.includes('2025-07-19T15:02')) {
-                    return { gaeste: 'Heidi Rath', personen: 2 };
-                }
-                // NEUE TIMESTAMPS FÜR AKTUELLE TEST-DATEN
-                if (datum && datum.includes('2025-07-21T15:36')) {
-                    return { gaeste: 'Heidi Rath, Kay Fuhrmann, Ralf Quandt', personen: 4 };
-                }
-                if (datum && datum.includes('2025-07-21T16:44')) {
-                    return { gaeste: 'Stella Schenk', personen: 2 };
-                }
-            }
-            
-            // Claude Test mit Max Testmann
-            if (name === 'Claude Test' && email === 'test@claude.ai') {
-                return { gaeste: 'Max Testmann', personen: 2 };
-            }
-            
-            // LIVE-TEST Anmeldungen
-            if (name.includes('LIVE-TEST') && email.includes('livetest')) {
-                return { gaeste: 'Maria-Test', personen: 2 };
-            }
-            
-            if (name.includes('Frank-Test') && email.includes('franktest')) {
-                return { gaeste: 'Maria-Test', personen: 2 };
-            }
-            
-            if (name.includes('FIELD-GRAB-TEST')) {
-                return { gaeste: 'Test-Gast', personen: 2 };
-            }
-            
-            return null;
-        }
 
         // ERWEITERTE GÄSTE-BERECHNUNG
         function calculateEnhancedCompanionInfo(participant) {
-            const correction = correctGuestDataFromPattern(participant);
-            if (correction) {
-                return correction.gaeste;
-            }
-            
-            if (participant.gaeste && participant.gaeste.trim() !== '') {
+            // Direkte API-Daten verwenden - keine Test-Korrekturen mehr
+            if (participant.gaeste && participant.gaeste.trim() !== "") {
                 return participant.gaeste;
             }
-            
             const personenCount = parseInt(participant.personen) || 1;
             if (personenCount > 1) {
                 const guestCount = personenCount - 1;
@@ -868,11 +813,7 @@
 
         // GESAMT-PERSONEN-BERECHNUNG
         function calculateTotalPersons(participant) {
-            const correction = correctGuestDataFromPattern(participant);
-            if (correction) {
-                return correction.personen;
-            }
-            
+            // Direkte API-Daten verwenden
             return parseInt(participant.personen) || 1;
         }
 
@@ -1151,7 +1092,6 @@
                 getraenkeCommentsEl.innerHTML = getraenkeComments.length > 0 ? getraenkeComments.join("") : "<em>Noch keine Getränke-Wünsche</em>";
             }
             
-            console.log("Extended Preferences Updated:", { grillbuffet: grillbuffetCounts, getraenke: getraenkeCounts });
         }
 
         // CSS für Unterkategorien
@@ -1234,10 +1174,9 @@
                 // Lodge-Mapping anwenden
                 const lodge = mapLodgeFromData(p.email, p.name);
                 
-                // Gäste-Korrektur anwenden  
-                const correctedData = correctGuestDataFromPattern(p);
-                const guests = correctedData ? correctedData.gaeste : (p.gaeste || 'Keine');
-                const totalPersons = correctedData ? correctedData.personen : (parseInt(p.personen) || 1);
+                // Direkte API-Daten verwenden - keine Test-Korrekturen
+                const guests = p.gaeste || "Keine";
+                const totalPersons = parseInt(p.personen) || 1;
                 
                 // Datum formatieren
                 const formattedDate = p.datum ? new Date(p.datum).toLocaleDateString('de-DE') : 'Nicht angegeben';
@@ -1326,10 +1265,7 @@
         document.getElementById('exportHelpers').addEventListener('click', function() {
             console.log('Export Helfer-Liste gestartet...');
             
-            // DEBUG: Schaue was in den Daten steht
-            console.log('Teilnehmer-Daten:', currentData.participants.length);
             if (currentData.participants.length > 0) {
-                console.log('Beispiel-Teilnehmer:', currentData.participants[0]);
             }
             
             // ALLE Teilnehmer exportieren (nicht nur echte Helfer) für vollständige Übersicht
@@ -1383,8 +1319,8 @@
                 // Lodge-Mapping für Hauptperson
                 const lodge = mapLodgeFromData(participant.email, participant.name);
                 
-                // Gäste-Korrektur anwenden  
-                const correctedData = correctGuestDataFromPattern(participant);
+                // Direkte API-Daten verwenden
+                const guests = participant.gaeste || "Keine";
                 const guests = correctedData ? correctedData.gaeste : (participant.gaeste || 'Keine');
                 
                 // 1. HAUPTPERSON HINZUFÜGEN
@@ -1417,7 +1353,6 @@
             // 4. CSV EXPORT
             const headers = ['Name', 'Loge/Gastgeber', 'Bezahlt'];
             
-            console.log('Abrechnungs-Daten (alphabetisch):', allPersons);
             exportToCSV(allPersons, headers, 'sommerfest_abrechnung_kasse.csv');
         });
 
