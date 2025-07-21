@@ -654,13 +654,13 @@
         function updateStatistics() {
             const participants = currentData.participants;
             
-            // Anmeldungen (wie bisher)
-            document.getElementById('totalRegistrations').textContent = totalPersonsWithGuests;
-            
-            // NEUE: Gesamt-Personen inkl. Gäste berechnen
+            // GESAMT-PERSONEN inkl. Gäste ZUERST berechnen
             const totalPersonsWithGuests = participants.reduce((sum, p) => {
                 return sum + calculateTotalPersons(p);
             }, 0);
+            
+            // Anmeldungen Statistik mit korrekter Gesamtzahl
+            document.getElementById('totalRegistrations').textContent = totalPersonsWithGuests;
             
             // Update DOM - falls totalParticipants Element existiert
             const totalParticipantsEl = document.getElementById('totalParticipants');
