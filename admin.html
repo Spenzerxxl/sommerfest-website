@@ -657,6 +657,45 @@
         }
 
         // Teilnehmer-Tabelle aktualisieren
+
+        // Lodge-Mapping basierend auf E-Mail-Domain und Namen
+        function mapLodgeFromData(email, name) {
+            // Email-Domain basierte Zuordnung
+            const emailDomainMapping = {
+                'frankrath.com': 'Zum Füllhorn',
+                'freimaurer-luebeck.de': 'Zum Füllhorn', 
+                'weltkugel-luebeck.de': 'Zur Weltkugel',
+                'nordlicht-luebeck.de': 'Nordlicht',
+                'zum-fuellhorn.de': 'Zum Füllhorn'
+            };
+            
+            // Extrahiere Domain aus E-Mail
+            const domain = email ? email.split('@')[1]?.toLowerCase() : '';
+            
+            // Prüfe Domain-Mapping
+            if (domain && emailDomainMapping[domain]) {
+                return emailDomainMapping[domain];
+            }
+            
+            // Namen-basierte Zuordnung für bekannte Personen
+            const nameMapping = {
+                'Frank Rath': 'Zum Füllhorn',
+                'Anne Hormsatt': 'Zum Füllhorn',
+                'Nina vom Ende': 'Zum Füllhorn',
+                'Axel Drews': 'Zur Weltkugel',
+                'Michael Cortier': 'Zum Füllhorn',
+                'Lennart Steen': 'Zur Weltkugel',
+                'Jörg Schenk': 'Zur Weltkugel'
+            };
+            
+            if (name && nameMapping[name]) {
+                return nameMapping[name];
+            }
+            
+            // Standard-Rückgabe für unbekannte Zuordnungen
+            return 'Loge unbekannt';
+        }
+
         function updateParticipantsTable() {
             const tbody = document.getElementById('participantsTable');
             const participants = currentData.participants;
@@ -670,7 +709,7 @@
                 <tr>
                     <td><strong>${p.name || 'N/A'}</strong></td>
                     <td>${p.email || 'N/A'}</td>
-                    <td>${'Logen-Info nicht in API'}</td>
+                    <td>${mapLodgeFromData(p.email, p.name)}</td>
                     <td>${p.gaeste || 'Keine'}</td>
                     <td>${p.datum ? new Date(p.datum).toLocaleDateString('de-DE') : 'N/A'}</td>
                 </tr>
