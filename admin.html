@@ -366,12 +366,13 @@
                                 <th>E-Mail</th>
                                 <th>Loge</th>
                                 <th>Begleitung</th>
+                                <th>Gesamt-Personen</th>
                                 <th>Anmeldedatum</th>
                             </tr>
                         </thead>
                         <tbody id="participantsTable">
                             <tr>
-                                <td colspan="5" class="loading">Lade Teilnehmer...</td>
+                                <td colspan="6" class="loading">Lade Teilnehmer...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -790,7 +791,7 @@
             const participants = currentData.participants;
             
             if (participants.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #666;">Noch keine Anmeldungen</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #666;">Noch keine Anmeldungen</td></tr>';
                 return;
             }
             
@@ -805,6 +806,7 @@
                         <td>${p.email || 'N/A'}</td>
                         <td>${lodge}</td>
                         <td>${companions}</td>
+                        <td style="text-align: center; font-weight: bold;">${calculateTotalPersons(p)}</td>
                         <td>${formattedDate}</td>
                     </tr>
                 `;
