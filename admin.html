@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sommerfest 2025 - Orga-Team Bereich</title>
+    <title>Sommerfest 2025 - Orga-Team Dashboard</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -39,94 +39,6 @@
             font-size: 2em;
         }
 
-        .header .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logout-btn {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .logout-btn:hover {
-            background-color: #c0392b;
-        }
-
-        /* Login Form */
-        .login-container {
-            max-width: 400px;
-            margin: 100px auto;
-            background-color: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-
-        .login-form h2 {
-            text-align: center;
-            color: #1e3a5f;
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            color: #1e3a5f;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #cbd5e0;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
-        input[type="text"]:focus, input[type="password"]:focus {
-            outline: none;
-            border-color: #2c5282;
-        }
-
-        .btn {
-            background-color: #2c5282;
-            color: white;
-            padding: 14px 30px;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .btn:hover {
-            background-color: #1e3a5f;
-        }
-
-        .error-message {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        /* Dashboard */
-        .dashboard {
-            display: none;
-        }
-
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -135,8 +47,8 @@
         }
 
         .stat-card {
-            background-color: white;
-            padding: 25px;
+            background: white;
+            padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             text-align: center;
@@ -144,211 +56,463 @@
 
         .stat-card h3 {
             color: #1e3a5f;
-            font-size: 2.5em;
             margin-bottom: 10px;
         }
 
-        .stat-card p {
-            color: #666;
-            font-size: 1.1em;
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #e67e22;
         }
 
-        .data-section {
-            background-color: white;
-            padding: 25px;
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 16px;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #1e3a5f;
+            border-bottom-color: #1e3a5f;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            overflow: hidden;
         }
 
-        .data-section h2 {
-            color: #1e3a5f;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .tab-content.active {
+            display: block;
         }
 
-        .export-btn {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .export-btn:hover {
-            background-color: #1e7e34;
-        }
-
-        .refresh-btn {
-            background-color: #17a2b8;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-left: 10px;
-        }
-
-        .refresh-btn:hover {
-            background-color: #117a8b;
+        .table-container {
+            overflow-x: auto;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
         }
 
         th, td {
-            text-align: left;
             padding: 12px;
+            text-align: left;
             border-bottom: 1px solid #ddd;
         }
 
         th {
-            background-color: #f8f9fa;
-            color: #1e3a5f;
+            background-color: #1e3a5f;
+            color: white;
             font-weight: bold;
         }
 
-        tr:hover {
-            background-color: #f8f9fa;
+        .preferences-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .preference-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .preference-section h3 {
+            color: #1e3a5f;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .preference-list {
+            list-style: none;
+        }
+
+        .preference-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 6px;
+            border-left: 4px solid #1e3a5f;
+        }
+
+        .preference-count {
+            background: #1e3a5f;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .export-section {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: #1e3a5f;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2c5282;
+        }
+
+        .btn-success {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #2ecc71;
+        }
+
+        .btn-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #1e3a5f;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #1e3a5f;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: none;
         }
 
         .loading {
             text-align: center;
-            padding: 20px;
+            padding: 40px;
             color: #666;
         }
 
-        .buffet-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .buffet-item:last-child {
-            border-bottom: none;
-        }
-
-        .buffet-item strong {
-            color: #1e3a5f;
-        }
-
-        .quantity {
-            color: #666;
-            font-style: italic;
+        @media (max-width: 768px) {
+            .preferences-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .export-buttons {
+                flex-direction: column;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Login Form -->
-    <div id="loginContainer" class="login-container">
-        <form id="loginForm" class="login-form">
-            <h2>Orga-Team Bereich</h2>
-            <h3>Sommerfest 2025</h3>
-            
-            <div id="errorMessage" class="error-message">
-                Ungültiger Name oder Passwort
-            </div>
-
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <h2 style="text-align: center; color: #1e3a5f; margin-bottom: 30px;">
+            🏛️ Sommerfest 2025<br>
+            Orga-Team Login
+        </h2>
+        
+        <div id="loginError" class="error-message">
+            Falscher Benutzername oder Passwort.
+        </div>
+        
+        <form id="loginForm">
             <div class="form-group">
-                <label for="username">Name:</label>
+                <label for="username">Benutzername</label>
                 <input type="text" id="username" name="username" required>
             </div>
-
+            
             <div class="form-group">
-                <label for="password">Passwort:</label>
+                <label for="password">Passwort</label>
                 <input type="password" id="password" name="password" required>
             </div>
-
-            <button type="submit" class="btn">Anmelden</button>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                Anmelden
+            </button>
         </form>
     </div>
 
     <!-- Dashboard -->
-    <div id="dashboard" class="dashboard">
+    <div id="dashboard" style="display: none;">
         <div class="container">
             <div class="header">
-                <h1>Sommerfest 2025 - Orga-Team Bereich</h1>
+                <h1>🏛️ Sommerfest 2025 - Orga-Dashboard</h1>
                 <div class="user-info">
-                    <span>Angemeldet als: <strong id="currentUser"></strong></span>
-                    <button id="logoutBtn" class="logout-btn">Abmelden</button>
+                    <span>Willkommen, <strong id="currentUserName">Admin</strong></span>
+                    <button class="btn btn-warning" onclick="logout()">Abmelden</button>
                 </div>
             </div>
 
-            <!-- Statistics -->
+            <!-- Statistik-Karten -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <h3 id="totalParticipants">-</h3>
-                    <p>Angemeldete Personen</p>
+                    <h3>📊 Anmeldungen</h3>
+                    <div class="stat-number" id="totalRegistrations">0</div>
+                    <small>Teilnehmer registriert</small>
                 </div>
                 <div class="stat-card">
-                    <h3 id="totalBuffetItems">-</h3>
-                    <p>Buffet-Beiträge</p>
+                    <h3>🍽️ Buffet-Beiträge</h3>
+                    <div class="stat-number" id="totalBuffetItems">0</div>
+                    <small>Verschiedene Gerichte</small>
                 </div>
                 <div class="stat-card">
-                    <h3 id="totalHelpers">-</h3>
-                    <p>Helfer (Auf-/Abbau)</p>
+                    <h3>🤝 Helfer Aufbau</h3>
+                    <div class="stat-number" id="aufbauHelfer">0</div>
+                    <small>Freiwillige Helfer</small>
                 </div>
                 <div class="stat-card">
-                    <h3 id="totalRevenue">-</h3>
-                    <p>Geschätzte Einnahmen</p>
+                    <h3>🧹 Helfer Abbau</h3>
+                    <div class="stat-number" id="abbauHelfer">0</div>
+                    <small>Freiwillige Helfer</small>
                 </div>
             </div>
 
-            <!-- Participant List -->
-            <div class="data-section">
-                <h2>
-                    Teilnehmer-Liste
-                    <div>
-                        <button id="refreshParticipants" class="refresh-btn">Aktualisieren</button>
-                        <button id="exportParticipants" class="export-btn">CSV Export</button>
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('participants')">👥 Teilnehmer</button>
+                <button class="tab" onclick="showTab('buffet')">🍽️ Buffet-Planung</button>
+                <button class="tab" onclick="showTab('preferences')">⭐ Präferenzen</button>
+                <button class="tab" onclick="showTab('helpers')">🤝 Helfer</button>
+                <button class="tab" onclick="showTab('export')">📥 Export</button>
+            </div>
+
+            <!-- Tab: Teilnehmer -->
+            <div id="tab-participants" class="tab-content active">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>E-Mail</th>
+                                <th>Loge</th>
+                                <th>Begleitung</th>
+                                <th>Anmeldedatum</th>
+                            </tr>
+                        </thead>
+                        <tbody id="participantsTable">
+                            <tr>
+                                <td colspan="5" class="loading">Lade Teilnehmer...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab: Buffet-Planung -->
+            <div id="tab-buffet" class="tab-content">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Gericht</th>
+                                <th>Anbieter</th>
+                                <th>Portionen</th>
+                                <th>Kontakt</th>
+                            </tr>
+                        </thead>
+                        <tbody id="buffetTable">
+                            <tr>
+                                <td colspan="4" class="loading">Lade Buffet-Daten...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab: Präferenzen (NEU!) -->
+            <div id="tab-preferences" class="tab-content">
+                <div class="preferences-grid">
+                    <!-- Grillbuffet-Präferenzen -->
+                    <div class="preference-section">
+                        <h3>🔥 Grillbuffet-Präferenzen</h3>
+                        <ul class="preference-list" id="grillbuffetPreferences">
+                            <li class="preference-item">
+                                <span>🌭 Wurst</span>
+                                <span class="preference-count">0</span>
+                            </li>
+                            <li class="preference-item">
+                                <span>🥩 Fleisch (inkl. Rind)</span>
+                                <span class="preference-count">0</span>
+                            </li>
+                            <li class="preference-item">
+                                <span>🥬 Vegetarisch/Vegan</span>
+                                <span class="preference-count">0</span>
+                            </li>
+                        </ul>
+                        
+                        <h4 style="margin-top: 20px; margin-bottom: 10px;">💬 Besondere Wünsche:</h4>
+                        <div id="grillbuffetComments" style="max-height: 200px; overflow-y: auto; background: white; padding: 10px; border-radius: 6px;">
+                            Lade Kommentare...
+                        </div>
                     </div>
-                </h2>
-                <div id="participantsLoading" class="loading">Lade Teilnehmerdaten...</div>
-                <table id="participantsTable" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th>Datum</th>
-                            <th>Name</th>
-                            <th>E-Mail</th>
-                            <th>Personen</th>
-                            <th>Gäste</th>
-                            <th>Buffet-Beitrag</th>
-                            <th>Portionen</th>
-                            <th>Aufbau-Hilfe</th>
-                            <th>Abbau-Hilfe</th>
-                        </tr>
-                    </thead>
-                    <tbody id="participantsBody">
-                    </tbody>
-                </table>
+
+                    <!-- Getränke-Präferenzen -->
+                    <div class="preference-section">
+                        <h3>🍻 Getränke-Präferenzen</h3>
+                        <ul class="preference-list" id="getraenkePreferences">
+                            <li class="preference-item">
+                                <span>🥤 Softdrinks</span>
+                                <span class="preference-count">0</span>
+                            </li>
+                            <li class="preference-item">
+                                <span>🚰 Alkoholfrei</span>
+                                <span class="preference-count">0</span>
+                            </li>
+                            <li class="preference-item">
+                                <span>🍺 Bier</span>
+                                <span class="preference-count">0</span>
+                            </li>
+                            <li class="preference-item">
+                                <span>🍷 Wein</span>
+                                <span class="preference-count">0</span>
+                            </li>
+                        </ul>
+                        
+                        <h4 style="margin-top: 20px; margin-bottom: 10px;">💬 Getränke-Wünsche:</h4>
+                        <div id="getraenkeComments" style="max-height: 200px; overflow-y: auto; background: white; padding: 10px; border-radius: 6px;">
+                            Lade Kommentare...
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Buffet Overview -->
-            <div class="data-section">
-                <h2>
-                    Buffet-Übersicht
-                    <button id="exportBuffet" class="export-btn">CSV Export</button>
-                </h2>
-                <div id="buffetList" class="loading">Lade Buffet-Daten...</div>
+            <!-- Tab: Helfer -->
+            <div id="tab-helpers" class="tab-content">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>E-Mail</th>
+                                <th>Aufbau (22.08.)</th>
+                                <th>Abbau (24.08.)</th>
+                                <th>Hinweise</th>
+                            </tr>
+                        </thead>
+                        <tbody id="helpersTable">
+                            <tr>
+                                <td colspan="5" class="loading">Lade Helfer-Daten...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab: Export -->
+            <div id="tab-export" class="tab-content">
+                <div class="export-section">
+                    <h3>📥 Daten-Export</h3>
+                    <p>Exportieren Sie alle Daten für die weitere Bearbeitung:</p>
+                    
+                    <div class="export-buttons">
+                        <button class="btn btn-primary" id="exportAll">
+                            📊 Komplette Teilnehmerliste
+                        </button>
+                        <button class="btn btn-success" id="exportBuffet">
+                            🍽️ Buffet-Planung
+                        </button>
+                        <button class="btn btn-warning" id="exportPreferences">
+                            ⭐ Präferenzen-Auswertung
+                        </button>
+                        <button class="btn btn-primary" id="exportHelpers">
+                            🤝 Helfer-Liste
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Orga-Team Login über n8n + Google Sheets
+        // API-Endpunkte
         const LOGIN_API_URL = 'https://automatisierung.frankrath.de/webhook/orga-login';
+        const PARTICIPANTS_API_URL = 'https://automatisierung.frankrath.de/webhook/get-participants';
+        const PREFERENCES_API_URL = 'https://automatisierung.frankrath.de/webhook/get-preferences';
 
-        // Login-System
+        // Globale Variablen
+        let currentData = {
+            participants: [],
+            preferences: { grillbuffet: {}, getraenke: {} }
+        };
+
+        // Login-Funktionalität
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -358,266 +522,350 @@
             try {
                 const response = await fetch(LOGIN_API_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        username: username,
-                        password: password
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
                 });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    // Login erfolgreich - Daten aus Google Sheets
-                    localStorage.setItem('currentUser', result.user.name);
-                    localStorage.setItem('userRole', result.user.role);
-                    localStorage.setItem('userEmail', result.user.email);
-                    showDashboard();
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        localStorage.setItem('currentUser', username);
+                        localStorage.setItem('userRole', data.role || 'admin');
+                        showDashboard();
+                    } else {
+                        showLoginError();
+                    }
                 } else {
-                    // Login fehlgeschlagen
-                    document.getElementById('errorMessage').style.display = 'block';
+                    showLoginError();
                 }
             } catch (error) {
                 console.error('Login-Fehler:', error);
-                document.getElementById('errorMessage').textContent = 'Verbindungsfehler. Bitte versuchen Sie es später erneut.';
-                document.getElementById('errorMessage').style.display = 'block';
+                showLoginError();
             }
         });
 
-        // Logout
-        document.getElementById('logoutBtn').addEventListener('click', function() {
-            localStorage.removeItem('currentUser');
-            localStorage.removeItem('userRole');
-            showLogin();
-        });
+        function showLoginError() {
+            document.getElementById('loginError').style.display = 'block';
+        }
 
-        // Dashboard anzeigen
+        function showLogin() {
+            document.getElementById('loginScreen').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+        }
+
         function showDashboard() {
-            const currentUser = localStorage.getItem('currentUser');
-            document.getElementById('currentUser').textContent = currentUser;
-            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
             
-            // Daten laden
+            const currentUser = localStorage.getItem('currentUser');
+            document.getElementById('currentUserName').textContent = currentUser || 'Admin';
+            
             loadDashboardData();
         }
 
-        // Login anzeigen
-        function showLogin() {
-            document.getElementById('loginContainer').style.display = 'block';
-            document.getElementById('dashboard').style.display = 'none';
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
-            document.getElementById('errorMessage').style.display = 'none';
+        function logout() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('userRole');
+            showLogin();
         }
 
-        // Google Sheets API über n8n
-        const PARTICIPANTS_API_URL = 'https://automatisierung.frankrath.de/webhook/get-participants';
+        // Tab-Funktionalität
+        function showTab(tabName) {
+            // Alle Tabs deaktivieren
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            // Aktiven Tab aktivieren
+            event.target.classList.add('active');
+            document.getElementById('tab-' + tabName).classList.add('active');
+            
+            // Spezifische Daten laden
+            if (tabName === 'preferences') {
+                loadPreferences();
+            }
+        }
 
-        // Dashboard-Daten laden (echte Google Sheets Daten)
+        // Dashboard-Daten laden
         async function loadDashboardData() {
             try {
-                // Echte Teilnehmer-Daten aus Google Sheets laden
                 const response = await fetch(PARTICIPANTS_API_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
+                    headers: { 'Content-Type': 'application/json' }
                 });
-
+                
                 if (response.ok) {
                     const data = await response.json();
-                    displayStatistics(data.participants || []);
-                    displayParticipants(data.participants || []);
-                    displayBuffetOverview(data.participants || []);
-                } else {
-                    // Fallback zu Mock-Daten bei Fehlern
-                    loadMockData();
+                    currentData.participants = data.participants || [];
+                    updateStatistics();
+                    updateParticipantsTable();
+                    updateBuffetTable();
+                    updateHelpersTable();
                 }
             } catch (error) {
-                console.error('Fehler beim Laden der Teilnehmer-Daten:', error);
-                loadMockData();
+                console.error('Fehler beim Laden der Dashboard-Daten:', error);
             }
         }
 
-        // Fallback Mock-Daten (für Entwicklung/Tests)
-        function loadMockData() {
-            const mockData = {
-                participants: [
-                    {
-                        datum: '2025-07-10',
-                        name: 'Frank Rath',
-                        email: 'logenmeister@zum-fuellhorn.de',
-                        personen: '2',
-                        gaeste: 'Anna Rath',
-                        buffet: 'Kartoffelsalat',
-                        portionen: '6',
-                        aufbau: 'Ja',
-                        abbau: 'Nein'
-                    },
-                    {
-                        datum: '2025-07-12',
-                        name: 'Anne Hormsatt',
-                        email: 'anne.hormsatt@online.de',
-                        personen: '1',
-                        gaeste: '',
-                        buffet: 'Frikadellen',
-                        portionen: '30 Stück',
-                        aufbau: 'Ja',
-                        abbau: 'Ja'
-                    },
-                    {
-                        datum: '2025-07-13',
-                        name: 'Nina vom Ende',
-                        email: 'nina@vomende.de',
-                        personen: '3',
-                        gaeste: 'Max Ende, Lisa Ende',
-                        buffet: 'Nudelsalat',
-                        portionen: '4',
-                        aufbau: 'Nein',
-                        abbau: 'Ja'
+        // Präferenzen laden
+        async function loadPreferences() {
+            try {
+                const response = await fetch(PREFERENCES_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    currentData.preferences = data.preferences || { grillbuffet: {}, getraenke: {} };
+                    updatePreferencesDisplay();
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden der Präferenzen:', error);
+                // Fallback: Aus Teilnehmerdaten ableiten
+                derivePreferencesFromParticipants();
+            }
+        }
+
+        // Statistiken aktualisieren
+        function updateStatistics() {
+            const participants = currentData.participants;
+            
+            document.getElementById('totalRegistrations').textContent = participants.length;
+            
+            const buffetItems = new Set();
+            let aufbauCount = 0;
+            let abbauCount = 0;
+            
+            participants.forEach(p => {
+                if (p.buffet) {
+                    try {
+                        const buffetData = JSON.parse(p.buffet);
+                        buffetData.forEach(item => buffetItems.add(item.name));
+                    } catch (e) {
+                        if (p.buffet.trim()) buffetItems.add(p.buffet);
                     }
-                ]
-            };
-
-            displayStatistics(mockData.participants);
-            displayParticipants(mockData.participants);
-            displayBuffetOverview(mockData.participants);
-        }
-
-        // Statistiken anzeigen
-        function displayStatistics(participants) {
-            const totalParticipants = participants.reduce((sum, p) => sum + parseInt(p.personen), 0);
-            const totalBuffetItems = participants.length;
-            const totalHelpers = participants.filter(p => p.aufbau === 'Ja' || p.abbau === 'Ja').length;
-            const totalRevenue = totalParticipants * 18; // 18€ pro Person
-
-            document.getElementById('totalParticipants').textContent = totalParticipants;
-            document.getElementById('totalBuffetItems').textContent = totalBuffetItems;
-            document.getElementById('totalHelpers').textContent = totalHelpers;
-            document.getElementById('totalRevenue').textContent = totalRevenue + ' €';
-        }
-
-        // Teilnehmer-Tabelle anzeigen
-        function displayParticipants(participants) {
-            const tbody = document.getElementById('participantsBody');
-            tbody.innerHTML = '';
-
-            participants.forEach(participant => {
-                const row = tbody.insertRow();
-                row.innerHTML = `
-                    <td>${participant.datum}</td>
-                    <td><strong>${participant.name}</strong></td>
-                    <td>${participant.email}</td>
-                    <td>${participant.personen}</td>
-                    <td>${participant.gaeste || '-'}</td>
-                    <td>${participant.buffet}</td>
-                    <td>${participant.portionen}</td>
-                    <td>${participant.aufbau}</td>
-                    <td>${participant.abbau}</td>
-                `;
+                }
+                
+                if (p.aufbau && p.aufbau.includes('Ja')) aufbauCount++;
+                if (p.abbau && p.abbau.includes('Ja')) abbauCount++;
             });
-
-            document.getElementById('participantsLoading').style.display = 'none';
-            document.getElementById('participantsTable').style.display = 'table';
+            
+            document.getElementById('totalBuffetItems').textContent = buffetItems.size;
+            document.getElementById('aufbauHelfer').textContent = aufbauCount;
+            document.getElementById('abbauHelfer').textContent = abbauCount;
         }
 
-        // Buffet-Übersicht anzeigen
-        function displayBuffetOverview(participants) {
-            const buffetList = document.getElementById('buffetList');
-            buffetList.innerHTML = '';
+        // Teilnehmer-Tabelle aktualisieren
+        function updateParticipantsTable() {
+            const tbody = document.getElementById('participantsTable');
+            const participants = currentData.participants;
+            
+            if (participants.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #666;">Noch keine Anmeldungen</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = participants.map(p => `
+                <tr>
+                    <td><strong>${p.name || 'N/A'}</strong></td>
+                    <td>${p.email || 'N/A'}</td>
+                    <td>${p.lodge || 'Nicht angegeben'}</td>
+                    <td>${p.companions || 'Keine'}</td>
+                    <td>${p.timestamp ? new Date(p.timestamp).toLocaleDateString('de-DE') : 'N/A'}</td>
+                </tr>
+            `).join('');
+        }
 
-            participants.forEach(participant => {
-                const buffetItem = document.createElement('div');
-                buffetItem.className = 'buffet-item';
-                buffetItem.innerHTML = `
-                    <div>
-                        <strong>${participant.buffet}</strong><br>
-                        <small>von ${participant.name}</small>
-                    </div>
-                    <div class="quantity">${participant.portionen}</div>
-                `;
-                buffetList.appendChild(buffetItem);
+        // Buffet-Tabelle aktualisieren
+        function updateBuffetTable() {
+            const tbody = document.getElementById('buffetTable');
+            const participants = currentData.participants;
+            const buffetItems = [];
+            
+            participants.forEach(p => {
+                if (p.buffet) {
+                    try {
+                        const buffetData = JSON.parse(p.buffet);
+                        buffetData.forEach(item => {
+                            buffetItems.push({
+                                name: item.name,
+                                provider: p.name,
+                                quantity: item.quantity,
+                                email: p.email
+                            });
+                        });
+                    } catch (e) {
+                        if (p.buffet.trim()) {
+                            buffetItems.push({
+                                name: p.buffet,
+                                provider: p.name,
+                                quantity: p.quantity || 'Nicht angegeben',
+                                email: p.email
+                            });
+                        }
+                    }
+                }
             });
+            
+            if (buffetItems.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #666;">Noch keine Buffet-Beiträge</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = buffetItems.map(item => `
+                <tr>
+                    <td><strong>${item.name}</strong></td>
+                    <td>${item.provider}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.email}</td>
+                </tr>
+            `).join('');
         }
 
-        // CSV Export
+        // Helfer-Tabelle aktualisieren
+        function updateHelpersTable() {
+            const tbody = document.getElementById('helpersTable');
+            const participants = currentData.participants;
+            
+            const helpers = participants.filter(p => 
+                (p.aufbau && p.aufbau.includes('Ja')) || 
+                (p.abbau && p.abbau.includes('Ja'))
+            );
+            
+            if (helpers.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #666;">Noch keine Helfer-Anmeldungen</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = helpers.map(h => `
+                <tr>
+                    <td><strong>${h.name}</strong></td>
+                    <td>${h.email}</td>
+                    <td>
+                        <span style="color: ${h.aufbau && h.aufbau.includes('Ja') ? '#27ae60' : '#e74c3c'};">
+                            ${h.aufbau || 'Nicht angegeben'}
+                        </span>
+                    </td>
+                    <td>
+                        <span style="color: ${h.abbau && h.abbau.includes('Ja') ? '#27ae60' : '#e74c3c'};">
+                            ${h.abbau || 'Nicht angegeben'}
+                        </span>
+                    </td>
+                    <td>${h.bemerkungen || 'Keine Hinweise'}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Präferenzen-Anzeige aktualisieren
+        function updatePreferencesDisplay() {
+            const prefs = currentData.preferences;
+            
+            // Grillbuffet-Präferenzen
+            const grillbuffetCounts = prefs.grillbuffet || {};
+            const grillbuffetItems = document.querySelectorAll('#grillbuffetPreferences .preference-count');
+            grillbuffetItems[0].textContent = grillbuffetCounts.wurst || 0;
+            grillbuffetItems[1].textContent = grillbuffetCounts.fleisch || 0;
+            grillbuffetItems[2].textContent = grillbuffetCounts.vegetarisch || 0;
+            
+            // Getränke-Präferenzen
+            const getraenkeCounts = prefs.getraenke || {};
+            const getraenkeItems = document.querySelectorAll('#getraenkePreferences .preference-count');
+            getraenkeItems[0].textContent = getraenkeCounts.softdrinks || 0;
+            getraenkeItems[1].textContent = getraenkeCounts.alkoholfrei || 0;
+            getraenkeItems[2].textContent = getraenkeCounts.bier || 0;
+            getraenkeItems[3].textContent = getraenkeCounts.wein || 0;
+            
+            // Kommentare
+            document.getElementById('grillbuffetComments').innerHTML = 
+                (prefs.grillbuffet_comments && prefs.grillbuffet_comments.length > 0) 
+                ? prefs.grillbuffet_comments.map(c => `<div style="margin-bottom: 10px; padding: 8px; background: #f0f0f0; border-radius: 4px;"><strong>${c.name}:</strong> ${c.comment}</div>`).join('')
+                : '<em>Noch keine besonderen Wünsche</em>';
+                
+            document.getElementById('getraenkeComments').innerHTML = 
+                (prefs.getraenke_comments && prefs.getraenke_comments.length > 0)
+                ? prefs.getraenke_comments.map(c => `<div style="margin-bottom: 10px; padding: 8px; background: #f0f0f0; border-radius: 4px;"><strong>${c.name}:</strong> ${c.comment}</div>`).join('')
+                : '<em>Noch keine Getränke-Wünsche</em>';
+        }
+
+        // Fallback: Präferenzen aus Teilnehmerdaten ableiten
+        function derivePreferencesFromParticipants() {
+            const participants = currentData.participants;
+            const grillbuffet = { wurst: 0, fleisch: 0, vegetarisch: 0 };
+            const getraenke = { softdrinks: 0, alkoholfrei: 0, bier: 0, wein: 0 };
+            
+            participants.forEach(p => {
+                // Hier würden die neuen Felder ausgelesen werden
+                if (p.grillbuffet_praeferenzen) {
+                    const prefs = p.grillbuffet_praeferenzen.split(',');
+                    prefs.forEach(pref => {
+                        if (pref.includes('Wurst')) grillbuffet.wurst++;
+                        if (pref.includes('Fleisch') || pref.includes('Rind')) grillbuffet.fleisch++;
+                        if (pref.includes('Vegetarisch') || pref.includes('Vegan')) grillbuffet.vegetarisch++;
+                    });
+                }
+                
+                if (p.getraenke_praeferenzen) {
+                    const prefs = p.getraenke_praeferenzen.split(',');
+                    prefs.forEach(pref => {
+                        if (pref.includes('Softdrinks')) getraenke.softdrinks++;
+                        if (pref.includes('Alkoholfrei')) getraenke.alkoholfrei++;
+                        if (pref.includes('Bier')) getraenke.bier++;
+                        if (pref.includes('Wein')) getraenke.wein++;
+                    });
+                }
+            });
+            
+            currentData.preferences = { grillbuffet, getraenke };
+            updatePreferencesDisplay();
+        }
+
+        // Export-Funktionen
         function exportToCSV(data, filename) {
-            const csvContent = "data:text/csv;charset=utf-8," 
-                + Object.keys(data[0]).join(",") + "\n"
-                + data.map(row => Object.values(row).join(",")).join("\n");
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", filename);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            const csv = convertToCSV(data);
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', filename);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
 
-        // Event Listeners für Buttons
-        document.getElementById('refreshParticipants').addEventListener('click', loadDashboardData);
-        
-        document.getElementById('exportParticipants').addEventListener('click', async function() {
-            try {
-                const response = await fetch(PARTICIPANTS_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.participants && data.participants.length > 0) {
-                        exportToCSV(data.participants, 'sommerfest_teilnehmer.csv');
-                    } else {
-                        alert('Keine Teilnehmer-Daten für Export verfügbar.');
-                    }
-                } else {
-                    alert('Fehler beim Laden der Export-Daten.');
-                }
-            } catch (error) {
-                console.error('Export-Fehler:', error);
-                alert('Fehler beim Export. Bitte versuchen Sie es später erneut.');
-            }
+        function convertToCSV(data) {
+            if (!data || data.length === 0) return '';
+            
+            const headers = Object.keys(data[0]);
+            const csvHeaders = headers.join(',');
+            const csvRows = data.map(row => 
+                headers.map(header => `"${(row[header] || '').toString().replace(/"/g, '""')}"`).join(',')
+            );
+            
+            return [csvHeaders, ...csvRows].join('\n');
+        }
+
+        // Export-Event-Listener
+        document.getElementById('exportAll').addEventListener('click', function() {
+            exportToCSV(currentData.participants, 'sommerfest_teilnehmer.csv');
         });
 
-        document.getElementById('exportBuffet').addEventListener('click', async function() {
-            try {
-                const response = await fetch(PARTICIPANTS_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.participants && data.participants.length > 0) {
-                        const buffetData = data.participants.map(p => ({
-                            name: p.name,
-                            buffet: p.buffet,
-                            portionen: p.portionen,
-                            email: p.email
-                        }));
-                        exportToCSV(buffetData, 'sommerfest_buffet.csv');
-                    } else {
-                        alert('Keine Buffet-Daten für Export verfügbar.');
-                    }
-                } else {
-                    alert('Fehler beim Laden der Export-Daten.');
-                }
-            } catch (error) {
-                console.error('Buffet-Export-Fehler:', error);
-                alert('Fehler beim Buffet-Export. Bitte versuchen Sie es später erneut.');
-            }
+        document.getElementById('exportPreferences').addEventListener('click', function() {
+            const prefData = currentData.participants.map(p => ({
+                name: p.name,
+                email: p.email,
+                grillbuffet_praeferenzen: p.grillbuffet_praeferenzen || '',
+                grillbuffet_bemerkungen: p.grillbuffet_bemerkungen || '',
+                getraenke_praeferenzen: p.getraenke_praeferenzen || '',
+                getraenke_bemerkungen: p.getraenke_bemerkungen || ''
+            }));
+            exportToCSV(prefData, 'sommerfest_praeferenzen.csv');
         });
 
-        // Initial Check: Ist User bereits eingeloggt?
+        // Initial Load
         window.addEventListener('load', function() {
             const currentUser = localStorage.getItem('currentUser');
-            const userRole = localStorage.getItem('userRole');
-            if (currentUser && userRole) {
+            if (currentUser) {
                 showDashboard();
             } else {
                 showLogin();
