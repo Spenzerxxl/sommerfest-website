@@ -505,9 +505,9 @@
 
     <script>
         // API-Endpunkte
-        const LOGIN_API_URL = 'https://sommerfest.freimaurer-hl.de/api-proxy.php?endpoint=login';
-        const PARTICIPANTS_API_URL = 'https://sommerfest.freimaurer-hl.de/api-proxy.php?endpoint=participants';
-        const PREFERENCES_API_URL = 'https://sommerfest.freimaurer-hl.de/api-proxy.php?endpoint=preferences';
+        const LOGIN_API_URL = 'https://automatisierung.frankrath.de/webhook/orga-login';
+        const PARTICIPANTS_API_URL = 'https://automatisierung.frankrath.de/webhook/get-participants';
+        const PREFERENCES_API_URL = 'https://automatisierung.frankrath.de/webhook/get-preferences';
 
         // Globale Variablen
         let currentData = {
@@ -523,7 +523,7 @@
             const password = document.getElementById('password').value;
             
             try {
-                const loginUrl = `${LOGIN_API_URL}&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+                const loginUrl = `${LOGIN_API_URL}?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
                 const response = await fetch(loginUrl, {
                     method: 'GET'
                 });
