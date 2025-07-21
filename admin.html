@@ -281,7 +281,25 @@
                 flex-wrap: wrap;
             }
         }
-    </style>
+    
+        /* Hinweise-Spalte in Teilnehmer-Tabelle */
+        table th:nth-child(7) { 
+            width: 150px; 
+            text-align: left; 
+            background-color: #fff3cd; 
+        }
+        table td:nth-child(7) { 
+            width: 150px; 
+            font-size: 12px; 
+            color: #856404; 
+            background-color: #fefefe; 
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        </style>
 </head>
 <body>
     <!-- Login Screen -->
@@ -368,11 +386,12 @@
                                 <th>Begleitung</th>
                                 <th>Gesamt-Personen</th>
                                 <th>Anmeldedatum</th>
+                                <th>Hinweise</th>
                             </tr>
                         </thead>
                         <tbody id="participantsTable">
                             <tr>
-                                <td colspan="6" class="loading">Lade Teilnehmer...</td>
+                                <td colspan="7" class="loading">Lade Teilnehmer...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -791,7 +810,7 @@
             const participants = currentData.participants;
             
             if (participants.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #666;">Noch keine Anmeldungen</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #666;">Noch keine Anmeldungen</td></tr>';
                 return;
             }
             
@@ -808,6 +827,7 @@
                         <td>${companions}</td>
                         <td style="text-align: center; font-weight: bold;">${calculateTotalPersons(p)}</td>
                         <td>${formattedDate}</td>
+                        <td>${p.bemerkungen || 'Keine Hinweise'}</td>
                     </tr>
                 `;
             }).join('');
@@ -959,7 +979,9 @@
         // Export-Funktionen
         function exportToCSV(data, filename) {
             const csv = convertToCSV(data);
-            const blob = new Blob([csv], { type: 'text/csv' });
+            // UTF-8 BOM hinzufügen für korrekte deutsche Umlaute
+            const csvWithBOM = '\ufeff' + csv;
+            const blob = new Blob([csvWithBOM], { type: 'text/csv;charset=utf-8;' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.setAttribute('hidden', '');
@@ -997,6 +1019,51 @@
                 getraenke_bemerkungen: p.getraenke_bemerkungen || ''
             }));
             exportToCSV(prefData, 'sommerfest_praeferenzen.csv');
+        });
+
+        // NEUE: Export-Buffet-Planung
+        document.getElementById('exportBuffet').addEventListener('click', function() {
+            const buffetItems = [];
+            currentData.participants.forEach(p => {
+                if (p.buffet) {
+                    try {
+                        const buffetData = JSON.parse(p.buffet);
+                        buffetData.forEach(item => {
+                            buffetItems.push({
+                                gericht: item.item || item.name,
+                                anbieter: p.name,
+                                portionen: item.quantity,
+                                email: p.email,
+                                telefon: p.telefon || 'Nicht angegeben'
+                            });
+                        });
+                    } catch (e) {
+                        if (p.buffet.trim()) {
+                            buffetItems.push({
+                                gericht: p.buffet,
+                                anbieter: p.name,
+                                portionen: p.quantity || 'Nicht angegeben',
+                                email: p.email,
+                                telefon: p.telefon || 'Nicht angegeben'
+                            });
+                        }
+                    }
+                }
+            });
+            exportToCSV(buffetItems, 'sommerfest_buffet_planung.csv');
+        });
+
+        // NEUE: Export-Helfer-Liste
+        document.getElementById('exportHelpers').addEventListener('click', function() {
+            const helperData = currentData.participants.map(p => ({
+                name: p.name,
+                email: p.email,
+                telefon: p.telefon || '',
+                aufbau: p.helfer_aufbau || '',
+                abbau: p.helfer_abbau || '',
+                hinweise: p.bemerkungen || ''
+            })).filter(h => h.aufbau || h.abbau); // Nur echte Helfer
+            exportToCSV(helperData, 'sommerfest_helfer_liste.csv');
         });
 
         // Initial Load
