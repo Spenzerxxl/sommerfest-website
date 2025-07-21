@@ -299,6 +299,20 @@
             white-space: nowrap;
         }
 
+        
+        /* 🔧 Fix für Name-Truncation - ausreichend Platz für Gäste-Namen */
+        .participants-table td:nth-child(4) { /* Begleitungs-Spalte */
+            min-width: 200px;
+            max-width: 350px;
+            word-wrap: break-word;
+            white-space: normal;
+            overflow: visible;
+        }
+        
+        .participants-table td {
+            padding: 8px 12px;
+            vertical-align: top;
+        }
         </style>
 </head>
 <body>
@@ -1247,8 +1261,8 @@
                     'Gesamt-Personen': totalPersons,
                     'Anmeldedatum': formattedDate,
                     'Buffet-Beiträge': buffetItems,
-                    'Aufbau-Helfer': p.helfer_aufbau || 'Nein',
-                    'Abbau-Helfer': p.helfer_abbau || 'Nein',
+                    'Aufbau-Helfer': p.aufbau || 'Nein',
+                    'Abbau-Helfer': p.abbau || 'Nein',
                     'Hinweise': p.bemerkungen || 'Keine'
                 };
             });
@@ -1324,23 +1338,23 @@
                 let aufbauStatus = 'Nein';
                 let abbauStatus = 'Nein';
                 
-                if (p.helfer_aufbau) {
-                    if (typeof p.helfer_aufbau === 'string' && p.helfer_aufbau.toLowerCase().includes('ja')) {
+                if (p.aufbau) {
+                    if (typeof p.aufbau === 'string' && p.aufbau.toLowerCase().includes('ja')) {
                         aufbauStatus = 'Ja';
-                    } else if (p.helfer_aufbau === true) {
+                    } else if (p.aufbau === true) {
                         aufbauStatus = 'Ja';
                     } else {
-                        aufbauStatus = p.helfer_aufbau;
+                        aufbauStatus = p.aufbau;
                     }
                 }
                 
-                if (p.helfer_abbau) {
-                    if (typeof p.helfer_abbau === 'string' && p.helfer_abbau.toLowerCase().includes('ja')) {
+                if (p.abbau) {
+                    if (typeof p.abbau === 'string' && p.abbau.toLowerCase().includes('ja')) {
                         abbauStatus = 'Ja';
-                    } else if (p.helfer_abbau === true) {
+                    } else if (p.abbau === true) {
                         abbauStatus = 'Ja';
                     } else {
-                        abbauStatus = p.helfer_abbau;
+                        abbauStatus = p.abbau;
                     }
                 }
                 
@@ -1397,8 +1411,20 @@
                 }
             });
             
-            // 3. ALPHABETISCH SORTIEREN
-            allPersons.sort((a, b) => a.Name.localeCompare(b.Name));
+            // 3. NACH NACHNAME SORTIEREN (FÜR KASSENLISTE)
+            allPersons.sort((a, b) => {
+                // Hilfsfunktion: Nachname aus "Vorname Nachname" extrahieren
+                const getLastName = (fullName) => {
+                    const parts = fullName.trim().split(" ");
+                    return parts[parts.length - 1]; // Letzter Teil = Nachname
+                };
+                
+                const lastNameA = getLastName(a.Name);
+                const lastNameB = getLastName(b.Name);
+                
+                // Nach Nachname sortieren für Kassenliste
+                return lastNameA.localeCompare(lastNameB);
+            });
             
             // 4. CSV EXPORT
             const headers = ['Name', 'Loge/Gastgeber', 'Bezahlt'];
