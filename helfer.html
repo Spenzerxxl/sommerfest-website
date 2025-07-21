@@ -228,6 +228,78 @@
             font-style: italic;
         }
 
+        /* Weiterleitungs-Overlay Styles */
+        .redirect-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .redirect-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            max-width: 500px;
+            margin: 20px;
+        }
+
+        .redirect-icon {
+            font-size: 4rem;
+            color: #28a745;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .redirect-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .redirect-message {
+            font-size: 1.1rem;
+            color: #6c757d;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .redirect-progress {
+            width: 100%;
+            height: 6px;
+            background-color: #e9ecef;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .redirect-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            border-radius: 3px;
+            animation: progressBar 3s ease-out forwards;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes progressBar {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -246,10 +318,37 @@
                 grid-template-columns: 1fr;
             }
 
+            .redirect-content {
+                margin: 10px;
+                padding: 30px 20px;
+            }
+
+            .redirect-title {
+                font-size: 1.5rem;
+            }
+
+            .redirect-message {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Weiterleitungs-Overlay -->
+    <div id="redirectOverlay" class="redirect-overlay">
+        <div class="redirect-content">
+            <div class="redirect-icon">✅</div>
+            <div class="redirect-title">Zweiter Schritt abgeschlossen!</div>
+            <div class="redirect-message">
+                Sie werden zur Bestätigungsseite weitergeleitet...<br>
+                <small>Ihre Anmeldung wird jetzt abgeschlossen und Sie erhalten eine E-Mail-Bestätigung.</small>
+            </div>
+            <div class="redirect-progress">
+                <div class="redirect-progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="main-content">
             
@@ -373,6 +472,43 @@
         const N8N_WEBHOOK_URL = 'https://automatisierung.frankrath.de/webhook/sommerfest-anmeldung';
         const HELFER_STATS_URL = 'https://automatisierung.frankrath.de/webhook/helfer-statistik';
 
+        // Weiterleitungs-Overlay-Funktion
+        function showRedirectOverlay() {
+            console.log('Zeige Weiterleitungs-Overlay für Helfer → Abschluss');
+            
+            const overlay = document.getElementById('redirectOverlay');
+            if (!overlay) {
+                console.error('Redirect-Overlay Element nicht gefunden!');
+                return;
+            }
+            
+            // Overlay anzeigen
+            overlay.style.display = 'flex';
+            
+            // Seite nach oben scrollen für bessere Sichtbarkeit
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Nach 3 Sekunden zur Abschlussseite weiterleiten
+            setTimeout(() => {
+                console.log('Weiterleitung zu abschluss.html...');
+                const abschlussParams = new URLSearchParams();
+                // Alle Daten für die Abschlussseite übertragen
+                Object.keys(originalData).forEach(key => {
+                    if (originalData[key]) abschlussParams.set(key, originalData[key]);
+                });
+                // Helfer-Daten hinzufügen
+                const aufbauValue = document.querySelector('input[name="aufbau"]:checked')?.value || '';
+                const abbauValue = document.querySelector('input[name="abbau"]:checked')?.value || '';
+                const bemerkungenValue = document.getElementById('bemerkungen').value || '';
+                
+                if (aufbauValue) abschlussParams.set('aufbau', aufbauValue);
+                if (abbauValue) abschlussParams.set('abbau', abbauValue);
+                if (bemerkungenValue) abschlussParams.set('bemerkungen', bemerkungenValue);
+                
+                window.location.href = `abschluss.html?${abschlussParams.toString()}`;
+            }, 3000);
+        }
+
         // Radio-Button Styling
         document.querySelectorAll('input[type="radio"]').forEach(radio => {
             radio.addEventListener('change', function() {
@@ -449,11 +585,8 @@
                     // Button-Text ändern
                     submitButton.textContent = "Erfolgreich! Weiterleitung...";
                     
-                    // Weiterleitung zur Abschlussseite nach 2 Sekunden
-                    setTimeout(() => {
-                        const abschlussParams = new URLSearchParams(completeData);
-                        window.location.href = `abschluss.html?${abschlussParams.toString()}`;
-                    }, 2000);
+                    // OVERLAY ANZEIGEN statt direkte Weiterleitung
+                    showRedirectOverlay();
                     
                 } else {
                     throw new Error('HTTP ' + response.status);
