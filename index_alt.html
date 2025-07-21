@@ -52,7 +52,6 @@
             margin: -40px -40px 30px -40px;
             border-radius: 0 0 8px 8px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            position: relative;
         }
 
         .simple-header .main-title {
@@ -67,30 +66,6 @@
             font-size: 1.8em;
             margin-bottom: 0;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-        }
-
-        /* ORGA-LOGIN BUTTON */
-        .orga-login-button {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(160, 196, 255, 0.2);
-            color: #a0c4ff;
-            padding: 8px 15px;
-            border: 1px solid #a0c4ff;
-            border-radius: 20px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .orga-login-button:hover {
-            background: #a0c4ff;
-            color: #1e3a5f;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
         h1 {
@@ -417,16 +392,6 @@
             .redirect-content p {
                 font-size: 1.1em;
             }
-
-            .orga-login-button {
-                position: relative;
-                top: auto;
-                right: auto;
-                margin: 10px auto;
-                display: block;
-                text-align: center;
-                width: fit-content;
-            }
         }
     </style>
 </head>
@@ -602,11 +567,6 @@
 
         <div class="main-content">
             <div class="simple-header">
-                <!-- ORGA-LOGIN BUTTON -->
-                <a href="admin.html" class="orga-login-button" title="Für Organisatoren">
-                    🔑 Orga-Team Login
-                </a>
-                
                 <h1 class="main-title">Sommerfest der Lübecker Freimaurer</h1>
                 <h2 class="event-title">Sommerfest 2025</h2>
             </div>
@@ -622,13 +582,9 @@
             </div>
 
             <form id="registrationForm">
-                <!-- ADRESSE HINZUGEFÜGT -->
-                <h2>Deine Anmeldung zum Sommerfest am Samstag, den 23. August 2025 ab 18 Uhr<br>
-                    <small style="font-size: 0.8em; color: #4a6fa5; font-weight: normal;">im Logenhaus Lübeck, St. Annen-Str. / Ecke Schildstraße - Eingang Hoftor</small>
-                </h2>
+                <h2>Deine Anmeldung zum Sommerfest am Samstag, den 23. August 2025 ab 18 Uhr</h2>
                 
                 <div class="form-group">
-                    <!-- "IHR NAME" → "NAME" GEÄNDERT -->
                     <label for="name">Name *</label>
                     <input type="text" id="name" name="name" required>
                 </div>
