@@ -421,7 +421,7 @@
             try {
                 // Echte Teilnehmer-Daten aus Google Sheets laden
                 const response = await fetch(PARTICIPANTS_API_URL, {
-                    method: 'POST',
+                    method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                     }
@@ -564,7 +564,7 @@
         document.getElementById('exportParticipants').addEventListener('click', async function() {
             try {
                 const response = await fetch(PARTICIPANTS_API_URL, {
-                    method: 'POST',
+                    method: 'GET',
                     headers: { 'Content-Type': 'application/json' }
                 });
                 
@@ -587,7 +587,7 @@
         document.getElementById('exportBuffet').addEventListener('click', async function() {
             try {
                 const response = await fetch(PARTICIPANTS_API_URL, {
-                    method: 'POST',
+                    method: 'GET',
                     headers: { 'Content-Type': 'application/json' }
                 });
                 
