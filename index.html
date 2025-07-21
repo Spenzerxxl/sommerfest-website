@@ -189,6 +189,93 @@
             display: none;
         }
 
+        /* UX-VERBESSERUNG: Weiterleitungs-Overlay */
+        .redirect-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 58, 95, 0.95);
+            color: white;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .redirect-content {
+            background: rgba(255,255,255,0.1);
+            padding: 40px;
+            border-radius: 15px;
+            border: 2px solid #a0c4ff;
+            max-width: 500px;
+            animation: pulse 2s infinite;
+        }
+
+        .redirect-content h3 {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            color: #a0c4ff;
+        }
+
+        .redirect-content p {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .progress-bar {
+            background-color: rgba(255,255,255,0.2);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #a0c4ff, #2c5282);
+            height: 100%;
+            width: 0%;
+            animation: fillProgress 3s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes fillProgress {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
+        /* UX-VERBESSERUNG: Warnung-Box für unvollständige Anmeldung */
+        .warning-banner {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .warning-banner.show {
+            display: block;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
         /* Präferenzen-Sidebar Styles */
         .preferences-section {
             margin-bottom: 30px;
@@ -293,10 +380,40 @@
             .main-content {
                 padding: 20px;
             }
+
+            .redirect-content {
+                padding: 30px 20px;
+            }
+
+            .redirect-content h3 {
+                font-size: 1.8em;
+            }
+
+            .redirect-content p {
+                font-size: 1.1em;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- UX-VERBESSERUNG: Warnung für unvollständige Anmeldung -->
+    <div id="warningBanner" class="warning-banner">
+        ⚠️ <strong>ACHTUNG:</strong> Ihre Anmeldung ist noch nicht abgeschlossen! Bitte füllen Sie alle Schritte aus.
+    </div>
+
+    <!-- UX-VERBESSERUNG: Weiterleitungs-Overlay -->
+    <div id="redirectOverlay" class="redirect-overlay">
+        <div class="redirect-content">
+            <h3>🎉 Erster Schritt abgeschlossen!</h3>
+            <p><strong>Sie werden zum nächsten Anmeldeschritt weitergeleitet...</strong></p>
+            <p>Im nächsten Schritt können Sie sich als Helfer für Auf- und Abbau eintragen.</p>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <p style="font-size: 1em; color: #a0c4ff;">Bitte warten Sie einen Moment...</p>
+        </div>
+    </div>
+
     <div class="container">
         <!-- Grillbuffet-Präferenzen Sidebar (Links) -->
         <div class="sidebar sidebar-left">
@@ -374,19 +491,19 @@
                     <div class="checkbox-group">
                         <div class="checkbox-item">
                             <input type="checkbox" id="soft_cola" value="Cola">
-                            <label for="soft_cola" >Cola</h5>
+                            <label for="soft_cola">Cola</label>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="soft_fanta" value="Fanta">
-                            <label for="soft_fanta" >Fanta</h5>
+                            <label for="soft_fanta">Fanta</label>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="soft_sprite" value="Sprite">
-                            <label for="soft_sprite" >Sprite</h5>
+                            <label for="soft_sprite">Sprite</label>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="soft_wasser" value="Wasser">
-                            <label for="soft_wasser" >Wasser</h5>
+                            <label for="soft_wasser">Wasser</label>
                         </div>
                     </div>
                 </div>
@@ -396,11 +513,11 @@
                     <div class="checkbox-group">
                         <div class="checkbox-item">
                             <input type="checkbox" id="alkfrei_pils" value="Alkoholfreies Pils">
-                            <label for="alkfrei_pils" >Alkoholfreies Pils</h5>
+                            <label for="alkfrei_pils">Alkoholfreies Pils</label>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="alkfrei_weizen" value="Alkoholfreies Weizen">
-                            <label for="alkfrei_weizen" >Alkoholfreies Weizen</h5>
+                            <label for="alkfrei_weizen">Alkoholfreies Weizen</label>
                         </div>
                     </div>
                 </div>
@@ -410,15 +527,15 @@
                     <div class="checkbox-group">
                         <div class="checkbox-item">
                             <input type="checkbox" id="bier_pils" value="Pils">
-                            <label for="bier_pils" >Pils</h5>
+                            <label for="bier_pils">Pils</label>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="bier_weizenbier" value="Weizenbier">
-                            <label for="bier_weizenbier" >Weizenbier</h5>
+                            <label for="bier_weizenbier">Weizenbier</label>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="bier_weissbier" value="Weißbier">
-                            <label for="bier_weissbier" >Weißbier</h5>
+                            <label for="bier_weissbier">Weißbier</label>
                         </div>
                     </div>
                 </div>
@@ -428,21 +545,21 @@
                     <div class="checkbox-group">
                         <div class="checkbox-item">
                             <input type="checkbox" id="wein_rotwein" value="Rotwein">
-                            <label for="wein_rotwein" >Rotwein</h5>
+                            <label for="wein_rotwein">Rotwein</label>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="wein_weisswein" value="Weißwein">
-                            <label for="wein_weisswein" >Weißwein</h5>
+                            <label for="wein_weisswein">Weißwein</label>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="wein_prosecco" value="Prosecco">
-                            <label for="wein_prosecco" >Prosecco</h5>
+                            <label for="wein_prosecco">Prosecco</label>
                         </div>
                     </div>
                 </div>
 
                 <div class="preferences-category">
-                    <label for="getraenke_bemerkungen">Spezielle Wünsche zu den Getränken</h5>
+                    <label for="getraenke_bemerkungen">Spezielle Wünsche zu den Getränken</label>
                     <textarea class="preferences-textarea" id="getraenke_bemerkungen" placeholder="z.B. Gerne auch alkoholfreies Bier..."></textarea>
                 </div>
             </div>
@@ -501,7 +618,8 @@
 
                 <button type="button" id="add-buffet-item" class="button-secondary" onclick="addBuffetItem()">+ Weiteren Beitrag hinzufügen</button>
                 
-                <button type="submit" class="button">Anmeldung absenden</button>
+                <!-- UX-VERBESSERUNG: Neuer Button-Text -->
+                <button type="submit" class="button">➡️ Weiter zum nächsten Schritt</button>
             </form>
         </div>
 
@@ -510,10 +628,34 @@
             <h3>Bisherige Buffet-Beiträge</h3>
             <ul id="contributionsList" class="contribution-list">
             </ul>
-        </div></div>
+        </div>
     </div>
 
     <script>
+        // UX-VERBESSERUNG: Warnung bei Seitenverlassen ohne Abschluss
+        let anmeldungBegonnen = false;
+        let anmeldungAbgeschlossen = false;
+
+        // Überwachung ob User das Formular zu füllen beginnt
+        document.addEventListener('DOMContentLoaded', function() {
+            const formInputs = document.querySelectorAll('#registrationForm input, #registrationForm textarea');
+            formInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    if (!anmeldungBegonnen) {
+                        anmeldungBegonnen = true;
+                        // Warnung bei Seitenverlassen aktivieren
+                        window.addEventListener('beforeunload', function(e) {
+                            if (anmeldungBegonnen && !anmeldungAbgeschlossen) {
+                                e.preventDefault();
+                                e.returnValue = 'Ihre Anmeldung ist noch nicht abgeschlossen. Möchten Sie die Seite wirklich verlassen?';
+                                return e.returnValue;
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
         // Simulierte Datenbank für Beiträge
         let contributions = [];
 
@@ -631,7 +773,7 @@
             return JSON.stringify(buffetItems);
         }
 
-        // Erweiterte Formular-Submit Handler mit Präferenzen
+        // UX-VERBESSERUNG: Erweiterte Formular-Submit Handler
         document.getElementById('registrationForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -639,7 +781,7 @@
             const submitButton = document.querySelector('button[type="submit"]');
             const originalText = submitButton.textContent;
             submitButton.disabled = true;
-            submitButton.textContent = "Wird verarbeitet...";
+            submitButton.textContent = "⏳ Wird verarbeitet...";
             submitButton.style.backgroundColor = "#6c757d";
             submitButton.style.cursor = "not-allowed";
             
@@ -688,11 +830,14 @@
             });
             updateContributionsList();
 
-            // Sofortige Weiterleitung ohne n8n-Request
+            // Error-Message ausblenden
             document.getElementById('errorMessage').style.display = 'none';
             
+            // UX-VERBESSERUNG: Großes Weiterleitungs-Overlay anzeigen
+            document.getElementById('redirectOverlay').style.display = 'flex';
+            
             // Button-Text ändern
-            submitButton.textContent = "Erfolgreich! Weiterleitung...";
+            submitButton.textContent = "✅ Erfolgreich! Weiterleitung läuft...";
 
             // Formular zurücksetzen
             this.reset();
@@ -707,8 +852,10 @@
             dynamicItems.forEach(item => item.parentNode.remove());
             buffetItemCount = 1;
             
-            // Sofortige Weiterleitung zur Helferseite (reduziert von 3s auf 1s)
+            // UX-VERBESSERUNG: Längere Wartezeit für bessere UX (3 Sekunden für Overlay-Anzeige)
             setTimeout(() => {
+                anmeldungAbgeschlossen = true; // Warnung bei Seitenverlassen deaktivieren
+                
                 const guestNumbers = calculateGuestNumbers(formData.companions);
                 const helferParams = new URLSearchParams({
                     name: formData.name,
@@ -727,7 +874,7 @@
                     getraenke_bemerkungen: formData.getraenke_bemerkungen
                 });
                 window.location.href = `helfer.html?${helferParams.toString()}`;
-            }, 1000);
+            }, 3000);
         });
 
         async function loadLiveBuffetData() {
@@ -759,8 +906,10 @@
                 const response = await fetch("https://automatisierung.frankrath.de/webhook/helfer-statistik");
                 const data = await response.json();
                 
-                document.getElementById("aufbau-count").textContent = data.aufbau || "0";
-                document.getElementById("abbau-count").textContent = data.abbau || "0";
+                const aufbauElement = document.getElementById("aufbau-count");
+                const abbauElement = document.getElementById("abbau-count");
+                if (aufbauElement) aufbauElement.textContent = data.aufbau || "0";
+                if (abbauElement) abbauElement.textContent = data.abbau || "0";
             } catch (error) {
                 console.error('Fehler beim Laden der Helfer-Statistik:', error);
             }
@@ -770,8 +919,26 @@
         setInterval(loadLiveBuffetData, 30000);
         setInterval(loadHelferStatistik, 30000);
         loadLiveBuffetData(); // Erste Ladung
-         // Erste Ladung
 
+        // UX-VERBESSERUNG: Warnung-Banner anzeigen bei bestimmten Szenarien
+        function showWarningIfIncomplete() {
+            if (anmeldungBegonnen && !anmeldungAbgeschlossen) {
+                const banner = document.getElementById('warningBanner');
+                banner.classList.add('show');
+                setTimeout(() => {
+                    banner.classList.remove('show');
+                }, 5000);
+            }
+        }
+
+        // Warnung anzeigen wenn User scrollt aber nicht abschließt
+        let hasScrolled = false;
+        window.addEventListener('scroll', function() {
+            if (!hasScrolled && anmeldungBegonnen && !anmeldungAbgeschlossen) {
+                hasScrolled = true;
+                setTimeout(showWarningIfIncomplete, 2000);
+            }
+        });
     </script>
 </body>
 </html>
