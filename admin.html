@@ -517,6 +517,9 @@
                         <button class="btn btn-primary" id="exportHelpers">
                             🤝 Helfer-Liste
                         </button>
+                        <button class="btn btn-warning" id="exportBilling" style="background-color: #f39c12;">
+                            💰 Abrechnung (für Kasse)
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1042,7 +1045,6 @@
                 return {
                     'Name': p.name || 'N/A',
                     'E-Mail': p.email || 'N/A',
-                    'Telefon': p.telefon || 'Nicht angegeben',
                     'Loge': lodge,
                     'Begleitung': guests,
                     'Gesamt-Personen': totalPersons,
@@ -1050,13 +1052,11 @@
                     'Buffet-Beiträge': buffetItems,
                     'Aufbau-Helfer': p.helfer_aufbau || 'Nein',
                     'Abbau-Helfer': p.helfer_abbau || 'Nein',
-                    'Hinweise': p.bemerkungen || 'Keine',
-                    'Grillbuffet-Präferenzen': p.grillbuffet_praeferenzen || 'Keine Angabe',
-                    'Getränke-Präferenzen': p.getraenke_praeferenzen || 'Keine Angabe'
+                    'Hinweise': p.bemerkungen || 'Keine'
                 };
             });
             
-            const headers = ['Name', 'E-Mail', 'Telefon', 'Loge', 'Begleitung', 'Gesamt-Personen', 'Anmeldedatum', 'Buffet-Beiträge', 'Aufbau-Helfer', 'Abbau-Helfer', 'Hinweise', 'Grillbuffet-Präferenzen', 'Getränke-Präferenzen'];
+            const headers = ['Name', 'E-Mail', 'Loge', 'Begleitung', 'Gesamt-Personen', 'Anmeldedatum', 'Buffet-Beiträge', 'Aufbau-Helfer', 'Abbau-Helfer', 'Hinweise'];
             
             exportToCSV(participantData, headers, 'sommerfest_teilnehmer_komplett.csv');
         });
@@ -1091,8 +1091,7 @@
                                 'Gericht': item.item || item.name || 'Unbekannt',
                                 'Anbieter': p.name,
                                 'Portionen': item.quantity || 'Nicht angegeben',
-                                'E-Mail': p.email,
-                                'Telefon': p.telefon || 'Nicht angegeben'
+                                'E-Mail': p.email
                             });
                         });
                     } catch (e) {
@@ -1101,15 +1100,14 @@
                                 'Gericht': p.buffet.replace(/"/g, ''),
                                 'Anbieter': p.name,
                                 'Portionen': p.quantity || 'Nicht angegeben',
-                                'E-Mail': p.email,
-                                'Telefon': p.telefon || 'Nicht angegeben'
+                                'E-Mail': p.email
                             });
                         }
                     }
                 }
             });
             
-            const headers = ['Gericht', 'Anbieter', 'Portionen', 'E-Mail', 'Telefon'];
+            const headers = ['Gericht', 'Anbieter', 'Portionen', 'E-Mail'];
             
             exportToCSV(buffetItems, headers, 'sommerfest_buffet_planung.csv');
         });
@@ -1129,9 +1127,35 @@
                 'Hinweise': p.bemerkungen || 'Keine'
             }));
             
-            const headers = ['Name', 'E-Mail', 'Telefon', 'Aufbau (22.08.)', 'Abbau (24.08.)', 'Hinweise'];
+            const headers = ['Name', 'E-Mail', 'Aufbau (22.08.)', 'Abbau (24.08.)', 'Hinweise'];
             
             exportToCSV(helperData, headers, 'sommerfest_helfer_liste.csv');
+        });
+
+        document.getElementById('exportBilling').addEventListener('click', function() {
+            console.log('Export Abrechnung gestartet...');
+            
+            const billingData = currentData.participants.map(p => {
+                // Lodge-Mapping anwenden
+                const lodge = mapLodgeFromData(p.email, p.name);
+                
+                // Gäste-Korrektur anwenden  
+                const correctedData = correctGuestDataFromPattern(p);
+                const guests = correctedData ? correctedData.gaeste : (p.gaeste || 'Keine');
+                const totalPersons = correctedData ? correctedData.personen : (parseInt(p.personen) || 1);
+                
+                return {
+                    'Name': p.name || 'N/A',
+                    'Loge': lodge,
+                    'Begleitung': guests,
+                    'Gesamtpersonen': totalPersons,
+                    'Bezahlt': ''  // Leere Spalte zum handschriftlichen Eintragen
+                };
+            });
+            
+            const headers = ['Name', 'Loge', 'Begleitung', 'Gesamtpersonen', 'Bezahlt'];
+            
+            exportToCSV(billingData, headers, 'sommerfest_abrechnung_kasse.csv');
         });
 
         // Initial Load
