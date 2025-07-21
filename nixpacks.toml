@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["nginx", "php82", "php82Extensions.curl", "php82Extensions.json"]
+
+[phases.build]
+cmds = ["echo 'PHP build phase'"]
+
+[phases.start]
+cmd = "php-fpm82 -D && nginx -g 'daemon off;'"
+
+[variables]
+PORT = "80"
