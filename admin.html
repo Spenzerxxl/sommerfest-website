@@ -299,20 +299,6 @@
             white-space: nowrap;
         }
 
-        
-        /* 🔧 Fix für Name-Truncation - ausreichend Platz für Gäste-Namen */
-        .participants-table td:nth-child(4) { /* Begleitungs-Spalte */
-            min-width: 200px;
-            max-width: 350px;
-            word-wrap: break-word;
-            white-space: normal;
-            overflow: visible;
-        }
-        
-        .participants-table td {
-            padding: 8px 12px;
-            vertical-align: top;
-        }
         </style>
 </head>
 <body>
@@ -1190,20 +1176,6 @@
             document.head.appendChild(style);
         }
 
-        // Hilfsfunktion: "Frank Rath" → "Rath, Frank" für Kassenliste
-        function formatNameForBilling(fullName) {
-            if (!fullName || fullName === "N/A") return fullName;
-            
-            const parts = fullName.trim().split(" ");
-            if (parts.length < 2) return fullName; // Nur ein Name
-            
-            // Letzter Teil = Nachname, Rest = Vorname(n)
-            const lastName = parts[parts.length - 1];
-            const firstName = parts.slice(0, -1).join(" ");
-            
-            return `${lastName}, ${firstName}`;
-        }
-        
         // Export-Funktionen
         function exportToCSV(data, headers, filename) {
             console.log(`Erstelle CSV: ${filename} mit ${data.length} Zeilen`);
@@ -1275,8 +1247,8 @@
                     'Gesamt-Personen': totalPersons,
                     'Anmeldedatum': formattedDate,
                     'Buffet-Beiträge': buffetItems,
-                    'Aufbau-Helfer': p.aufbau || 'Nein',
-                    'Abbau-Helfer': p.abbau || 'Nein',
+                    'Aufbau-Helfer': p.helfer_aufbau || 'Nein',
+                    'Abbau-Helfer': p.helfer_abbau || 'Nein',
                     'Hinweise': p.bemerkungen || 'Keine'
                 };
             });
@@ -1352,23 +1324,23 @@
                 let aufbauStatus = 'Nein';
                 let abbauStatus = 'Nein';
                 
-                if (p.aufbau) {
-                    if (typeof p.aufbau === 'string' && p.aufbau.toLowerCase().includes('ja')) {
+                if (p.helfer_aufbau) {
+                    if (typeof p.helfer_aufbau === 'string' && p.helfer_aufbau.toLowerCase().includes('ja')) {
                         aufbauStatus = 'Ja';
-                    } else if (p.aufbau === true) {
+                    } else if (p.helfer_aufbau === true) {
                         aufbauStatus = 'Ja';
                     } else {
-                        aufbauStatus = p.aufbau;
+                        aufbauStatus = p.helfer_aufbau;
                     }
                 }
                 
-                if (p.abbau) {
-                    if (typeof p.abbau === 'string' && p.abbau.toLowerCase().includes('ja')) {
+                if (p.helfer_abbau) {
+                    if (typeof p.helfer_abbau === 'string' && p.helfer_abbau.toLowerCase().includes('ja')) {
                         abbauStatus = 'Ja';
-                    } else if (p.abbau === true) {
+                    } else if (p.helfer_abbau === true) {
                         abbauStatus = 'Ja';
                     } else {
-                        abbauStatus = p.abbau;
+                        abbauStatus = p.helfer_abbau;
                     }
                 }
                 
@@ -1403,7 +1375,7 @@
                 
                 // 1. HAUPTPERSON HINZUFÜGEN
                 allPersons.push({
-                    'Name': formatNameForBilling(participant.name || 'N/A'),
+                    'Name': participant.name || 'N/A',
                     'Loge/Gastgeber': lodge,
                     'Bezahlt': ''
                 });
@@ -1417,7 +1389,7 @@
                     
                     guestNames.forEach(guestName => {
                         allPersons.push({
-                            'Name': formatNameForBilling(guestName),
+                            'Name': guestName,
                             'Loge/Gastgeber': `Gast von ${participant.name}`,
                             'Bezahlt': ''
                         });
@@ -1425,9 +1397,8 @@
                 }
             });
             
-            // 3. ALPHABETISCH SORTIEREN (Namen bereits im Format "Nachname, Vorname")
+            // 3. ALPHABETISCH SORTIEREN
             allPersons.sort((a, b) => a.Name.localeCompare(b.Name));
-            });
             
             // 4. CSV EXPORT
             const headers = ['Name', 'Loge/Gastgeber', 'Bezahlt'];
