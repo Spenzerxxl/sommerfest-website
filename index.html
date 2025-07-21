@@ -642,14 +642,18 @@
 
                 <h2>Dein/Euer Beitrag zum Buffet</h2>
                 
+                <div style="background-color: #e8f4f8; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #2c5282;">
+                    <p style="margin: 0; color: #2c5282; font-size: 0.95em;"><strong>💡 Hinweis:</strong> Buffet-Beiträge sind freiwillig! Du kannst auch ohne eigenen Beitrag am Fest teilnehmen. Das Grillbuffet ist im Eintrittspreis enthalten.</p>
+                </div>
+                
                 <div class="form-group">
-                    <label for="contribution">Was möchtest du mitbringen? *</label>
-                    <input type="text" id="contribution" name="contribution" required placeholder="z.B. Kartoffelsalat">
+                    <label for="contribution">Was möchtest du mitbringen? (optional)</label>
+                    <input type="text" id="contribution" name="contribution" placeholder="z.B. Kartoffelsalat (oder leer lassen)">
                 </div>
 
                 <div class="form-group">
-                    <label for="quantity">Menge/Anzahl *</label>
-                    <input type="text" id="quantity" name="quantity" required placeholder="z.B. für 10 Personen">
+                    <label for="quantity">Menge/Anzahl (optional)</label>
+                    <input type="text" id="quantity" name="quantity" placeholder="z.B. für 10 Personen (oder leer lassen)">
                 </div>
 
                 <button type="button" id="add-buffet-item" class="button-secondary" onclick="addBuffetItem()">+ Weiteren Beitrag hinzufügen</button>
@@ -781,10 +785,10 @@
             const newItem = document.createElement("div");
             newItem.className = "form-group";
             newItem.innerHTML = `
-                <label for="contribution${buffetItemCount}">Weiterer Beitrag ${buffetItemCount} *</label>
-                <input type="text" id="contribution${buffetItemCount}" name="contribution${buffetItemCount}" required placeholder="z.B. Kartoffelsalat">
-                <label for="quantity${buffetItemCount}">Menge/Anzahl *</label>
-                <input type="text" id="quantity${buffetItemCount}" name="quantity${buffetItemCount}" required placeholder="z.B. für 10 Personen">
+                <label for="contribution${buffetItemCount}">Weiterer Beitrag ${buffetItemCount} (optional)</label>
+                <input type="text" id="contribution${buffetItemCount}" name="contribution${buffetItemCount}" placeholder="z.B. Kartoffelsalat (optional)">
+                <label for="quantity${buffetItemCount}">Menge/Anzahl (optional)</label>
+                <input type="text" id="quantity${buffetItemCount}" name="quantity${buffetItemCount}" placeholder="z.B. für 10 Personen (optional)">
                 <button type="button" onclick="removeBuffetItem(this)" class="button-secondary">Entfernen</button>
             `;
             container.parentNode.insertBefore(newItem, container.nextSibling);
@@ -848,7 +852,7 @@
 
             // Validierung
             const buffetData = JSON.parse(formData.contribution);
-            if (!formData.name || !formData.email || buffetData.length === 0) {
+            if (!formData.name || !formData.email) {
                 // Button wieder aktivieren bei Fehler
                 submitButton.disabled = false;
                 submitButton.textContent = originalText;
