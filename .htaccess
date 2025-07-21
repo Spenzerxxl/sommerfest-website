@@ -1,0 +1,13 @@
+# PHP Support aktivieren
+Options +Indexes
+DirectoryIndex index.html index.php
+
+# PHP-Dateien verarbeiten
+AddType application/x-httpd-php .php
+
+# CORS für alle PHP-Dateien
+<Files "*.php">
+    Header always set Access-Control-Allow-Origin "*"
+    Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+</Files>
