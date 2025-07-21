@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sommerfest 2025 - Orga-Team Dashboard</title>
@@ -520,10 +523,9 @@
             const password = document.getElementById('password').value;
             
             try {
-                const response = await fetch(LOGIN_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
+                const loginUrl = `${LOGIN_API_URL}?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+                const response = await fetch(loginUrl, {
+                    method: 'GET'
                 });
                 
                 if (response.ok) {
@@ -589,7 +591,7 @@
         async function loadDashboardData() {
             try {
                 const response = await fetch(PARTICIPANTS_API_URL, {
-                    method: 'POST',
+                    method: 'GET',
                     headers: { 'Content-Type': 'application/json' }
                 });
                 
@@ -610,8 +612,7 @@
         async function loadPreferences() {
             try {
                 const response = await fetch(PREFERENCES_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
+                    method: 'GET',
                 });
                 
                 if (response.ok) {
