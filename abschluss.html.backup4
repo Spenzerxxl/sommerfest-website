@@ -53,6 +53,11 @@
             font-weight: normal;
         }
 
+
+
+
+
+
         .welcome-text {
             background-color: #d4edda;
             padding: 25px;
@@ -109,45 +114,6 @@
         .summary-value {
             color: #2c3e50;
             flex: 1;
-        }
-
-        /* Neue Styles für Buffet-Liste */
-        .buffet-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .buffet-item {
-            color: #2c3e50;
-            padding: 8px 0;
-            border-bottom: 1px solid #f1f3f4;
-            font-size: 1.1em;
-        }
-
-        .buffet-item:last-child {
-            border-bottom: none;
-        }
-
-        .buffet-item::before {
-            content: "•";
-            color: #1e3a5f;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        .helfer-item {
-            margin-bottom: 10px;
-        }
-
-        .helfer-text {
-            font-size: 1.15em;
-            line-height: 1.4;
-            color: #1e3a5f;
-        }
-
-        #display-bemerkungen {
-            font-size: 1.15em;
-            line-height: 1.4;
         }
 
         .helper-status {
@@ -293,17 +259,25 @@
 
             <div id="buffet-section" class="summary-section">
                 <h3>Dein Buffet-Beitrag</h3>
-                <ul class="buffet-list" id="buffet-list">
-                    <!-- Buffet-Items werden hier dynamisch eingefügt -->
-                </ul>
+                <div class="summary-row">
+                    <span class="summary-label">Beitrag:</span>
+                    <span class="summary-value" id="display-buffet">-</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Menge:</span>
+                    <span class="summary-value" id="display-portionen">-</span>
+                </div>
             </div>
 
             <div id="helfer-section" class="summary-section">
-                <div class="helfer-item" id="aufbau-item">
-                    <span class="helfer-text" id="display-aufbau">-</span>
+                <h3>Deine Helfer-Bereitschaft</h3>
+                <div class="summary-row">
+                    <span class="summary-label">Aufbau (22. August):</span>
+                    <span class="summary-value" id="display-aufbau">-</span>
                 </div>
-                <div class="helfer-item" id="abbau-item">
-                    <span class="helfer-text" id="display-abbau">-</span>
+                <div class="summary-row">
+                    <span class="summary-label">Abbau (24. August):</span>
+                    <span class="summary-value" id="display-abbau">-</span>
                 </div>
             </div>
 
@@ -384,71 +358,69 @@
         document.getElementById('display-gesamt').textContent = data.gesamtPersonen;
         document.getElementById('display-bemerkungen').textContent = data.bemerkungen;
 
-        // Buffet-Sektion: Neue übersichtliche Darstellung
+        // Buffet-Sektion nur anzeigen wenn Buffet-Beitrag vorhanden
         if (data.buffet && data.buffet.trim() !== '' && data.buffet !== 'Nicht angegeben') {
             try {
-                // JSON-String parsen und als schöne Liste anzeigen
+                // JSON-String parsen und formatiert anzeigen
                 const buffetItems = JSON.parse(data.buffet);
-                const buffetList = document.getElementById('buffet-list');
+                let formattedBuffet = '';
                 
-                buffetItems.forEach(item => {
-                    const listItem = document.createElement('li');
-                    listItem.className = 'buffet-item';
-                    listItem.textContent = `${item.quantity} Portionen ${item.item}`;
-                    buffetList.appendChild(listItem);
+                buffetItems.forEach((item, index) => {
+                    if (index > 0) {
+                        formattedBuffet += ', ';
+                    }
+                    formattedBuffet += `${item.item} (${item.quantity})`;
                 });
                 
+                document.getElementById('display-buffet').textContent = formattedBuffet;
+                document.getElementById('display-portionen').textContent = 'Siehe oben';
             } catch (error) {
                 // Fallback falls JSON nicht parsbar
                 console.error('JSON-Parse-Fehler:', error);
-                const buffetList = document.getElementById('buffet-list');
-                const listItem = document.createElement('li');
-                listItem.className = 'buffet-item';
-                listItem.textContent = data.buffet;
-                buffetList.appendChild(listItem);
+                document.getElementById('display-buffet').textContent = data.buffet;
+                document.getElementById('display-portionen').textContent = data.portionen;
             }
         } else {
-            // Fallback: Zeige "Kein Buffet-Beitrag" an statt Sektion zu verstecken
-            const buffetList = document.getElementById('buffet-list');
-            const listItem = document.createElement('li');
-            listItem.className = 'buffet-item';
-            listItem.textContent = 'Kein Buffet-Beitrag angegeben';
-            listItem.style.fontStyle = 'italic';
-            listItem.style.color = '#666';
-            buffetList.appendChild(listItem);
+            document.getElementById('buffet-section').classList.add('hidden');
         }
 
-        // Helfer-Sektion: Neue Logik für bessere Darstellung
-        const aufbauJa = data.aufbau && data.aufbau.includes('Ja');
-        const abbauJa = data.abbau && data.abbau.includes('Ja');
-        
-        if (aufbauJa || abbauJa) {
-            // Mindestens eine Ja-Antwort → Sektion anzeigen
+        // Helfer-Sektion nur anzeigen wenn mindestens eine Helfer-Angabe gemacht wurde
+        const hatHelferAngabe = (data.aufbau && data.aufbau.trim() !== '' && data.aufbau !== 'Nicht angegeben') ||
+                                (data.abbau && data.abbau.trim() !== '' && data.abbau !== 'Nicht angegeben');
+
+        if (hatHelferAngabe) {
+            // Helfer-Status mit Styling
             const aufbauElement = document.getElementById('display-aufbau');
             const abbauElement = document.getElementById('display-abbau');
-            const aufbauItem = document.getElementById('aufbau-item');
-            const abbauItem = document.getElementById('abbau-item');
             
-            if (aufbauJa) {
-                aufbauElement.textContent = 'Ja, ich helfe beim Aufbau am Freitag, den 22. August';
-                aufbauItem.style.display = 'block';
+            if (data.aufbau && data.aufbau.includes('Ja')) {
+                aufbauElement.innerHTML = '<span class="helper-status helper-yes">' + data.aufbau + '</span>';
+            } else if (data.aufbau) {
+                aufbauElement.innerHTML = '<span class="helper-status helper-no">' + data.aufbau + '</span>';
             } else {
-                aufbauItem.style.display = 'none';
+                aufbauElement.textContent = 'Keine Angabe';
             }
             
-            if (abbauJa) {
-                abbauElement.textContent = 'Ja, ich helfe beim Abbau am Sonntag, den 24. August';
-                abbauItem.style.display = 'block';
+            if (data.abbau && data.abbau.includes('Ja')) {
+                abbauElement.innerHTML = '<span class="helper-status helper-yes">' + data.abbau + '</span>';
+            } else if (data.abbau) {
+                abbauElement.innerHTML = '<span class="helper-status helper-no">' + data.abbau + '</span>';
             } else {
-                abbauItem.style.display = 'none';
+                abbauElement.textContent = 'Keine Angabe';
             }
         } else {
-            // Beide "Nein" oder keine Angabe → Helfer-Sektion komplett ausblenden
+            // Helfer-Sektion ausblenden
             document.getElementById('helfer-section').classList.add('hidden');
+        }
+
+        // Hinweise-Sektion: Titel anpassen wenn keine Helfer-Angabe gemacht wurde
+        if (!hatHelferAngabe) {
+            document.querySelector('#hinweise-section h3').textContent = 'Deine Hinweise an das Organisationsteam';
         }
 
         // Debug-Ausgabe
         console.log('Empfangene Daten:', data);
+        console.log('Hat Helfer-Angabe:', hatHelferAngabe);
     </script>
 </body>
 </html>
