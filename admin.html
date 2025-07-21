@@ -420,25 +420,69 @@
             </div>
 
             <!-- Tab: Präferenzen (NEU!) -->
+            <!-- Tab: Präferenzen (ERWEITERT!) -->
             <div id="tab-preferences" class="tab-content">
                 <div class="preferences-grid">
-                    <!-- Grillbuffet-Präferenzen -->
+                    <!-- Grillbuffet-Präferenzen (DETAILLIERT) -->
                     <div class="preference-section">
-                        <h3>🔥 Grillbuffet-Präferenzen</h3>
-                        <ul class="preference-list" id="grillbuffetPreferences">
-                            <li class="preference-item">
-                                <span>🌭 Wurst</span>
-                                <span class="preference-count">0</span>
-                            </li>
-                            <li class="preference-item">
-                                <span>🥩 Fleisch (inkl. Rind)</span>
-                                <span class="preference-count">0</span>
-                            </li>
-                            <li class="preference-item">
-                                <span>🥬 Vegetarisch/Vegan</span>
-                                <span class="preference-count">0</span>
-                            </li>
-                        </ul>
+                        <h3>🍖 Grillbuffet-Präferenzen</h3>
+                        
+                        <!-- Wurst-Kategorie -->
+                        <div class="preference-subcategory">
+                            <h4 style="color: #1e3a5f; margin: 15px 0 10px 0;">🌭 Wurst:</h4>
+                            <ul class="preference-list" id="wurstPreferences">
+                                <li class="preference-item">
+                                    <span>Schinkenwurst</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                                <li class="preference-item">
+                                    <span>Rostbratwurst</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                                <li class="preference-item">
+                                    <span>Geflügelwurst</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Fleisch-Kategorie -->
+                        <div class="preference-subcategory">
+                            <h4 style="color: #1e3a5f; margin: 15px 0 10px 0;">🥩 Fleisch:</h4>
+                            <ul class="preference-list" id="fleischPreferences">
+                                <li class="preference-item">
+                                    <span>Hähnchenbrust</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                                <li class="preference-item">
+                                    <span>Schweinenacken</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                                <li class="preference-item">
+                                    <span>Putenbrust</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                                <li class="preference-item">
+                                    <span>Rind</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Vegetarisch/Vegan-Kategorie -->
+                        <div class="preference-subcategory">
+                            <h4 style="color: #1e3a5f; margin: 15px 0 10px 0;">🥬 Vegetarisch/Vegan:</h4>
+                            <ul class="preference-list" id="vegetarischPreferences">
+                                <li class="preference-item">
+                                    <span>Grillgemüse</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                                <li class="preference-item">
+                                    <span>Vegane Bratwurst</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                            </ul>
+                        </div>
                         
                         <h4 style="margin-top: 20px; margin-bottom: 10px;">💬 Besondere Wünsche:</h4>
                         <div id="grillbuffetComments" style="max-height: 200px; overflow-y: auto; background: white; padding: 10px; border-radius: 6px;">
@@ -446,27 +490,85 @@
                         </div>
                     </div>
 
-                    <!-- Getränke-Präferenzen -->
+                    <!-- Getränke-Präferenzen (DETAILLIERT) -->
                     <div class="preference-section">
                         <h3>🍻 Getränke-Präferenzen</h3>
-                        <ul class="preference-list" id="getraenkePreferences">
-                            <li class="preference-item">
-                                <span>🥤 Softdrinks</span>
-                                <span class="preference-count">0</span>
-                            </li>
-                            <li class="preference-item">
-                                <span>🚰 Alkoholfrei</span>
-                                <span class="preference-count">0</span>
-                            </li>
-                            <li class="preference-item">
-                                <span>🍺 Bier</span>
-                                <span class="preference-count">0</span>
-                            </li>
-                            <li class="preference-item">
-                                <span>🍷 Wein</span>
-                                <span class="preference-count">0</span>
-                            </li>
-                        </ul>
+                        
+                        <!-- Softdrinks-Kategorie -->
+                        <div class="preference-subcategory">
+                            <h4 style="color: #1e3a5f; margin: 15px 0 10px 0;">🥤 Softdrinks:</h4>
+                            <ul class="preference-list" id="softdrinksPreferences">
+                                <li class="preference-item">
+                                    <span>Cola</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                                <li class="preference-item">
+                                    <span>Fanta</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                                <li class="preference-item">
+                                    <span>Sprite</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                                <li class="preference-item">
+                                    <span>Wasser</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Alkoholfrei-Kategorie -->
+                        <div class="preference-subcategory">
+                            <h4 style="color: #1e3a5f; margin: 15px 0 10px 0;">🚰 Alkoholfrei:</h4>
+                            <ul class="preference-list" id="alkoholfreiPreferences">
+                                <li class="preference-item">
+                                    <span>Alkoholfreies Pils</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                                <li class="preference-item">
+                                    <span>Alkoholfreies Weizen</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Bier-Kategorie -->
+                        <div class="preference-subcategory">
+                            <h4 style="color: #1e3a5f; margin: 15px 0 10px 0;">🍺 Bier:</h4>
+                            <ul class="preference-list" id="bierPreferences">
+                                <li class="preference-item">
+                                    <span>Pils</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                                <li class="preference-item">
+                                    <span>Weizenbier</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                                <li class="preference-item">
+                                    <span>Weißbier</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Wein/Sekt-Kategorie -->
+                        <div class="preference-subcategory">
+                            <h4 style="color: #1e3a5f; margin: 15px 0 10px 0;">🍷 Wein/Sekt:</h4>
+                            <ul class="preference-list" id="weinPreferences">
+                                <li class="preference-item">
+                                    <span>Rotwein</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                                <li class="preference-item">
+                                    <span>Weißwein</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                                <li class="preference-item">
+                                    <span>Prosecco</span>
+                                    <span class="preference-count">0</span>
+                                </li>
+                            </ul>
+                        </div>
                         
                         <h4 style="margin-top: 20px; margin-bottom: 10px;">💬 Getränke-Wünsche:</h4>
                         <div id="getraenkeComments" style="max-height: 200px; overflow-y: auto; background: white; padding: 10px; border-radius: 6px;">
@@ -641,7 +743,7 @@
                 if (response.ok) {
                     const data = await response.json();
                     currentData.preferences = data.preferences || { grillbuffet: {}, getraenke: {} };
-                    updatePreferencesDisplay();
+                    updateExtendedPreferencesDisplay();
                 }
             } catch (error) {
                 console.error('Fehler beim Laden der Präferenzen:', error);
@@ -924,66 +1026,154 @@
         }
 
         // Präferenzen-Anzeige aktualisieren
-        function updatePreferencesDisplay() {
-            const prefs = currentData.preferences;
-            
-            // Grillbuffet-Präferenzen
-            const grillbuffetCounts = prefs.grillbuffet || {};
-            const grillbuffetItems = document.querySelectorAll('#grillbuffetPreferences .preference-count');
-            grillbuffetItems[0].textContent = grillbuffetCounts.wurst || 0;
-            grillbuffetItems[1].textContent = grillbuffetCounts.fleisch || 0;
-            grillbuffetItems[2].textContent = grillbuffetCounts.vegetarisch || 0;
-            
-            // Getränke-Präferenzen
-            const getraenkeCounts = prefs.getraenke || {};
-            const getraenkeItems = document.querySelectorAll('#getraenkePreferences .preference-count');
-            getraenkeItems[0].textContent = getraenkeCounts.softdrinks || 0;
-            getraenkeItems[1].textContent = getraenkeCounts.alkoholfrei || 0;
-            getraenkeItems[2].textContent = getraenkeCounts.bier || 0;
-            getraenkeItems[3].textContent = getraenkeCounts.wein || 0;
-            
-            // Kommentare
-            document.getElementById('grillbuffetComments').innerHTML = 
-                (prefs.grillbuffet_comments && prefs.grillbuffet_comments.length > 0) 
-                ? prefs.grillbuffet_comments.map(c => `<div style="margin-bottom: 10px; padding: 8px; background: #f0f0f0; border-radius: 4px;"><strong>${c.name}:</strong> ${c.comment}</div>`).join('')
-                : '<em>Noch keine besonderen Wünsche</em>';
-                
-            document.getElementById('getraenkeComments').innerHTML = 
-                (prefs.getraenke_comments && prefs.getraenke_comments.length > 0)
-                ? prefs.getraenke_comments.map(c => `<div style="margin-bottom: 10px; padding: 8px; background: #f0f0f0; border-radius: 4px;"><strong>${c.name}:</strong> ${c.comment}</div>`).join('')
-                : '<em>Noch keine Getränke-Wünsche</em>';
-        }
-
-        // Fallback: Präferenzen aus Teilnehmerdaten ableiten
-        function derivePreferencesFromParticipants() {
+        // ERWEITERTE PRÄFERENZEN-ANZEIGE FUNKTION
+        function updateExtendedPreferencesDisplay() {
             const participants = currentData.participants;
-            const grillbuffet = { wurst: 0, fleisch: 0, vegetarisch: 0 };
-            const getraenke = { softdrinks: 0, alkoholfrei: 0, bier: 0, wein: 0 };
             
+            // Zähler für alle detaillierten Präferenzen
+            const grillbuffetCounts = {
+                "Schinkenwurst": 0, "Rostbratwurst": 0, "Geflügelwurst": 0,
+                "Hähnchenbrust": 0, "Schweinenacken": 0, "Putenbrust": 0, "Rind": 0,
+                "Grillgemüse": 0, "Vegane Bratwurst": 0
+            };
+            
+            const getraenkeCounts = {
+                "Cola": 0, "Fanta": 0, "Sprite": 0, "Wasser": 0,
+                "Alkoholfreies Pils": 0, "Alkoholfreies Weizen": 0,
+                "Pils": 0, "Weizenbier": 0, "Weißbier": 0,
+                "Rotwein": 0, "Weißwein": 0, "Prosecco": 0
+            };
+            
+            // Teilnehmer-Präferenzen auswerten
             participants.forEach(p => {
-                // Hier würden die neuen Felder ausgelesen werden
                 if (p.grillbuffet_praeferenzen) {
-                    const prefs = p.grillbuffet_praeferenzen.split(',');
-                    prefs.forEach(pref => {
-                        if (pref.includes('Wurst')) grillbuffet.wurst++;
-                        if (pref.includes('Fleisch') || pref.includes('Rind')) grillbuffet.fleisch++;
-                        if (pref.includes('Vegetarisch') || pref.includes('Vegan')) grillbuffet.vegetarisch++;
-                    });
+                    try {
+                        let grillPrefs = [];
+                        if (typeof p.grillbuffet_praeferenzen === "string" && p.grillbuffet_praeferenzen.startsWith("[")) {
+                            grillPrefs = JSON.parse(p.grillbuffet_praeferenzen);
+                        } else if (typeof p.grillbuffet_praeferenzen === "string") {
+                            grillPrefs = p.grillbuffet_praeferenzen.split(",").map(s => s.trim());
+                        }
+                        grillPrefs.forEach(pref => {
+                            if (grillbuffetCounts.hasOwnProperty(pref)) {
+                                grillbuffetCounts[pref]++;
+                            }
+                        });
+                    } catch (e) {
+                        console.warn("Fehler beim Parsen von Grillbuffet-Präferenzen:", e);
+                    }
                 }
                 
                 if (p.getraenke_praeferenzen) {
-                    const prefs = p.getraenke_praeferenzen.split(',');
-                    prefs.forEach(pref => {
-                        if (pref.includes('Softdrinks')) getraenke.softdrinks++;
-                        if (pref.includes('Alkoholfrei')) getraenke.alkoholfrei++;
-                        if (pref.includes('Bier')) getraenke.bier++;
-                        if (pref.includes('Wein')) getraenke.wein++;
-                    });
+                    try {
+                        let getraenkePrefs = [];
+                        if (typeof p.getraenke_praeferenzen === "string" && p.getraenke_praeferenzen.startsWith("[")) {
+                            getraenkePrefs = JSON.parse(p.getraenke_praeferenzen);
+                        } else if (typeof p.getraenke_praeferenzen === "string") {
+                            getraenkePrefs = p.getraenke_praeferenzen.split(",").map(s => s.trim());
+                        }
+                        getraenkePrefs.forEach(pref => {
+                            if (getraenkeCounts.hasOwnProperty(pref)) {
+                                getraenkeCounts[pref]++;
+                            }
+                        });
+                    } catch (e) {
+                        console.warn("Fehler beim Parsen von Getränke-Präferenzen:", e);
+                    }
                 }
             });
             
-            currentData.preferences = { grillbuffet, getraenke };
-            updatePreferencesDisplay();
+            // DOM-Updates für Grillbuffet
+            const wurstItems = document.querySelectorAll("#wurstPreferences .preference-count");
+            if (wurstItems.length >= 3) {
+                wurstItems[0].textContent = grillbuffetCounts["Schinkenwurst"];
+                wurstItems[1].textContent = grillbuffetCounts["Rostbratwurst"];
+                wurstItems[2].textContent = grillbuffetCounts["Geflügelwurst"];
+            }
+            
+            const fleischItems = document.querySelectorAll("#fleischPreferences .preference-count");
+            if (fleischItems.length >= 4) {
+                fleischItems[0].textContent = grillbuffetCounts["Hähnchenbrust"];
+                fleischItems[1].textContent = grillbuffetCounts["Schweinenacken"];
+                fleischItems[2].textContent = grillbuffetCounts["Putenbrust"];
+                fleischItems[3].textContent = grillbuffetCounts["Rind"];
+            }
+            
+            const vegItems = document.querySelectorAll("#vegetarischPreferences .preference-count");
+            if (vegItems.length >= 2) {
+                vegItems[0].textContent = grillbuffetCounts["Grillgemüse"];
+                vegItems[1].textContent = grillbuffetCounts["Vegane Bratwurst"];
+            }
+            
+            // DOM-Updates für Getränke
+            const softItems = document.querySelectorAll("#softdrinksPreferences .preference-count");
+            if (softItems.length >= 4) {
+                softItems[0].textContent = getraenkeCounts["Cola"];
+                softItems[1].textContent = getraenkeCounts["Fanta"];
+                softItems[2].textContent = getraenkeCounts["Sprite"];
+                softItems[3].textContent = getraenkeCounts["Wasser"];
+            }
+            
+            const alkItems = document.querySelectorAll("#alkoholfreiPreferences .preference-count");
+            if (alkItems.length >= 2) {
+                alkItems[0].textContent = getraenkeCounts["Alkoholfreies Pils"];
+                alkItems[1].textContent = getraenkeCounts["Alkoholfreies Weizen"];
+            }
+            
+            const bierItems = document.querySelectorAll("#bierPreferences .preference-count");
+            if (bierItems.length >= 3) {
+                bierItems[0].textContent = getraenkeCounts["Pils"];
+                bierItems[1].textContent = getraenkeCounts["Weizenbier"];
+                bierItems[2].textContent = getraenkeCounts["Weißbier"];
+            }
+            
+            const weinItems = document.querySelectorAll("#weinPreferences .preference-count");
+            if (weinItems.length >= 3) {
+                weinItems[0].textContent = getraenkeCounts["Rotwein"];
+                weinItems[1].textContent = getraenkeCounts["Weißwein"];
+                weinItems[2].textContent = getraenkeCounts["Prosecco"];
+            }
+            
+            // Kommentare
+            const grillComments = participants.filter(p => p.grillbuffet_bemerkungen && p.grillbuffet_bemerkungen.trim())
+                .map(p => `<div style="margin-bottom: 10px; padding: 8px; background: #f0f0f0; border-radius: 4px;"><strong>${p.name}:</strong> ${p.grillbuffet_bemerkungen}</div>`);
+            
+            const getraenkeComments = participants.filter(p => p.getraenke_bemerkungen && p.getraenke_bemerkungen.trim())
+                .map(p => `<div style="margin-bottom: 10px; padding: 8px; background: #f0f0f0; border-radius: 4px;"><strong>${p.name}:</strong> ${p.getraenke_bemerkungen}</div>`);
+            
+            const grillCommentsEl = document.getElementById("grillbuffetComments");
+            if (grillCommentsEl) {
+                grillCommentsEl.innerHTML = grillComments.length > 0 ? grillComments.join("") : "<em>Noch keine besonderen Wünsche</em>";
+            }
+                
+            const getraenkeCommentsEl = document.getElementById("getraenkeComments");
+            if (getraenkeCommentsEl) {
+                getraenkeCommentsEl.innerHTML = getraenkeComments.length > 0 ? getraenkeComments.join("") : "<em>Noch keine Getränke-Wünsche</em>";
+            }
+            
+            console.log("Extended Preferences Updated:", { grillbuffet: grillbuffetCounts, getraenke: getraenkeCounts });
+        }
+
+        // CSS für Unterkategorien
+        if (!document.getElementById("extendedPrefsCSS")) {
+            const extendedPrefsCSS = `
+                .preference-subcategory {
+                    margin-bottom: 20px; padding: 10px; background: #f8f9fa; border-radius: 6px;
+                }
+                .preference-subcategory h4 {
+                    font-size: 1.1em; margin-bottom: 8px; color: #1e3a5f;
+                }
+                .preference-subcategory .preference-list {
+                    margin: 0; padding-left: 10px;
+                }
+                .preference-subcategory .preference-item {
+                    padding: 6px 10px; margin-bottom: 4px; background: white; border-radius: 4px;
+                }
+            `;
+            const style = document.createElement("style");
+            style.id = "extendedPrefsCSS";
+            style.textContent = extendedPrefsCSS;
+            document.head.appendChild(style);
         }
 
         // Export-Funktionen
