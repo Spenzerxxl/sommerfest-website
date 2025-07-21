@@ -670,9 +670,9 @@
                 <tr>
                     <td><strong>${p.name || 'N/A'}</strong></td>
                     <td>${p.email || 'N/A'}</td>
-                    <td>${p.lodge || 'Nicht angegeben'}</td>
-                    <td>${p.companions || 'Keine'}</td>
-                    <td>${p.timestamp ? new Date(p.timestamp).toLocaleDateString('de-DE') : 'N/A'}</td>
+                    <td>${'Logen-Info nicht in API'}</td>
+                    <td>${p.gaeste || 'Keine'}</td>
+                    <td>${p.datum ? new Date(p.datum).toLocaleDateString('de-DE') : 'N/A'}</td>
                 </tr>
             `).join('');
         }
