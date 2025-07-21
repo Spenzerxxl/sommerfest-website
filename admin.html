@@ -655,7 +655,7 @@
             const participants = currentData.participants;
             
             // Anmeldungen (wie bisher)
-            document.getElementById('totalRegistrations').textContent = participants.length;
+            document.getElementById('totalRegistrations').textContent = totalPersonsWithGuests;
             
             // NEUE: Gesamt-Personen inkl. Gäste berechnen
             const totalPersonsWithGuests = participants.reduce((sum, p) => {
@@ -676,7 +676,7 @@
                 if (p.buffet) {
                     try {
                         const buffetData = JSON.parse(p.buffet);
-                        buffetData.forEach(item => buffetItems.add(item.name));
+                        buffetData.forEach(item => buffetItems.add(item.item));
                     } catch (e) {
                         if (p.buffet.trim()) buffetItems.add(p.buffet);
                     }
