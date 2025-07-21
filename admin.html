@@ -795,54 +795,10 @@
 
         // Teilnehmer-Tabelle aktualisieren
 
-        // GÄSTE-KORREKTUR basierend auf Google Sheets-Analyse
+        // DATENSCHUTZ BEREINIGT: Test-Daten-Korrektur entfernt
         function correctGuestDataFromPattern(participant) {
-            const { name, email, datum } = participant;
-            
-            // Frank Rath Test-Anmeldungen (verschiedene Gäste-Kombinationen)
-            if (name === 'Frank Rath' && email === 'info@frankrath.com') {
-                if (datum && datum.includes('2025-07-16T18:41')) {
-                    return { gaeste: 'Heidi Rath, Kay Fuhrmann, Ralf Quandt', personen: 4 };
-                }
-                if (datum && datum.includes('2025-07-16T19:11')) {
-                    return { gaeste: 'Heidi Rath, Kay Fuhrmann, Ralf Quandt', personen: 4 };
-                }
-                if (datum && datum.includes('2025-07-16T19:21')) {
-                    return { gaeste: 'Heidi Rath, Lennard Rath, Stella Rath', personen: 4 };
-                }
-                if (datum && datum.includes('2025-07-17T20:39')) {
-                    return { gaeste: 'Heidi Rath, Ralf Quandt, Kay Fuhrmann', personen: 4 };
-                }
-                if (datum && datum.includes('2025-07-19T15:02')) {
-                    return { gaeste: 'Heidi Rath', personen: 2 };
-                }
-                // NEUE TIMESTAMPS FÜR AKTUELLE TEST-DATEN
-                if (datum && datum.includes('2025-07-21T15:36')) {
-                    return { gaeste: 'Heidi Rath, Kay Fuhrmann, Ralf Quandt', personen: 4 };
-                }
-                if (datum && datum.includes('2025-07-21T16:44')) {
-                    return { gaeste: 'Stella Schenk', personen: 2 };
-                }
-            }
-            
-            // Claude Test mit Max Testmann
-            if (name === 'Claude Test' && email === 'test@claude.ai') {
-                return { gaeste: 'Max Testmann', personen: 2 };
-            }
-            
-            // LIVE-TEST Anmeldungen
-            if (name.includes('LIVE-TEST') && email.includes('livetest')) {
-                return { gaeste: 'Maria-Test', personen: 2 };
-            }
-            
-            if (name.includes('Frank-Test') && email.includes('franktest')) {
-                return { gaeste: 'Maria-Test', personen: 2 };
-            }
-            
-            if (name.includes('FIELD-GRAB-TEST')) {
-                return { gaeste: 'Test-Gast', personen: 2 };
-            }
-            
+            // Bereinigt: Alle Test-Daten und hardcodierten Namen entfernt
+            // Diese Funktion wird für Abwärtskompatibilität beibehalten, aber nicht mehr verwendet
             return null;
         }
 
@@ -877,7 +833,7 @@
         }
 
 
-        // Lodge-Mapping basierend auf E-Mail-Domain und Namen
+        // Lodge-Mapping basierend auf E-Mail-Domain
         function mapLodgeFromData(email, name) {
             // Email-Domain basierte Zuordnung
             const emailDomainMapping = {
@@ -896,9 +852,8 @@
                 return emailDomainMapping[domain];
             }
             
-            // Namen-basierte Zuordnung für bekannte Personen
+            // DATENSCHUTZ BEREINIGT: Namen-basierte Zuordnung für öffentliche Ämter beibehalten
             const nameMapping = {
-                'Frank Rath': 'Zum Füllhorn',
                 'Anne Hormsatt': 'Zum Füllhorn',
                 'Nina vom Ende': 'Zum Füllhorn',
                 'Axel Drews': 'Zur Weltkugel',
@@ -1150,8 +1105,6 @@
             if (getraenkeCommentsEl) {
                 getraenkeCommentsEl.innerHTML = getraenkeComments.length > 0 ? getraenkeComments.join("") : "<em>Noch keine Getränke-Wünsche</em>";
             }
-            
-            console.log("Extended Preferences Updated:", { grillbuffet: grillbuffetCounts, getraenke: getraenkeCounts });
         }
 
         // CSS für Unterkategorien
@@ -1192,7 +1145,6 @@
         
         // Export-Funktionen
         function exportToCSV(data, headers, filename) {
-            console.log(`Erstelle CSV: ${filename} mit ${data.length} Zeilen`);
             const csv = convertToCSV(data, headers);
             // UTF-8 BOM hinzufügen für korrekte deutsche Umlaute
             const csvWithBOM = '\ufeff' + csv;
@@ -1228,7 +1180,6 @@
 
         // Export-Event-Listener (komplett überarbeitet für Excel-Kompatibilität)
         document.getElementById('exportAll').addEventListener('click', function() {
-            console.log('Export Teilnehmerliste gestartet...');
             
             const participantData = currentData.participants.map(p => {
                 // Lodge-Mapping anwenden
@@ -1273,7 +1224,6 @@
         });
 
         document.getElementById('exportPreferences').addEventListener('click', function() {
-            console.log('Export Präferenzen gestartet...');
             
             const prefData = currentData.participants.map(p => ({
                 'Name': p.name || 'N/A',
@@ -1290,7 +1240,6 @@
         });
 
         document.getElementById('exportBuffet').addEventListener('click', function() {
-            console.log('Export Buffet-Planung gestartet...');
             
             const buffetItems = [];
             currentData.participants.forEach(p => {
@@ -1324,13 +1273,6 @@
         });
 
         document.getElementById('exportHelpers').addEventListener('click', function() {
-            console.log('Export Helfer-Liste gestartet...');
-            
-            // DEBUG: Schaue was in den Daten steht
-            console.log('Teilnehmer-Daten:', currentData.participants.length);
-            if (currentData.participants.length > 0) {
-                console.log('Beispiel-Teilnehmer:', currentData.participants[0]);
-            }
             
             // ALLE Teilnehmer exportieren (nicht nur echte Helfer) für vollständige Übersicht
             const helperData = currentData.participants.map(p => {
@@ -1367,15 +1309,12 @@
                 };
             });
             
-            console.log(`Helfer-Export: ${helperData.length} Einträge gefunden`);
-            
             const headers = ['Name', 'E-Mail', 'Aufbau (22.08.)', 'Abbau (24.08.)', 'Hinweise'];
             
             exportToCSV(helperData, headers, 'sommerfest_helfer_liste.csv');
         });
 
         document.getElementById('exportBilling').addEventListener('click', function() {
-            console.log('Export Abrechnung (alphabetisch) gestartet...');
             
             const allPersons = [];
             
@@ -1417,7 +1356,6 @@
             // 4. CSV EXPORT
             const headers = ['Name', 'Loge/Gastgeber', 'Bezahlt'];
             
-            console.log('Abrechnungs-Daten (alphabetisch):', allPersons);
             exportToCSV(allPersons, headers, 'sommerfest_abrechnung_kasse.csv');
         });
 
