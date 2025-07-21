@@ -52,6 +52,7 @@
             margin: -40px -40px 30px -40px;
             border-radius: 0 0 8px 8px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative;
         }
 
         .simple-header .main-title {
@@ -68,28 +69,21 @@
             text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
         }
 
-        /* FOOTER MIT ORGA-LOGIN BUTTON */
-        .footer {
-            background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            margin-top: 40px;
-        }
-
+        /* ORGA-LOGIN BUTTON */
         .orga-login-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
             background: rgba(160, 196, 255, 0.2);
             color: #a0c4ff;
             padding: 8px 15px;
             border: 1px solid #a0c4ff;
             border-radius: 20px;
-            font-size: 11px;
+            font-size: 12px;
             cursor: pointer;
             transition: all 0.3s;
             text-decoration: none;
             font-weight: bold;
-            display: inline-block;
-            margin-top: 5px;
         }
 
         .orga-login-button:hover {
@@ -423,6 +417,16 @@
             .redirect-content p {
                 font-size: 1.1em;
             }
+
+            .orga-login-button {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin: 10px auto;
+                display: block;
+                text-align: center;
+                width: fit-content;
+            }
         }
     </style>
 </head>
@@ -597,8 +601,12 @@
         </div>
 
         <div class="main-content">
-            <!-- HEADER OHNE BUTTON -->
             <div class="simple-header">
+                <!-- ORGA-LOGIN BUTTON -->
+                <a href="admin.html" class="orga-login-button" title="Für Organisatoren">
+                    🔑 Orga-Team Login
+                </a>
+                
                 <h1 class="main-title">Sommerfest der Lübecker Freimaurer</h1>
                 <h2 class="event-title">Sommerfest 2025</h2>
             </div>
@@ -665,14 +673,6 @@
             <ul id="contributionsList" class="contribution-list">
             </ul>
         </div>
-    </div>
-
-    <!-- FOOTER MIT ORGA-LOGIN BUTTON -->
-    <div class="footer">
-        <p style="font-size: 0.9em; margin-bottom: 10px;">© 2025 Sommerfest der Lübecker Freimaurer</p>
-        <a href="admin.html" class="orga-login-button" title="Für Organisatoren">
-            🔑 Orga-Team Login
-        </a>
     </div>
 
     <script>

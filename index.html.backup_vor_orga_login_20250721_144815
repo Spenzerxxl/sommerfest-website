@@ -68,37 +68,6 @@
             text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
         }
 
-        /* FOOTER MIT ORGA-LOGIN BUTTON */
-        .footer {
-            background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            margin-top: 40px;
-        }
-
-        .orga-login-button {
-            background: rgba(160, 196, 255, 0.2);
-            color: #a0c4ff;
-            padding: 8px 15px;
-            border: 1px solid #a0c4ff;
-            border-radius: 20px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            font-weight: bold;
-            display: inline-block;
-            margin-top: 5px;
-        }
-
-        .orga-login-button:hover {
-            background: #a0c4ff;
-            color: #1e3a5f;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
         h1 {
             color: #1e3a5f;
             font-size: 2.5em;
@@ -597,7 +566,6 @@
         </div>
 
         <div class="main-content">
-            <!-- HEADER OHNE BUTTON -->
             <div class="simple-header">
                 <h1 class="main-title">Sommerfest der Lübecker Freimaurer</h1>
                 <h2 class="event-title">Sommerfest 2025</h2>
@@ -614,14 +582,10 @@
             </div>
 
             <form id="registrationForm">
-                <!-- ADRESSE HINZUGEFÜGT -->
-                <h2>Deine Anmeldung zum Sommerfest am Samstag, den 23. August 2025 ab 18 Uhr<br>
-                    <small style="font-size: 0.8em; color: #4a6fa5; font-weight: normal;">im Logenhaus Lübeck, St. Annen-Str. / Ecke Schildstraße - Eingang Hoftor</small>
-                </h2>
+                <h2>Deine Anmeldung zum Sommerfest am Samstag, den 23. August 2025 ab 18 Uhr</h2>
                 
                 <div class="form-group">
-                    <!-- "IHR NAME" → "NAME" GEÄNDERT -->
-                    <label for="name">Name *</label>
+                    <label for="name">Ihr Name *</label>
                     <input type="text" id="name" name="name" required>
                 </div>
 
@@ -665,14 +629,6 @@
             <ul id="contributionsList" class="contribution-list">
             </ul>
         </div>
-    </div>
-
-    <!-- FOOTER MIT ORGA-LOGIN BUTTON -->
-    <div class="footer">
-        <p style="font-size: 0.9em; margin-bottom: 10px;">© 2025 Sommerfest der Lübecker Freimaurer</p>
-        <a href="admin.html" class="orga-login-button" title="Für Organisatoren">
-            🔑 Orga-Team Login
-        </a>
     </div>
 
     <script>
