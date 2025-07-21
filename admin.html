@@ -1176,6 +1176,20 @@
             document.head.appendChild(style);
         }
 
+        // Hilfsfunktion: "Frank Rath" → "Rath, Frank" für Kassenliste
+        function formatNameForBilling(fullName) {
+            if (!fullName || fullName === "N/A") return fullName;
+            
+            const parts = fullName.trim().split(" ");
+            if (parts.length < 2) return fullName; // Nur ein Name
+            
+            // Letzter Teil = Nachname, Rest = Vorname(n)
+            const lastName = parts[parts.length - 1];
+            const firstName = parts.slice(0, -1).join(" ");
+            
+            return `${lastName}, ${firstName}`;
+        }
+        
         // Export-Funktionen
         function exportToCSV(data, headers, filename) {
             console.log(`Erstelle CSV: ${filename} mit ${data.length} Zeilen`);
@@ -1375,7 +1389,7 @@
                 
                 // 1. HAUPTPERSON HINZUFÜGEN
                 allPersons.push({
-                    'Name': participant.name || 'N/A',
+                    'Name': formatNameForBilling(participant.name || 'N/A'),
                     'Loge/Gastgeber': lodge,
                     'Bezahlt': ''
                 });
@@ -1389,7 +1403,7 @@
                     
                     guestNames.forEach(guestName => {
                         allPersons.push({
-                            'Name': guestName,
+                            'Name': formatNameForBilling(guestName),
                             'Loge/Gastgeber': `Gast von ${participant.name}`,
                             'Bezahlt': ''
                         });
