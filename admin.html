@@ -882,7 +882,7 @@
             }
             
             tbody.innerHTML = participants.map(p => {
-                const lodge = mapLodgeFromData(p.email, p.name);
+                const lodge = p.loge || mapLodgeFromData(p.email, p.name);
                 const companions = calculateEnhancedCompanionInfo(p);
                 const formattedDate = p.datum ? new Date(p.datum).toLocaleDateString('de-DE') : 'N/A';
                 
