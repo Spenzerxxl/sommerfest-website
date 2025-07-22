@@ -1183,7 +1183,7 @@
             
             const participantData = currentData.participants.map(p => {
                 // Lodge-Mapping anwenden
-                const lodge = mapLodgeFromData(p.email, p.name);
+                const lodge = p.loge || mapLodgeFromData(p.email, p.name);
                 
                 // Gäste-Korrektur anwenden  
                 const correctedData = correctGuestDataFromPattern(p);
@@ -1320,7 +1320,7 @@
             
             currentData.participants.forEach(participant => {
                 // Lodge-Mapping für Hauptperson
-                const lodge = mapLodgeFromData(participant.email, participant.name);
+                const lodge = participant.loge || mapLodgeFromData(participant.email, participant.name);
                 
                 // Gäste-Korrektur anwenden  
                 const correctedData = correctGuestDataFromPattern(participant);
