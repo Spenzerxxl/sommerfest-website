@@ -1227,7 +1227,7 @@
 
         // Präferenzen-Anzeige aktualisieren
         // ERWEITERTE PRÄFERENZEN-ANZEIGE FUNKTION
-        function updateExtendedPreferencesDisplay() {
+                function updateExtendedPreferencesDisplay() {
             const participants = currentData.participants;
             
             if (!participants || participants.length === 0) {
@@ -1258,38 +1258,65 @@
             const grillbuffetRemarks = [];
             const getraenkeRemarks = [];
             
+            // Debug-Ausgabe
+            console.log('Verarbeite', participants.length, 'Teilnehmer');
+            
             // Durch alle Teilnehmer gehen
             participants.forEach(p => {
                 // Grillbuffet Präferenzen
-                if (p.grillbuffet_praeferenzen && p.grillbuffet_praeferenzen !== 'Keine Angabe') {
-                    const prefs = p.grillbuffet_praeferenzen.split(',').map(s => s.trim());
+                if (p.grillbuffet_praeferenzen && p.grillbuffet_praeferenzen !== 'Keine Angabe' && p.grillbuffet_praeferenzen !== '[]') {
+                    let prefs = [];
+                    try {
+                        // Versuche als JSON zu parsen (das ist das normale Format)
+                        prefs = JSON.parse(p.grillbuffet_praeferenzen);
+                    } catch (e) {
+                        // Falls JSON-Parse fehlschlägt, versuche als Komma-getrennte Liste
+                        prefs = p.grillbuffet_praeferenzen.split(',').map(s => s.trim());
+                    }
+                    
+                    // Zähle jede Präferenz
                     prefs.forEach(pref => {
-                        if (pref) {
+                        if (pref && pref !== '') {
                             grillbuffetCounts[pref] = (grillbuffetCounts[pref] || 0) + 1;
                         }
                     });
                 }
                 
                 // Getränke Präferenzen
-                if (p.getraenke_praeferenzen && p.getraenke_praeferenzen !== 'Keine Angabe') {
-                    const prefs = p.getraenke_praeferenzen.split(',').map(s => s.trim());
+                if (p.getraenke_praeferenzen && p.getraenke_praeferenzen !== 'Keine Angabe' && p.getraenke_praeferenzen !== '[]') {
+                    let prefs = [];
+                    try {
+                        // Versuche als JSON zu parsen
+                        prefs = JSON.parse(p.getraenke_praeferenzen);
+                    } catch (e) {
+                        // Falls JSON-Parse fehlschlägt, versuche als Komma-getrennte Liste
+                        prefs = p.getraenke_praeferenzen.split(',').map(s => s.trim());
+                    }
+                    
+                    // Zähle jede Präferenz
                     prefs.forEach(pref => {
-                        if (pref) {
+                        if (pref && pref !== '') {
                             getraenkeCounts[pref] = (getraenkeCounts[pref] || 0) + 1;
                         }
                     });
                 }
                 
-                // Bemerkungen
+                // Bemerkungen sammeln
                 if (p.grillbuffet_bemerkungen && p.grillbuffet_bemerkungen.trim() && 
-                    p.grillbuffet_bemerkungen !== 'Keine' && p.grillbuffet_bemerkungen !== '-') {
+                    p.grillbuffet_bemerkungen !== 'Keine' && p.grillbuffet_bemerkungen !== '-' && 
+                    p.grillbuffet_bemerkungen !== '') {
                     grillbuffetRemarks.push({name: p.name, remark: p.grillbuffet_bemerkungen});
                 }
                 if (p.getraenke_bemerkungen && p.getraenke_bemerkungen.trim() && 
-                    p.getraenke_bemerkungen !== 'Keine' && p.getraenke_bemerkungen !== '-') {
+                    p.getraenke_bemerkungen !== 'Keine' && p.getraenke_bemerkungen !== '-' && 
+                    p.getraenke_bemerkungen !== '') {
                     getraenkeRemarks.push({name: p.name, remark: p.getraenke_bemerkungen});
                 }
             });
+            
+            // Debug-Ausgabe
+            console.log('Grillbuffet-Zählung:', grillbuffetCounts);
+            console.log('Getränke-Zählung:', getraenkeCounts);
             
             // Hilfsfunktion für Farbcodierung
             function getColorForPercentage(percentage) {
