@@ -613,9 +613,7 @@
                         <button class="btn btn-success" id="exportBuffet">
                             🍽️ Buffet-Planung
                         </button>
-                        <button class="btn btn-warning" id="exportPreferences">
-                            📊 Präferenzen-Übersicht anzeigen
-                        </button>
+                        
                         <button class="btn btn-primary" id="exportHelpers">
                             🤝 Helfer-Liste
                         </button>
@@ -1232,178 +1230,127 @@
         function updateExtendedPreferencesDisplay() {
             const participants = currentData.participants;
             
-            // Zähler für alle detaillierten Präferenzen
-            const grillbuffetCounts = {
-                "Schinkenwurst": 0, "Rostbratwurst": 0, "Geflügelwurst": 0,
-                "Hähnchenbrust": 0, "Schweinenacken": 0, "Putenbrust": 0, "Rind": 0,
-                "Grillgemüse": 0, "Vegane Bratwurst": 0
-            };
+            if (!participants || participants.length === 0) {
+                // Setze alle auf 0 mit grauer Farbe
+                document.querySelectorAll('.preference-count').forEach(el => {
+                    el.textContent = '0 (0%)';
+                    el.style.backgroundColor = '#95a5a6';
+                    el.style.color = 'white';
+                    el.style.padding = '2px 8px';
+                    el.style.borderRadius = '4px';
+                    el.style.fontWeight = 'bold';
+                    el.style.display = 'inline-block';
+                    el.style.minWidth = '70px';
+                    el.style.textAlign = 'center';
+                });
+                
+                const grillComments = document.getElementById('grillbuffetComments');
+                if (grillComments) grillComments.innerHTML = '<p style="color: #666;">Noch keine Kommentare</p>';
+                
+                const drinkComments = document.getElementById('getraenkeComments');
+                if (drinkComments) drinkComments.innerHTML = '<p style="color: #666;">Noch keine Kommentare</p>';
+                return;
+            }
             
-            const getraenkeCounts = {
-                "Cola": 0, "Fanta": 0, "Sprite": 0, "Wasser": 0,
-                "Alkoholfreies Pils": 0, "Alkoholfreies Weizen": 0,
-                "Pils": 0, "Weizenbier": 0, "Weißbier": 0,
-                "Rotwein": 0, "Weißwein": 0, "Prosecco": 0
-            };
+            // Zähler initialisieren
+            const grillbuffetCounts = {};
+            const getraenkeCounts = {};
+            const grillbuffetRemarks = [];
+            const getraenkeRemarks = [];
             
-            // Teilnehmer-Präferenzen auswerten
+            // Durch alle Teilnehmer gehen
             participants.forEach(p => {
-                if (p.grillbuffet_praeferenzen) {
-                    try {
-                        let grillPrefs = [];
-                        if (typeof p.grillbuffet_praeferenzen === "string" && p.grillbuffet_praeferenzen.startsWith("[")) {
-                            grillPrefs = JSON.parse(p.grillbuffet_praeferenzen);
-                        } else if (typeof p.grillbuffet_praeferenzen === "string") {
-                            grillPrefs = p.grillbuffet_praeferenzen.split(",").map(s => s.trim());
+                // Grillbuffet Präferenzen
+                if (p.grillbuffet_praeferenzen && p.grillbuffet_praeferenzen !== 'Keine Angabe') {
+                    const prefs = p.grillbuffet_praeferenzen.split(',').map(s => s.trim());
+                    prefs.forEach(pref => {
+                        if (pref) {
+                            grillbuffetCounts[pref] = (grillbuffetCounts[pref] || 0) + 1;
                         }
-                        grillPrefs.forEach(pref => {
-                            if (grillbuffetCounts.hasOwnProperty(pref)) {
-                                grillbuffetCounts[pref]++;
-                            }
-                        });
-                    } catch (e) {
-                        console.warn("Fehler beim Parsen von Grillbuffet-Präferenzen:", e);
-                    }
+                    });
                 }
                 
-                if (p.getraenke_praeferenzen) {
-                    try {
-                        let getraenkePrefs = [];
-                        if (typeof p.getraenke_praeferenzen === "string" && p.getraenke_praeferenzen.startsWith("[")) {
-                            getraenkePrefs = JSON.parse(p.getraenke_praeferenzen);
-                        } else if (typeof p.getraenke_praeferenzen === "string") {
-                            getraenkePrefs = p.getraenke_praeferenzen.split(",").map(s => s.trim());
+                // Getränke Präferenzen
+                if (p.getraenke_praeferenzen && p.getraenke_praeferenzen !== 'Keine Angabe') {
+                    const prefs = p.getraenke_praeferenzen.split(',').map(s => s.trim());
+                    prefs.forEach(pref => {
+                        if (pref) {
+                            getraenkeCounts[pref] = (getraenkeCounts[pref] || 0) + 1;
                         }
-                        getraenkePrefs.forEach(pref => {
-                            if (getraenkeCounts.hasOwnProperty(pref)) {
-                                getraenkeCounts[pref]++;
-                            }
-                        });
-                    } catch (e) {
-                        console.warn("Fehler beim Parsen von Getränke-Präferenzen:", e);
-                    }
+                    });
+                }
+                
+                // Bemerkungen
+                if (p.grillbuffet_bemerkungen && p.grillbuffet_bemerkungen.trim() && 
+                    p.grillbuffet_bemerkungen !== 'Keine' && p.grillbuffet_bemerkungen !== '-') {
+                    grillbuffetRemarks.push({name: p.name, remark: p.grillbuffet_bemerkungen});
+                }
+                if (p.getraenke_bemerkungen && p.getraenke_bemerkungen.trim() && 
+                    p.getraenke_bemerkungen !== 'Keine' && p.getraenke_bemerkungen !== '-') {
+                    getraenkeRemarks.push({name: p.name, remark: p.getraenke_bemerkungen});
                 }
             });
             
-            // DOM-Updates für Grillbuffet
-            const wurstItems = document.querySelectorAll("#wurstPreferences .preference-count");
-            if (wurstItems.length >= 3) {
-                wurstItems[0].textContent = grillbuffetCounts["Schinkenwurst"];
-                wurstItems[1].textContent = grillbuffetCounts["Rostbratwurst"];
-                wurstItems[2].textContent = grillbuffetCounts["Geflügelwurst"];
+            // Hilfsfunktion für Farbcodierung
+            function getColorForPercentage(percentage) {
+                if (percentage >= 50) return '#27ae60';  // Grün
+                if (percentage >= 25) return '#3498db';  // Blau  
+                if (percentage > 0) return '#e67e22';     // Orange
+                return '#95a5a6';                         // Grau
             }
             
-            const fleischItems = document.querySelectorAll("#fleischPreferences .preference-count");
-            if (fleischItems.length >= 4) {
-                fleischItems[0].textContent = grillbuffetCounts["Hähnchenbrust"];
-                fleischItems[1].textContent = grillbuffetCounts["Schweinenacken"];
-                fleischItems[2].textContent = grillbuffetCounts["Putenbrust"];
-                fleischItems[3].textContent = grillbuffetCounts["Rind"];
-            }
-            
-            const vegItems = document.querySelectorAll("#vegetarischPreferences .preference-count");
-            if (vegItems.length >= 2) {
-                vegItems[0].textContent = grillbuffetCounts["Grillgemüse"];
-                vegItems[1].textContent = grillbuffetCounts["Vegane Bratwurst"];
-            }
-            
-            // DOM-Updates für Getränke
-            const softItems = document.querySelectorAll("#softdrinksPreferences .preference-count");
-            if (softItems.length >= 4) {
-                softItems[0].textContent = getraenkeCounts["Cola"];
-                softItems[1].textContent = getraenkeCounts["Fanta"];
-                softItems[2].textContent = getraenkeCounts["Sprite"];
-                softItems[3].textContent = getraenkeCounts["Wasser"];
-            }
-            
-            const alkItems = document.querySelectorAll("#alkoholfreiPreferences .preference-count");
-            if (alkItems.length >= 2) {
-                alkItems[0].textContent = getraenkeCounts["Alkoholfreies Pils"];
-                alkItems[1].textContent = getraenkeCounts["Alkoholfreies Weizen"];
-            }
-            
-            const bierItems = document.querySelectorAll("#bierPreferences .preference-count");
-            if (bierItems.length >= 3) {
-                bierItems[0].textContent = getraenkeCounts["Pils"];
-                bierItems[1].textContent = getraenkeCounts["Weizenbier"];
-                bierItems[2].textContent = getraenkeCounts["Weißbier"];
-            }
-            
-            const weinItems = document.querySelectorAll("#weinPreferences .preference-count");
-            if (weinItems.length >= 3) {
-                weinItems[0].textContent = getraenkeCounts["Rotwein"];
-                weinItems[1].textContent = getraenkeCounts["Weißwein"];
-                weinItems[2].textContent = getraenkeCounts["Prosecco"];
-            }
-            
-            // Kommentare
-            const grillComments = participants.filter(p => p.grillbuffet_bemerkungen && p.grillbuffet_bemerkungen.trim())
-                .map(p => `<div style="margin-bottom: 10px; padding: 8px; background: #f0f0f0; border-radius: 4px;"><strong>${p.name}:</strong> ${p.grillbuffet_bemerkungen}</div>`);
-            
-            const getraenkeComments = participants.filter(p => p.getraenke_bemerkungen && p.getraenke_bemerkungen.trim())
-                .map(p => `<div style="margin-bottom: 10px; padding: 8px; background: #f0f0f0; border-radius: 4px;"><strong>${p.name}:</strong> ${p.getraenke_bemerkungen}</div>`);
-            
-            const grillCommentsEl = document.getElementById("grillbuffetComments");
-            if (grillCommentsEl) {
-                grillCommentsEl.innerHTML = grillComments.length > 0 ? grillComments.join("") : "<em>Noch keine besonderen Wünsche</em>";
-            }
+            // Alle Präferenz-Counts aktualisieren
+            document.querySelectorAll('.preference-item').forEach(item => {
+                const nameEl = item.querySelector('span:first-child');
+                const countEl = item.querySelector('.preference-count');
                 
-            const getraenkeCommentsEl = document.getElementById("getraenkeComments");
-            if (getraenkeCommentsEl) {
-                getraenkeCommentsEl.innerHTML = getraenkeComments.length > 0 ? getraenkeComments.join("") : "<em>Noch keine Getränke-Wünsche</em>";
+                if (nameEl && countEl) {
+                    const itemName = nameEl.textContent.trim();
+                    const count = grillbuffetCounts[itemName] || getraenkeCounts[itemName] || 0;
+                    const percentage = participants.length > 0 ? Math.round((count / participants.length) * 100) : 0;
+                    
+                    countEl.textContent = `${count} (${percentage}%)`;
+                    countEl.style.backgroundColor = getColorForPercentage(percentage);
+                    countEl.style.color = 'white';
+                    countEl.style.padding = '2px 8px';
+                    countEl.style.borderRadius = '4px';
+                    countEl.style.fontWeight = 'bold';
+                    countEl.style.display = 'inline-block';
+                    countEl.style.minWidth = '70px';
+                    countEl.style.textAlign = 'center';
+                }
+            });
+            
+            // Bemerkungen anzeigen
+            const grillComments = document.getElementById('grillbuffetComments');
+            if (grillComments) {
+                let html = '';
+                if (grillbuffetRemarks.length > 0) {
+                    grillbuffetRemarks.forEach(({name, remark}) => {
+                        html += `<div style="margin-bottom: 8px; padding: 8px; background: #f8f9fa; border-radius: 4px;">
+                            <strong style="color: #27ae60;">${name}:</strong> ${remark}
+                        </div>`;
+                    });
+                } else {
+                    html = '<p style="color: #666;">Keine besonderen Wünsche angegeben</p>';
+                }
+                grillComments.innerHTML = html;
             }
-        }
-
-        // CSS für Unterkategorien
-        if (!document.getElementById("extendedPrefsCSS")) {
-            const extendedPrefsCSS = `
-                .preference-subcategory {
-                    margin-bottom: 20px; padding: 10px; background: #f8f9fa; border-radius: 6px;
-                }
-                .preference-subcategory h4 {
-                    font-size: 1.1em; margin-bottom: 8px; color: #1e3a5f;
-                }
-                .preference-subcategory .preference-list {
-                    margin: 0; padding-left: 10px;
-                }
-                .preference-subcategory .preference-item {
-                    padding: 6px 10px; margin-bottom: 4px; background: white; border-radius: 4px;
-                }
-            `;
-            const style = document.createElement("style");
-            style.id = "extendedPrefsCSS";
-            style.textContent = extendedPrefsCSS;
-            document.head.appendChild(style);
-        }
-
-        // Hilfsfunktion: "Frank Rath" → "Rath, Frank" für Kassenliste
-        function formatNameForBilling(fullName) {
-            if (!fullName || fullName === "N/A") return fullName;
             
-            const parts = fullName.trim().split(" ");
-            if (parts.length < 2) return fullName; // Nur ein Name
-            
-            // Letzter Teil = Nachname, Rest = Vorname(n)
-            const lastName = parts[parts.length - 1];
-            const firstName = parts.slice(0, -1).join(" ");
-            
-            return `${lastName}, ${firstName}`;
-        }
-        
-        // Export-Funktionen
-        function exportToCSV(data, headers, filename) {
-            const csv = convertToCSV(data, headers);
-            // UTF-8 BOM hinzufügen für korrekte deutsche Umlaute
-            const csvWithBOM = '\ufeff' + csv;
-            const blob = new Blob([csvWithBOM], { type: 'text/csv;charset=utf-8;' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.setAttribute('hidden', '');
-            a.setAttribute('href', url);
-            a.setAttribute('download', filename);
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            const drinkComments = document.getElementById('getraenkeComments');
+            if (drinkComments) {
+                let html = '';
+                if (getraenkeRemarks.length > 0) {
+                    getraenkeRemarks.forEach(({name, remark}) => {
+                        html += `<div style="margin-bottom: 8px; padding: 8px; background: #f8f9fa; border-radius: 4px;">
+                            <strong style="color: #3498db;">${name}:</strong> ${remark}
+                        </div>`;
+                    });
+                } else {
+                    html = '<p style="color: #666;">Keine besonderen Wünsche angegeben</p>';
+                }
+                drinkComments.innerHTML = html;
+            }
         }
 
         function convertToCSV(data, headers) {
@@ -1470,12 +1417,7 @@
             exportToCSV(participantData, headers, 'sommerfest_teilnehmer_komplett.csv');
         });
 
-        document.getElementById('exportPreferences').addEventListener('click', function() {
-            // Zum Präferenzen-Tab wechseln
-            showTab('preferences');
-            // Nach oben scrollen
-            window.scrollTo(0, 0);
-        });
+        
 
         document.getElementById('exportBuffet').addEventListener('click', function() {
             
