@@ -1307,8 +1307,8 @@
                     'Gesamt-Personen': totalPersons,
                     'Anmeldedatum': formattedDate,
                     'Buffet-Beiträge': buffetItems,
-                    'Aufbau-Helfer': p.helfer_aufbau || 'Nein',
-                    'Abbau-Helfer': p.helfer_abbau || 'Nein',
+                    'Aufbau-Helfer': ((p.aufbau && p.aufbau.includes('Ja')) || (p.helfer_aufbau && (p.helfer_aufbau === true || (typeof p.helfer_aufbau === 'string' && p.helfer_aufbau.toLowerCase().includes('ja'))))) ? 'Ja' : 'Nein',
+                    'Abbau-Helfer': ((p.abbau && p.abbau.includes('Ja')) || (p.helfer_abbau && (p.helfer_abbau === true || (typeof p.helfer_abbau === 'string' && p.helfer_abbau.toLowerCase().includes('ja'))))) ? 'Ja' : 'Nein',
                     'Hinweise': p.bemerkungen || 'Keine'
                 };
             });
@@ -1371,27 +1371,29 @@
             
             // ALLE Teilnehmer exportieren (nicht nur echte Helfer) für vollständige Übersicht
             const helperData = currentData.participants.map(p => {
-                // Helfer-Status auswerten (flexibel)
+                // Helfer-Status auswerten (beide Feldnamen unterstützen)
                 let aufbauStatus = 'Nein';
                 let abbauStatus = 'Nein';
                 
-                if (p.helfer_aufbau) {
+                // Prüfe beide mögliche Feldnamen für Aufbau
+                if (p.aufbau && p.aufbau.includes('Ja')) {
+                    aufbauStatus = 'Ja';
+                } else if (p.helfer_aufbau) {
                     if (typeof p.helfer_aufbau === 'string' && p.helfer_aufbau.toLowerCase().includes('ja')) {
                         aufbauStatus = 'Ja';
                     } else if (p.helfer_aufbau === true) {
                         aufbauStatus = 'Ja';
-                    } else {
-                        aufbauStatus = p.helfer_aufbau;
                     }
                 }
                 
-                if (p.helfer_abbau) {
+                // Prüfe beide mögliche Feldnamen für Abbau
+                if (p.abbau && p.abbau.includes('Ja')) {
+                    abbauStatus = 'Ja';
+                } else if (p.helfer_abbau) {
                     if (typeof p.helfer_abbau === 'string' && p.helfer_abbau.toLowerCase().includes('ja')) {
                         abbauStatus = 'Ja';
                     } else if (p.helfer_abbau === true) {
                         abbauStatus = 'Ja';
-                    } else {
-                        abbauStatus = p.helfer_abbau;
                     }
                 }
                 
