@@ -624,6 +624,21 @@
                         </button>
                     </div>
                 </div>
+                    
+                    <!-- Logen-Übersicht -->
+                    <div class="lodge-overview" style="margin-top: 40px; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
+                        <h3>🏛️ Anmeldungen nach Logen</h3>
+                        <div id="lodgeStatistics" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 20px;">
+                            <div style="text-align: center; color: #666;">
+                                <i>Lade Daten...</i>
+                            </div>
+                        </div>
+                        <div style="margin-top: 20px; padding: 15px; background-color: white; border-radius: 5px;">
+                            <strong>Gesamt-Teilnehmer:</strong> 
+                            <span id="totalParticipantsCount" style="font-size: 1.2em; color: #27ae60;">0</span> Personen
+                        </div>
+                    </div>
+
             </div>
         </div>
     </div>
@@ -727,6 +742,7 @@
                     updateParticipantsTable();
                     updateBuffetTable();
                     updateHelpersTable();
+                    updateLodgeStatistics();
                 }
             } catch (error) {
                 console.error('Fehler beim Laden der Dashboard-Daten:', error);
@@ -946,6 +962,85 @@
             `).join('');
         }
 
+
+        // Logen-Statistik berechnen und anzeigen
+        function updateLodgeStatistics() {
+            const participants = currentData.participants;
+            
+            if (!participants || participants.length === 0) {
+                document.getElementById('lodgeStatistics').innerHTML = 
+                    '<div style="text-align: center; color: #666; grid-column: 1/-1;">Noch keine Anmeldungen</div>';
+                document.getElementById('totalParticipantsCount').textContent = '0';
+                return;
+            }
+            
+            // Logen-Zählung initialisieren
+            const lodgeCount = {};
+            let totalPersons = 0;
+            
+            // Durch alle Teilnehmer iterieren und nach Logen gruppieren
+            participants.forEach(p => {
+                // Loge bestimmen (entweder direkt oder durch Mapping)
+                const lodge = p.loge || mapLodgeFromData(p.email, p.name);
+                
+                // Anzahl der Personen für diesen Teilnehmer berechnen
+                const personCount = calculateTotalPersons(p);
+                totalPersons += personCount;
+                
+                // Zur Logen-Zählung hinzufügen
+                if (!lodgeCount[lodge]) {
+                    lodgeCount[lodge] = {
+                        participants: 0,
+                        totalPersons: 0
+                    };
+                }
+                lodgeCount[lodge].participants += 1;
+                lodgeCount[lodge].totalPersons += personCount;
+            });
+            
+            // HTML für die Logen-Übersicht erstellen
+            let lodgeHtml = '';
+            const lodgeColors = {
+                'Zum Füllhorn': '#27ae60',
+                'Zur Weltkugel': '#3498db', 
+                'Nordlicht': '#e74c3c',
+                'Gast': '#95a5a6'
+            };
+            
+            // Sortierte Liste der Logen
+            const sortedLodges = Object.keys(lodgeCount).sort();
+            
+            sortedLodges.forEach(lodge => {
+                const data = lodgeCount[lodge];
+                const color = lodgeColors[lodge] || '#7f8c8d';
+                
+                lodgeHtml += `
+                    <div style="padding: 15px; background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <h4 style="margin: 0; color: ${color};">${lodge}</h4>
+                            <div style="font-size: 1.5em; font-weight: bold; color: ${color};">
+                                ${data.totalPersons}
+                            </div>
+                        </div>
+                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #ecf0f1;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.9em; color: #666;">
+                                <span>Anmeldungen:</span>
+                                <span>${data.participants}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.9em; color: #666; margin-top: 5px;">
+                                <span>Personen gesamt:</span>
+                                <span style="font-weight: bold;">${data.totalPersons}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // HTML aktualisieren
+            document.getElementById('lodgeStatistics').innerHTML = lodgeHtml || 
+                '<div style="text-align: center; color: #666; grid-column: 1/-1;">Keine Daten verfügbar</div>';
+            document.getElementById('totalParticipantsCount').textContent = totalPersons;
+        }
         // Helfer-Tabelle aktualisieren
         function updateHelpersTable() {
             const tbody = document.getElementById('helpersTable');
