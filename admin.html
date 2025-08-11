@@ -614,7 +614,7 @@
                             🍽️ Buffet-Planung
                         </button>
                         <button class="btn btn-warning" id="exportPreferences">
-                            📊 Präferenzen-Übersicht (Bestellgrundlage)
+                            📊 Präferenzen-Übersicht anzeigen
                         </button>
                         <button class="btn btn-primary" id="exportHelpers">
                             🤝 Helfer-Liste
@@ -641,41 +641,7 @@
 
  
                 <!-- Präferenz-Übersicht -->
-                <div id="preferencesSection" style="display: none; margin-top: 30px;">
-                    <h3 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">
-                        📊 Präferenzen-Auswertung (Bestellgrundlage)
-                    </h3>
-                    
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px;">
-                        <!-- Grillbuffet Präferenzen -->
-                        <div>
-                            <h4 style="color: #27ae60; margin-bottom: 15px;">🍖 Grillbuffet</h4>
-                            <div id="grillbuffetStatistics" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                                <!-- Wird dynamisch gefüllt -->
-                            </div>
-                        </div>
-                        
-                        <!-- Getränke Präferenzen -->
-                        <div>
-                            <h4 style="color: #3498db; margin-bottom: 15px;">🍺 Getränke</h4>
-                            <div id="getraenkeStatistics" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                                <!-- Wird dynamisch gefüllt -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Bemerkungen -->
-                    <div style="margin-top: 30px;">
-                        <h4 style="color: #e67e22; margin-bottom: 15px;">📝 Besondere Hinweise</h4>
-                        <div id="preferencesRemarks" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                            <!-- Wird dynamisch gefüllt -->
-                        </div>
-                    </div>
-                    
-                    <button class="btn btn-secondary" onclick="document.getElementById('preferencesSection').style.display='none'; document.getElementById('exportTab').style.display='block';" style="margin-top: 20px;">
-                        ← Zurück zu Export-Übersicht
-                    </button>
-                </div>
+                
            </div>
         </div>
     </div>
@@ -780,6 +746,7 @@
                     updateBuffetTable();
                     updateHelpersTable();
                     updateLodgeStatistics();
+                    updateExtendedPreferencesDisplay();
                 }
             } catch (error) {
                 console.error('Fehler beim Laden der Dashboard-Daten:', error);
@@ -1504,7 +1471,10 @@
         });
 
         document.getElementById('exportPreferences').addEventListener('click', function() {
-            showPreferencesStatistics();
+            // Zum Präferenzen-Tab wechseln
+            showTab('preferences');
+            // Nach oben scrollen
+            window.scrollTo(0, 0);
         });
 
         document.getElementById('exportBuffet').addEventListener('click', function() {
