@@ -1307,8 +1307,8 @@
                     'Gesamt-Personen': totalPersons,
                     'Anmeldedatum': formattedDate,
                     'Buffet-Beiträge': buffetItems,
-                    'Aufbau-Helfer': ((p.aufbau && p.aufbau.includes('Ja')) || (p.helfer_aufbau && (p.helfer_aufbau === true || (typeof p.helfer_aufbau === 'string' && p.helfer_aufbau.toLowerCase().includes('ja'))))) ? 'Ja' : 'Nein',
-                    'Abbau-Helfer': ((p.abbau && p.abbau.includes('Ja')) || (p.helfer_abbau && (p.helfer_abbau === true || (typeof p.helfer_abbau === 'string' && p.helfer_abbau.toLowerCase().includes('ja'))))) ? 'Ja' : 'Nein',
+                    'Aufbau-Helfer': (p.aufbau && typeof p.aufbau === 'string' && p.aufbau.includes('Ja')) ? 'Ja' : 'Nein',
+                    'Abbau-Helfer': (p.abbau && typeof p.abbau === 'string' && p.abbau.includes('Ja')) ? 'Ja' : 'Nein',
                     'Hinweise': p.bemerkungen || 'Keine'
                 };
             });
