@@ -614,7 +614,7 @@
                             🍽️ Buffet-Planung
                         </button>
                         <button class="btn btn-warning" id="exportPreferences">
-                            ⭐ Präferenzen-Auswertung
+                            📊 Präferenzen-Übersicht (Bestellgrundlage)
                         </button>
                         <button class="btn btn-primary" id="exportHelpers">
                             🤝 Helfer-Liste
@@ -1041,6 +1041,154 @@
                 '<div style="text-align: center; color: #666; grid-column: 1/-1;">Keine Daten verfügbar</div>';
             document.getElementById('totalParticipantsCount').textContent = totalPersons;
         }
+        
+        // Präferenz-Statistik anzeigen
+        function showPreferencesStatistics() {
+            const participants = currentData.participants;
+            
+            if (!participants || participants.length === 0) {
+                alert('Noch keine Anmeldungen vorhanden');
+                return;
+            }
+            
+            // Verstecke Export-Tab, zeige Präferenz-Sektion
+            document.getElementById('exportTab').style.display = 'none';
+            document.getElementById('preferencesSection').style.display = 'block';
+            
+            // Grillbuffet-Präferenzen zählen
+            const grillbuffetCount = {};
+            const getraenkeCount = {};
+            const grillbuffetRemarks = [];
+            const getraenkeRemarks = [];
+            
+            participants.forEach(p => {
+                // Grillbuffet Präferenzen verarbeiten
+                if (p.grillbuffet_praeferenzen && p.grillbuffet_praeferenzen !== 'Keine Angabe') {
+                    // Die Präferenzen sind als String gespeichert, getrennt durch Kommas
+                    const prefs = p.grillbuffet_praeferenzen.split(',').map(s => s.trim());
+                    prefs.forEach(pref => {
+                        if (pref) {
+                            grillbuffetCount[pref] = (grillbuffetCount[pref] || 0) + 1;
+                        }
+                    });
+                }
+                
+                // Getränke Präferenzen verarbeiten
+                if (p.getraenke_praeferenzen && p.getraenke_praeferenzen !== 'Keine Angabe') {
+                    const prefs = p.getraenke_praeferenzen.split(',').map(s => s.trim());
+                    prefs.forEach(pref => {
+                        if (pref) {
+                            getraenkeCount[pref] = (getraenkeCount[pref] || 0) + 1;
+                        }
+                    });
+                }
+                
+                // Bemerkungen sammeln
+                if (p.grillbuffet_bemerkungen && p.grillbuffet_bemerkungen.trim() && p.grillbuffet_bemerkungen !== 'Keine') {
+                    grillbuffetRemarks.push({name: p.name, remark: p.grillbuffet_bemerkungen});
+                }
+                if (p.getraenke_bemerkungen && p.getraenke_bemerkungen.trim() && p.getraenke_bemerkungen !== 'Keine') {
+                    getraenkeRemarks.push({name: p.name, remark: p.getraenke_bemerkungen});
+                }
+            });
+            
+            // Grillbuffet-Statistik anzeigen
+            let grillbuffetHtml = '';
+            const grillbuffetSorted = Object.entries(grillbuffetCount).sort((a, b) => b[1] - a[1]);
+            
+            if (grillbuffetSorted.length > 0) {
+                // Kategorisiere die Optionen
+                const kategorien = {
+                    'Würste': ['Schinkenwurst', 'Rostbratwurst', 'Geflügelwurst'],
+                    'Fleisch': ['Hähnchenbrust', 'Schweinenacken', 'Putenbrust', 'Rind'],
+                    'Vegetarisch/Vegan': ['Grillgemüse', 'Vegane Bratwurst']
+                };
+                
+                for (const [kategorie, items] of Object.entries(kategorien)) {
+                    const relevantItems = grillbuffetSorted.filter(([item, count]) => items.includes(item));
+                    if (relevantItems.length > 0) {
+                        grillbuffetHtml += `<div style="margin-bottom: 20px;"><strong style="color: #2c3e50;">${kategorie}:</strong><ul style="margin-top: 10px;">`;
+                        relevantItems.forEach(([item, count]) => {
+                            const percentage = Math.round((count / participants.length) * 100);
+                            grillbuffetHtml += `
+                                <li style="margin-bottom: 8px; list-style: none;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span>${item}</span>
+                                        <span style="background: #27ae60; color: white; padding: 2px 8px; border-radius: 4px;">
+                                            ${count} (${percentage}%)
+                                        </span>
+                                    </div>
+                                </li>`;
+                        });
+                        grillbuffetHtml += '</ul></div>';
+                    }
+                }
+            } else {
+                grillbuffetHtml = '<p style="color: #666;">Keine Präferenzen angegeben</p>';
+            }
+            
+            // Getränke-Statistik anzeigen
+            let getraenkeHtml = '';
+            const getraenkeSorted = Object.entries(getraenkeCount).sort((a, b) => b[1] - a[1]);
+            
+            if (getraenkeSorted.length > 0) {
+                const kategorien = {
+                    'Softdrinks': ['Cola', 'Fanta', 'Sprite', 'Wasser'],
+                    'Alkoholfrei': ['Alkoholfreies Pils', 'Alkoholfreies Weizen'],
+                    'Bier': ['Pils', 'Weizenbier', 'Weißbier'],
+                    'Wein/Sekt': ['Rotwein', 'Weißwein', 'Prosecco']
+                };
+                
+                for (const [kategorie, items] of Object.entries(kategorien)) {
+                    const relevantItems = getraenkeSorted.filter(([item, count]) => items.includes(item));
+                    if (relevantItems.length > 0) {
+                        getraenkeHtml += `<div style="margin-bottom: 20px;"><strong style="color: #2c3e50;">${kategorie}:</strong><ul style="margin-top: 10px;">`;
+                        relevantItems.forEach(([item, count]) => {
+                            const percentage = Math.round((count / participants.length) * 100);
+                            getraenkeHtml += `
+                                <li style="margin-bottom: 8px; list-style: none;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span>${item}</span>
+                                        <span style="background: #3498db; color: white; padding: 2px 8px; border-radius: 4px;">
+                                            ${count} (${percentage}%)
+                                        </span>
+                                    </div>
+                                </li>`;
+                        });
+                        getraenkeHtml += '</ul></div>';
+                    }
+                }
+            } else {
+                getraenkeHtml = '<p style="color: #666;">Keine Präferenzen angegeben</p>';
+            }
+            
+            // Bemerkungen anzeigen
+            let remarksHtml = '';
+            if (grillbuffetRemarks.length > 0 || getraenkeRemarks.length > 0) {
+                if (grillbuffetRemarks.length > 0) {
+                    remarksHtml += '<div style="margin-bottom: 20px;"><strong style="color: #27ae60;">Grillbuffet-Hinweise:</strong><ul style="margin-top: 10px;">';
+                    grillbuffetRemarks.forEach(({name, remark}) => {
+                        remarksHtml += `<li style="margin-bottom: 5px;"><strong>${name}:</strong> ${remark}</li>`;
+                    });
+                    remarksHtml += '</ul></div>';
+                }
+                if (getraenkeRemarks.length > 0) {
+                    remarksHtml += '<div><strong style="color: #3498db;">Getränke-Hinweise:</strong><ul style="margin-top: 10px;">';
+                    getraenkeRemarks.forEach(({name, remark}) => {
+                        remarksHtml += `<li style="margin-bottom: 5px;"><strong>${name}:</strong> ${remark}</li>`;
+                    });
+                    remarksHtml += '</ul></div>';
+                }
+            } else {
+                remarksHtml = '<p style="color: #666;">Keine besonderen Hinweise</p>';
+            }
+            
+            // HTML in die Bereiche einfügen
+            document.getElementById('grillbuffetStatistics').innerHTML = grillbuffetHtml;
+            document.getElementById('getraenkeStatistics').innerHTML = getraenkeHtml;
+            document.getElementById('preferencesRemarks').innerHTML = remarksHtml;
+        }
+
         // Helfer-Tabelle aktualisieren
         function updateHelpersTable() {
             const tbody = document.getElementById('helpersTable');
@@ -1319,19 +1467,7 @@
         });
 
         document.getElementById('exportPreferences').addEventListener('click', function() {
-            
-            const prefData = currentData.participants.map(p => ({
-                'Name': p.name || 'N/A',
-                'E-Mail': p.email || 'N/A',
-                'Grillbuffet-Präferenzen': p.grillbuffet_praeferenzen || 'Keine Angabe',
-                'Grillbuffet-Bemerkungen': p.grillbuffet_bemerkungen || 'Keine',
-                'Getränke-Präferenzen': p.getraenke_praeferenzen || 'Keine Angabe',
-                'Getränke-Bemerkungen': p.getraenke_bemerkungen || 'Keine'
-            }));
-            
-            const headers = ['Name', 'E-Mail', 'Grillbuffet-Präferenzen', 'Grillbuffet-Bemerkungen', 'Getränke-Präferenzen', 'Getränke-Bemerkungen'];
-            
-            exportToCSV(prefData, headers, 'sommerfest_praeferenzen.csv');
+            showPreferencesStatistics();
         });
 
         document.getElementById('exportBuffet').addEventListener('click', function() {
