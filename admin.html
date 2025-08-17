@@ -372,6 +372,7 @@
                 <button class="tab" onclick="showTab('preferences')">⭐ Präferenzen</button>
                 <button class="tab" onclick="showTab('helpers')">🤝 Helfer</button>
                 <button class="tab" onclick="showTab('export')">📥 Export</button>
+                <button class="tab" onclick="showTab('email')">📧 E-Mail Versand</button>
             </div>
 
             <!-- Tab: Teilnehmer -->
@@ -640,6 +641,31 @@
  
                 <!-- Präferenz-Übersicht -->
                 
+            <!-- Tab: E-Mail Versand -->
+            <div id="tab-email" class="tab-content">
+                <div class="export-section">
+                    <h3>E-Mail Reminder versenden</h3>
+                    
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #17a2b8; margin: 20px 0;">
+                        <p style="font-size: 16px; margin-bottom: 10px; color: #495057;">Sendet personalisierte Erinnerungen an alle <span id="participantCount" style="font-weight: bold; color: #2a5298;">0</span> Teilnehmer:</p>
+                        <ul style="margin-left: 20px; color: #6c757d;">
+                            <li>Normale Teilnehmer: Allgemeine Erinnerung</li>
+                            <li>Aufbau-Helfer: Erinnerung + Aufbau-Info (22.08., 16:00)</li>
+                            <li>Abbau-Helfer: Erinnerung + Abbau-Info (24.08., 14:00)</li>
+                            <li>Aufbau+Abbau: Erinnerung + beide Termine</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 20px; margin-top: 30px; max-width: 600px;">
+                        <button onclick="sendSmartReminder()" class="btn btn-primary" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border: none; padding: 20px 30px; border-radius: 10px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);">
+                            Intelligente Reminder versenden
+                            <small style="display: block; font-weight: normal; font-size: 14px; margin-top: 5px; opacity: 0.9;">Jeder Teilnehmer erhält die passende E-Mail-Variante</small>
+                        </button>
+                    </div>
+                    
+                    <div id="emailStatus" style="margin-top: 20px; padding: 15px; border-radius: 5px; display: none;"></div>
+                </div>
+            </div>
            </div>
         </div>
     </div>
@@ -1608,6 +1634,59 @@
                 showLogin();
             }
         });
+
+        // E-Mail Reminder Funktion
+        function sendSmartReminder() {
+            // Admin-Check
+            if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+                alert('Nicht autorisiert!');
+                return;
+            }
+            
+            // Teilnehmerzahl
+            const currentCount = currentData.participants.length;
+            
+            // Count anzeigen
+            const countEl = document.getElementById('participantCount');
+            if (countEl) {
+                countEl.textContent = currentCount;
+            }
+            
+            // Bestätigung
+            const message = 'Wirklich personalisierte E-Mails an alle ' + currentCount + ' Teilnehmer versenden?';
+            if (!confirm(message)) {
+                return;
+            }
+            
+            const statusDiv = document.getElementById('emailStatus');
+            if (statusDiv) {
+                statusDiv.style.display = 'block';
+                statusDiv.style.background = '#d4edda';
+                statusDiv.style.color = '#155724';
+                statusDiv.style.borderLeft = '4px solid #28a745';
+                statusDiv.innerHTML = 'E-Mails werden vorbereitet...';
+                
+                // API-Call
+                fetch('https://automatisierung.frankrath.de/webhook/send-smart-reminder', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        statusDiv.innerHTML = 'Personalisierte E-Mails werden an ' + currentCount + ' Teilnehmer versendet...<br><small>Die Versendung läuft im Hintergrund.</small>';
+                    } else {
+                        throw new Error('Server-Fehler');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    statusDiv.style.background = '#f8d7da';
+                    statusDiv.style.color = '#721c24';
+                    statusDiv.style.borderLeft = '4px solid #dc3545';
+                    statusDiv.innerHTML = 'Fehler beim Versand! Bitte prüfen Sie die n8n-Workflows.';
+                });
+            }
+        }
     </script>
 </body>
 </html>
