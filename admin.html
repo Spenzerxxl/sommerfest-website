@@ -646,27 +646,6 @@
                 
                 <div id="emailStatus" style="margin-top: 20px; padding: 15px; border-radius: 5px; display: none;"></div>
             </div>
-
-                    
-                    <!-- Logen-Übersicht -->
-                    <div class="lodge-overview" style="margin-top: 40px; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
-                        <h3>🏛️ Anmeldungen nach Logen</h3>
-                        <div id="lodgeStatistics" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 20px;">
-                            <div style="text-align: center; color: #666;">
-                                <i>Lade Daten...</i>
-                            </div>
-                        </div>
-                        <div style="margin-top: 20px; padding: 15px; background-color: white; border-radius: 5px;">
-                            <strong>Gesamt-Teilnehmer:</strong> 
-                            <span id="totalParticipantsCount" style="font-size: 1.2em; color: #27ae60;">0</span> Personen
-                        </div>
-                    </div>
-
- 
-                <!-- Präferenz-Übersicht -->
-                
-           </div>
-        </div>
     </div>
 
     <script>
@@ -674,6 +653,8 @@
         const LOGIN_API_URL = 'https://automatisierung.frankrath.de/webhook/orga-login';
         const PARTICIPANTS_API_URL = 'https://automatisierung.frankrath.de/webhook/get-participants';
         const PREFERENCES_API_URL = 'https://automatisierung.frankrath.de/webhook/get-preferences';
+        const BUFFET_API_URL = 'https://automatisierung.frankrath.de/webhook/buffet-uebersicht';
+        const HELPER_API_URL = 'https://automatisierung.frankrath.de/webhook/helfer-statistik';
 
         // Globale Variablen
         let currentData = {
@@ -1721,8 +1702,30 @@
         // Update participant count in email tab
         function updateParticipantCount() {
             const countElement = document.getElementById('participantCount');
-            if (countElement && currentData.participants) {
-                countElement.textContent = currentData.participants.length;
+            if (countElement) {
+                // Wenn keine Daten vorhanden sind, erst laden
+                if (!currentData.participants || currentData.participants.length === 0) {
+                    // Zeige Lade-Indikator
+                    countElement.textContent = 'lädt...';
+                    
+                    // Lade Daten und aktualisiere dann
+                    fetch(PARTICIPANTS_API_URL, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        currentData.participants = data.participants || [];
+                        countElement.textContent = currentData.participants.length;
+                    })
+                    .catch(error => {
+                        console.error('Fehler beim Laden der Teilnehmerzahl:', error);
+                        countElement.textContent = '0';
+                    });
+                } else {
+                    // Daten sind vorhanden, direkt anzeigen
+                    countElement.textContent = currentData.participants.length;
+                }
             }
         }
     
