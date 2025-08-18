@@ -642,27 +642,85 @@
                 </div>
             </div>
             <!-- Tab: E-Mail Versand -->
+            <!-- Tab: E-Mail Versand (ERWEITERT) -->
             <div id="tab-email" class="tab-content" style="padding: 20px;">
                 <h3>📧 E-Mail Reminder versenden</h3>
                 
+                <!-- Statistik-Box -->
                 <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #17a2b8;">
-                    <p style="font-size: 16px; margin-bottom: 10px;">📊 Sendet personalisierte Erinnerungen an alle <span id="participantCount" style="font-weight: bold; color: #2a5298;">-</span> Teilnehmer:</p>
-                    <ul style="margin-left: 20px; color: #6c757d;">
-                        <li style="margin: 5px 0;">Normale Teilnehmer → Allgemeine Erinnerung</li>
-                        <li style="margin: 5px 0;">Aufbau-Helfer → Erinnerung + Aufbau-Info (22.08., 16:00)</li>
-                        <li style="margin: 5px 0;">Abbau-Helfer → Erinnerung + Abbau-Info (24.08., 14:00)</li>
-                        <li style="margin: 5px 0;">Aufbau+Abbau → Erinnerung + beide Termine</li>
-                    </ul>
+                    <p style="font-size: 16px; margin-bottom: 10px;">
+                        📊 <span id="selectedCount" style="font-weight: bold; color: #28a745;">0</span> von 
+                        <span id="totalEmailCount" style="font-weight: bold; color: #2a5298;">58</span> Empfängern ausgewählt
+                    </p>
+                    <div style="display: flex; gap: 15px; margin-top: 10px;">
+                        <span style="display: flex; align-items: center;">
+                            <span style="width: 12px; height: 12px; background: #28a745; border-radius: 50%; margin-right: 5px;"></span>
+                            Normal: <span id="normalCount">0</span>
+                        </span>
+                        <span style="display: flex; align-items: center;">
+                            <span style="width: 12px; height: 12px; background: #17a2b8; border-radius: 50%; margin-right: 5px;"></span>
+                            Nur Aufbau: <span id="aufbauCount">0</span>
+                        </span>
+                        <span style="display: flex; align-items: center;">
+                            <span style="width: 12px; height: 12px; background: #ffc107; border-radius: 50%; margin-right: 5px;"></span>
+                            Nur Abbau: <span id="abbauCount">0</span>
+                        </span>
+                        <span style="display: flex; align-items: center;">
+                            <span style="width: 12px; height: 12px; background: #dc3545; border-radius: 50%; margin-right: 5px;"></span>
+                            Beides: <span id="beideCount">0</span>
+                        </span>
+                    </div>
                 </div>
-                
-                <div style="display: flex; flex-direction: column; gap: 20px; margin-top: 30px; max-width: 600px;">
-                    <button onclick="sendSmartReminder()" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border: none; padding: 20px 30px; border-radius: 10px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);">
-                        🚀 Intelligente Reminder versenden
-                        <small style="display: block; font-weight: normal; font-size: 14px; margin-top: 5px; opacity: 0.9;">Jeder Teilnehmer erhält die passende E-Mail-Variante</small>
-                    </button>
+
+                <!-- Empfänger-Kontrolltabelle -->
+                <div style="margin: 30px 0;">
+                    <h4>👥 Empfänger-Kontrolle</h4>
+                    <div style="margin: 15px 0; display: flex; gap: 10px; align-items: center;">
+                        <button onclick="selectAllRecipients()" style="padding: 8px 15px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            ✅ Alle auswählen
+                        </button>
+                        <button onclick="deselectAllRecipients()" style="padding: 8px 15px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            ❌ Alle abwählen
+                        </button>
+                        <input type="text" id="recipientFilter" placeholder="🔍 Namen filtern..." onkeyup="filterRecipients()" 
+                               style="padding: 8px; border: 1px solid #dee2e6; border-radius: 5px; flex: 1; max-width: 300px;">
+                    </div>
+
+                    <div style="max-height: 400px; overflow-y: auto; border: 1px solid #dee2e6; border-radius: 5px;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead style="background: #f8f9fa; position: sticky; top: 0;">
+                                <tr>
+                                    <th style="padding: 10px; text-align: left; width: 50px;">✓</th>
+                                    <th style="padding: 10px; text-align: left;">Name</th>
+                                    <th style="padding: 10px; text-align: left;">E-Mail</th>
+                                    <th style="padding: 10px; text-align: left;">Loge</th>
+                                    <th style="padding: 10px; text-align: left;">Kategorie</th>
+                                    <th style="padding: 10px; text-align: center;">Aktion</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recipientTableBody">
+                                <!-- Wird dynamisch gefüllt -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                
-                <div id="emailStatus" style="margin-top: 20px; padding: 15px; border-radius: 5px; display: none;"></div>
+
+                <!-- Versand-Aktionen -->
+                <div style="margin-top: 30px; padding: 20px; background: #fff3cd; border: 2px solid #ffc107; border-radius: 10px;">
+                    <h4 style="color: #856404; margin-bottom: 15px;">⚠️ Versand-Optionen</h4>
+                    
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                        <button onclick="sendTestEmail()" style="padding: 15px 25px; background: #ffc107; color: #212529; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                            🧪 Test-E-Mail an mich senden
+                        </button>
+                        
+                        <button onclick="sendSelectedEmails()" style="padding: 15px 25px; background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);">
+                            🚀 E-Mails an ausgewählte Empfänger senden
+                        </button>
+                    </div>
+                    
+                    <div id="emailStatus" style="margin-top: 20px; padding: 15px; border-radius: 5px; display: none;"></div>
+                </div>
             </div>
     </div>
 
@@ -1785,3 +1843,258 @@
     </script>
 </body>
 </html>
+
+<!-- Zusätzliche JavaScript-Funktionen für erweiterten E-Mail-Tab -->
+<script>
+// Globale Variable für E-Mail-Empfänger
+window.emailRecipients = [];
+
+// Empfänger-Daten vorbereiten
+function prepareRecipientData() {
+    const recipients = [];
+    
+    if (!currentData.participants) return recipients;
+    
+    currentData.participants.forEach(p => {
+        // Nur Hauptpersonen (die eine E-Mail haben)
+        if (p.email) {
+            const aufbau = p.aufbau && p.aufbau.includes("Ja");
+            const abbau = p.abbau && p.abbau.includes("Ja");
+            
+            let kategorie = "normal";
+            let kategorieLabel = "Normal";
+            let kategorieColor = "#28a745";
+            
+            if (aufbau && abbau) {
+                kategorie = "beide";
+                kategorieLabel = "Aufbau + Abbau";
+                kategorieColor = "#dc3545";
+            } else if (aufbau) {
+                kategorie = "aufbau";
+                kategorieLabel = "Nur Aufbau";
+                kategorieColor = "#17a2b8";
+            } else if (abbau) {
+                kategorie = "abbau";
+                kategorieLabel = "Nur Abbau";
+                kategorieColor = "#ffc107";
+            }
+            
+            recipients.push({
+                name: p.name,
+                email: p.email,
+                loge: p.loge || "Unbekannt",
+                kategorie: kategorie,
+                kategorieLabel: kategorieLabel,
+                kategorieColor: kategorieColor,
+                gaeste: p.gaeste || "keine",
+                buffet: formatBuffetBeitrag(p.buffet),
+                personen: p.personen || "1",
+                selected: true // Standardmäßig ausgewählt
+            });
+        }
+    });
+    
+    return recipients;
+}
+
+// Buffet-Beitrag formatieren
+function formatBuffetBeitrag(buffet) {
+    if (!buffet) return "Kein Beitrag";
+    
+    try {
+        const items = JSON.parse(buffet);
+        if (Array.isArray(items) && items.length > 0) {
+            return items.map(item => `${item.gericht} (${item.portionen} Port.)`).join(", ");
+        }
+    } catch (e) {
+        return buffet;
+    }
+    
+    return "Kein Beitrag";
+}
+
+// Empfänger-Tabelle aktualisieren
+function updateRecipientTable() {
+    const tbody = document.getElementById('recipientTableBody');
+    if (!tbody) return;
+    
+    const recipients = prepareRecipientData();
+    
+    // Speichere Empfänger global
+    window.emailRecipients = recipients;
+    
+    // Statistiken aktualisieren
+    updateEmailStatistics();
+    
+    tbody.innerHTML = '';
+    
+    recipients.forEach((r, index) => {
+        const row = document.createElement('tr');
+        row.style.borderBottom = '1px solid #dee2e6';
+        row.innerHTML = `
+            <td style="padding: 10px;">
+                <input type="checkbox" id="recipient-${index}" data-index="${index}" 
+                       ${r.selected ? 'checked' : ''} onchange="updateRecipientSelection(${index})">
+            </td>
+            <td style="padding: 10px; font-weight: 500;">${r.name}</td>
+            <td style="padding: 10px; color: #6c757d;">${r.email}</td>
+            <td style="padding: 10px;">${r.loge}</td>
+            <td style="padding: 10px;">
+                <span style="display: inline-block; padding: 3px 8px; background: ${r.kategorieColor}; color: white; border-radius: 3px; font-size: 12px;">
+                    ${r.kategorieLabel}
+                </span>
+            </td>
+            <td style="padding: 10px; text-align: center;">
+                <button onclick="previewEmail(${index})" style="padding: 5px 10px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 12px;">
+                    👁️ Vorschau
+                </button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+// Empfänger-Auswahl aktualisieren
+function updateRecipientSelection(index) {
+    if (window.emailRecipients && window.emailRecipients[index]) {
+        window.emailRecipients[index].selected = document.getElementById(`recipient-${index}`).checked;
+        updateEmailStatistics();
+    }
+}
+
+// E-Mail-Statistiken aktualisieren
+function updateEmailStatistics() {
+    if (!window.emailRecipients) return;
+    
+    const stats = {
+        total: window.emailRecipients.length,
+        selected: 0,
+        normal: 0,
+        aufbau: 0,
+        abbau: 0,
+        beide: 0
+    };
+    
+    window.emailRecipients.forEach(r => {
+        if (r.selected) {
+            stats.selected++;
+            stats[r.kategorie]++;
+        }
+    });
+    
+    document.getElementById('selectedCount').textContent = stats.selected;
+    document.getElementById('totalEmailCount').textContent = stats.total;
+    document.getElementById('normalCount').textContent = stats.normal;
+    document.getElementById('aufbauCount').textContent = stats.aufbau;
+    document.getElementById('abbauCount').textContent = stats.abbau;
+    document.getElementById('beideCount').textContent = stats.beide;
+}
+
+// Alle Empfänger auswählen
+function selectAllRecipients() {
+    if (window.emailRecipients) {
+        window.emailRecipients.forEach((r, index) => {
+            r.selected = true;
+            const checkbox = document.getElementById(`recipient-${index}`);
+            if (checkbox) checkbox.checked = true;
+        });
+        updateEmailStatistics();
+    }
+}
+
+// Alle Empfänger abwählen
+function deselectAllRecipients() {
+    if (window.emailRecipients) {
+        window.emailRecipients.forEach((r, index) => {
+            r.selected = false;
+            const checkbox = document.getElementById(`recipient-${index}`);
+            if (checkbox) checkbox.checked = false;
+        });
+        updateEmailStatistics();
+    }
+}
+
+// Empfänger filtern
+function filterRecipients() {
+    const filter = document.getElementById('recipientFilter').value.toLowerCase();
+    const rows = document.getElementById('recipientTableBody').getElementsByTagName('tr');
+    
+    for (let row of rows) {
+        const name = row.cells[1].textContent.toLowerCase();
+        const email = row.cells[2].textContent.toLowerCase();
+        const loge = row.cells[3].textContent.toLowerCase();
+        
+        if (name.includes(filter) || email.includes(filter) || loge.includes(filter)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    }
+}
+
+// Test-E-Mail senden
+async function sendTestEmail() {
+    alert('🧪 Test-Funktion: n8n Workflow noch nicht implementiert.\nHier würde eine Test-E-Mail an Ihre Adresse gesendet.');
+}
+
+// Ausgewählte E-Mails senden
+async function sendSelectedEmails() {
+    if (!window.emailRecipients) {
+        alert('Keine Empfänger geladen!');
+        return;
+    }
+    
+    const selectedRecipients = window.emailRecipients.filter(r => r.selected);
+    
+    if (selectedRecipients.length === 0) {
+        alert('Keine Empfänger ausgewählt!');
+        return;
+    }
+    
+    // Zweistufige Sicherheitsabfrage
+    if (!confirm(`⚠️ ACHTUNG: Sie sind dabei, E-Mails an ${selectedRecipients.length} Empfänger zu versenden!\n\nSind Sie sicher?`)) {
+        return;
+    }
+    
+    if (!confirm(`🚨 LETZTE WARNUNG:\n\n${selectedRecipients.length} personalisierte E-Mails werden JETZT versendet!\n\nWirklich fortfahren?`)) {
+        return;
+    }
+    
+    const statusDiv = document.getElementById('emailStatus');
+    statusDiv.style.display = 'block';
+    statusDiv.style.background = '#d1ecf1';
+    statusDiv.style.color = '#0c5460';
+    statusDiv.style.borderLeft = '4px solid #17a2b8';
+    statusDiv.innerHTML = '⏳ E-Mails werden vorbereitet...';
+    
+    // TODO: n8n Webhook implementieren
+    setTimeout(() => {
+        statusDiv.style.background = '#f8d7da';
+        statusDiv.style.color = '#721c24';
+        statusDiv.style.borderLeft = '4px solid #dc3545';
+        statusDiv.innerHTML = '❌ n8n Workflow noch nicht implementiert. E-Mails können noch nicht versendet werden.';
+    }, 2000);
+}
+
+// E-Mail-Vorschau (Placeholder)
+function previewEmail(index) {
+    if (!window.emailRecipients || !window.emailRecipients[index]) return;
+    
+    const recipient = window.emailRecipients[index];
+    alert(`📧 E-Mail-Vorschau für ${recipient.name}\n\nKategorie: ${recipient.kategorieLabel}\nE-Mail: ${recipient.email}\n\n(Vollständige Vorschau mit Templates folgt noch)`);
+}
+
+// Erweitere die showTab-Funktion
+const originalShowTab = window.showTab;
+window.showTab = function(tabName) {
+    // Rufe die originale Funktion auf
+    if (typeof originalShowTab === 'function') {
+        originalShowTab(tabName);
+    }
+    
+    // Spezielle Behandlung für E-Mail-Tab
+    if (tabName === 'email') {
+        updateRecipientTable();
+    }
+};
+</script>
