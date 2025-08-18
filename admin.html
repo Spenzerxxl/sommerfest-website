@@ -376,7 +376,7 @@
             </div>
 
             <!-- Tab: Teilnehmer -->
-            <div id="tab-participants" class="tab-content active">
+            <div id="tab-participants" class="tab-content active" style="display: block;">
                 <div class="table-container">
                     <table>
                         <thead>
@@ -739,22 +739,32 @@
 
         // Tab-Funktionalität
         function showTab(tabName) {
+            console.log('Switching to tab:', tabName);
+            
             // Alle Tabs deaktivieren
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => {
+                c.classList.remove('active');
+                c.style.display = 'none';
+            });
             
-            // Aktiven Tab aktivieren
-            // Find the button that was clicked based on the tabName
-            document.querySelectorAll('.tab').forEach(tab => {
-                if (tab.onclick && tab.onclick.toString().includes("'" + tabName + "'")) {
-                    tab.classList.add('active');
+            // Finde und aktiviere den Button
+            document.querySelectorAll('.tab').forEach(button => {
+                const onclickStr = button.getAttribute('onclick');
+                if (onclickStr && onclickStr.includes("'" + tabName + "'")) {
+                    button.classList.add('active');
+                    console.log('Activated button for:', tabName);
                 }
             });
             
-            // Show the content
+            // Zeige den Content
             const tabContent = document.getElementById('tab-' + tabName);
             if (tabContent) {
                 tabContent.classList.add('active');
+                tabContent.style.display = 'block';
+                console.log('Showing content for:', tabName);
+            } else {
+                console.error('Tab content not found for:', tabName);
             }
             
             // Spezifische Daten laden
