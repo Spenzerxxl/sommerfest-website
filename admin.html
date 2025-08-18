@@ -672,6 +672,128 @@
                     </div>
                 </div>
 
+                <!-- Template-Editor Section -->
+                <div style="margin: 30px 0;">
+                    <h4>📝 E-Mail-Templates anpassen</h4>
+                    <p style="color: #6c757d; margin-bottom: 20px;">
+                        Passen Sie die Templates an. Verfügbare Platzhalter: [Name], [Gäste], [Buffet], [Personen], [Loge]
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <!-- Template 1: Normal -->
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
+                            <h5 style="color: #28a745; margin-bottom: 10px;">🟢 Normale Teilnehmer</h5>
+                            <textarea id="template-normal" style="width: 100%; height: 200px; padding: 10px; border: 1px solid #dee2e6; border-radius: 5px; font-family: monospace; font-size: 13px;">Liebe/r [Name],
+
+wir freuen uns auf dich beim Sommerfest am 23.08.2025!
+
+📍 Ort: Logenhaus Lübeck
+🕐 Zeit: ab 18:00 Uhr
+
+Du hast angemeldet:
+👥 Personen: [Personen] (inkl. [Gäste])
+🍽️ Dein Buffet-Beitrag: [Buffet]
+
+Wir freuen uns auf einen schönen gemeinsamen Abend!
+
+Mit brüderlichen Grüßen
+Das Orga-Team
+
+📧 Bei Fragen: sommerfest@zum-fuellhorn.de</textarea>
+                        </div>
+
+                        <!-- Template 2: Aufbau -->
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #17a2b8;">
+                            <h5 style="color: #17a2b8; margin-bottom: 10px;">🔵 Aufbau-Helfer</h5>
+                            <textarea id="template-aufbau" style="width: 100%; height: 200px; padding: 10px; border: 1px solid #dee2e6; border-radius: 5px; font-family: monospace; font-size: 13px;">Liebe/r [Name],
+
+wir freuen uns auf dich beim Sommerfest am 23.08.2025!
+
+📍 Ort: Logenhaus Lübeck
+🕐 Zeit: ab 18:00 Uhr
+
+🔨 WICHTIG: Du hast dich als AUFBAU-HELFER eingetragen!
+📅 Freitag, 22.08.2025
+⏰ 16:00 Uhr
+📍 Treffpunkt: Logenhaus
+
+Deine Anmeldung:
+👥 Personen: [Personen] (inkl. [Gäste])
+🍽️ Buffet-Beitrag: [Buffet]
+
+Vielen Dank für deine Unterstützung beim Aufbau!
+
+Mit brüderlichen Grüßen
+Das Orga-Team</textarea>
+                        </div>
+
+                        <!-- Template 3: Abbau -->
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                            <h5 style="color: #ff9800; margin-bottom: 10px;">🟡 Abbau-Helfer</h5>
+                            <textarea id="template-abbau" style="width: 100%; height: 200px; padding: 10px; border: 1px solid #dee2e6; border-radius: 5px; font-family: monospace; font-size: 13px;">Liebe/r [Name],
+
+wir freuen uns auf dich beim Sommerfest am 23.08.2025!
+
+📍 Ort: Logenhaus Lübeck
+🕐 Zeit: ab 18:00 Uhr
+
+🧹 WICHTIG: Du hast dich als ABBAU-HELFER eingetragen!
+📅 Sonntag, 24.08.2025
+⏰ 14:00 Uhr
+📍 Treffpunkt: Logenhaus
+
+Deine Anmeldung:
+👥 Personen: [Personen] (inkl. [Gäste])
+🍽️ Buffet-Beitrag: [Buffet]
+
+Vielen Dank für deine Unterstützung beim Abbau!
+
+Mit brüderlichen Grüßen
+Das Orga-Team</textarea>
+                        </div>
+
+                        <!-- Template 4: Beides -->
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #dc3545;">
+                            <h5 style="color: #dc3545; margin-bottom: 10px;">🔴 Aufbau + Abbau</h5>
+                            <textarea id="template-beide" style="width: 100%; height: 200px; padding: 10px; border: 1px solid #dee2e6; border-radius: 5px; font-family: monospace; font-size: 13px;">Liebe/r [Name],
+
+wir freuen uns auf dich beim Sommerfest am 23.08.2025!
+
+📍 Ort: Logenhaus Lübeck
+🕐 Zeit: ab 18:00 Uhr
+
+💪 DANKE für deine DOPPELTE Unterstützung!
+
+🔨 AUFBAU:
+📅 Freitag, 22.08.2025
+⏰ 16:00 Uhr
+
+🧹 ABBAU:
+📅 Sonntag, 24.08.2025
+⏰ 14:00 Uhr
+
+Deine Anmeldung:
+👥 Personen: [Personen] (inkl. [Gäste])
+🍽️ Buffet-Beitrag: [Buffet]
+
+Vielen Dank für deinen großartigen Einsatz!
+
+Mit brüderlichen Grüßen
+Das Orga-Team</textarea>
+                        </div>
+                    </div>
+
+                    <!-- Template-Aktionen -->
+                    <div style="margin-top: 20px; display: flex; gap: 10px;">
+                        <button onclick="saveTemplates()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            💾 Templates speichern
+                        </button>
+                        <button onclick="resetTemplates()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            🔄 Auf Standard zurücksetzen
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Empfänger-Kontrolltabelle -->
                 <div style="margin: 30px 0;">
                     <h4>👥 Empfänger-Kontrolle</h4>
@@ -1842,6 +1964,29 @@
         }
     
     </script>
+
+<!-- Vorschau-Modal -->
+<div id="emailPreviewModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999;">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 10px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="margin: 0;">📧 E-Mail-Vorschau</h3>
+            <button onclick="closePreview()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #6c757d;">✕</button>
+        </div>
+        <div style="margin-bottom: 15px; padding: 10px; background: #e9ecef; border-radius: 5px;">
+            <strong>An:</strong> <span id="previewRecipient"></span><br>
+            <strong>Betreff:</strong> Sommerfest 2025 - Erinnerung
+        </div>
+        <div id="previewContent" style="background: #f8f9fa; padding: 20px; border-radius: 5px; white-space: pre-wrap; font-family: monospace; font-size: 14px; line-height: 1.6;">
+            <!-- Vorschau-Inhalt -->
+        </div>
+        <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
+            <button onclick="closePreview()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                Schließen
+            </button>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
 
@@ -2077,13 +2222,7 @@ async function sendSelectedEmails() {
     }, 2000);
 }
 
-// E-Mail-Vorschau (Placeholder)
-function previewEmail(index) {
-    if (!window.emailRecipients || !window.emailRecipients[index]) return;
-    
-    const recipient = window.emailRecipients[index];
-    alert(`📧 E-Mail-Vorschau für ${recipient.name}\n\nKategorie: ${recipient.kategorieLabel}\nE-Mail: ${recipient.email}\n\n(Vollständige Vorschau mit Templates folgt noch)`);
-}
+
 
 // Erweitere die showTab-Funktion
 const originalShowTab = window.showTab;
@@ -2096,6 +2235,120 @@ window.showTab = function(tabName) {
     // Spezielle Behandlung für E-Mail-Tab
     if (tabName === 'email') {
         updateRecipientTable();
+    }
+};
+</script>
+
+<!-- Vervollständigte Template-Funktionen -->
+<script>
+// Template personalisieren
+function personalizeTemplate(template, recipient) {
+    return template
+        .replace(/\[Name\]/g, recipient.name)
+        .replace(/\[Gäste\]/g, recipient.gaeste)
+        .replace(/\[Buffet\]/g, recipient.buffet)
+        .replace(/\[Personen\]/g, recipient.personen)
+        .replace(/\[Loge\]/g, recipient.loge);
+}
+
+// E-Mail-Vorschau mit vollständigem Template
+function previewEmail(index) {
+    if (!window.emailRecipients || !window.emailRecipients[index]) return;
+    
+    const recipient = window.emailRecipients[index];
+    const templateElement = document.getElementById('template-' + recipient.kategorie);
+    
+    if (!templateElement) {
+        // Falls Template nicht existiert, Standard-Template verwenden
+        const defaultTemplate = 'Liebe/r [Name],\n\nwir freuen uns auf dich beim Sommerfest am 23.08.2025!\n\nOrt: Logenhaus Lübeck\nZeit: ab 18:00 Uhr\n\nDu hast angemeldet:\nPersonen: [Personen] (inkl. [Gäste])\nDein Buffet-Beitrag: [Buffet]\n\nMit brüderlichen Grüßen\nDas Orga-Team';
+        
+        const personalizedEmail = personalizeTemplate(defaultTemplate, recipient);
+        document.getElementById('previewRecipient').textContent = recipient.name + ' <' + recipient.email + '>';
+        document.getElementById('previewContent').textContent = personalizedEmail;
+    } else {
+        const template = templateElement.value;
+        const personalizedEmail = personalizeTemplate(template, recipient);
+        
+        document.getElementById('previewRecipient').textContent = recipient.name + ' <' + recipient.email + '>';
+        document.getElementById('previewContent').textContent = personalizedEmail;
+    }
+    
+    document.getElementById('emailPreviewModal').style.display = 'block';
+}
+
+// Vorschau schließen
+function closePreview() {
+    const modal = document.getElementById('emailPreviewModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Templates speichern
+function saveTemplates() {
+    const templates = {};
+    
+    // Prüfe ob Template-Elemente existieren
+    const normalTemplate = document.getElementById('template-normal');
+    const aufbauTemplate = document.getElementById('template-aufbau');
+    const abbauTemplate = document.getElementById('template-abbau');
+    const beideTemplate = document.getElementById('template-beide');
+    
+    if (normalTemplate) templates.normal = normalTemplate.value;
+    if (aufbauTemplate) templates.aufbau = aufbauTemplate.value;
+    if (abbauTemplate) templates.abbau = abbauTemplate.value;
+    if (beideTemplate) templates.beide = beideTemplate.value;
+    
+    localStorage.setItem('emailTemplates', JSON.stringify(templates));
+    
+    alert('✅ Templates wurden gespeichert!');
+}
+
+// Templates laden
+function loadTemplates() {
+    const saved = localStorage.getItem('emailTemplates');
+    if (saved) {
+        try {
+            const templates = JSON.parse(saved);
+            
+            const normalTemplate = document.getElementById('template-normal');
+            const aufbauTemplate = document.getElementById('template-aufbau');
+            const abbauTemplate = document.getElementById('template-abbau');
+            const beideTemplate = document.getElementById('template-beide');
+            
+            if (templates.normal && normalTemplate) normalTemplate.value = templates.normal;
+            if (templates.aufbau && aufbauTemplate) aufbauTemplate.value = templates.aufbau;
+            if (templates.abbau && abbauTemplate) abbauTemplate.value = templates.abbau;
+            if (templates.beide && beideTemplate) beideTemplate.value = templates.beide;
+            
+            console.log('✅ Templates aus localStorage geladen');
+        } catch (e) {
+            console.error('Fehler beim Laden der Templates:', e);
+        }
+    }
+}
+
+// Templates zurücksetzen
+function resetTemplates() {
+    if (!confirm('Wirklich alle Templates auf Standard zurücksetzen?')) return;
+    
+    localStorage.removeItem('emailTemplates');
+    location.reload(); // Seite neu laden für Standard-Templates
+}
+
+// Beim Anzeigen des E-Mail-Tabs Templates laden
+const originalShowTabForTemplates = window.showTab;
+window.showTab = function(tabName) {
+    // Rufe die originale Funktion auf
+    if (typeof originalShowTabForTemplates === 'function') {
+        originalShowTabForTemplates(tabName);
+    }
+    
+    // Spezielle Behandlung für E-Mail-Tab
+    if (tabName === 'email') {
+        setTimeout(() => {
+            loadTemplates(); // Templates laden wenn Tab angezeigt wird
+        }, 100);
     }
 };
 </script>
