@@ -2180,7 +2180,59 @@ function filterRecipients() {
 
 // Test-E-Mail senden
 async function sendTestEmail() {
-    alert('🧪 Test-Funktion: n8n Workflow noch nicht implementiert.\nHier würde eine Test-E-Mail an Ihre Adresse gesendet.');
+    if (!window.emailRecipients || window.emailRecipients.length === 0) {
+        alert('Keine Empfänger vorhanden!');
+        return;
+    }
+    
+    // Nimm den ersten ausgewählten Empfänger als Test
+    const testRecipient = window.emailRecipients.find(r => r.selected) || window.emailRecipients[0];
+    if (!testRecipient) {
+        alert('Bitte wählen Sie mindestens einen Empfänger aus!');
+        return;
+    }
+    
+    const template = document.getElementById(`template-${testRecipient.kategorie}`).value;
+    
+    if (confirm(`Test-E-Mail an Ihre eigene Adresse senden?
+
+Die E-Mail wird mit den Daten von "${testRecipient.name}" personalisiert.`)) {
+        const statusDiv = document.getElementById('emailStatus');
+        statusDiv.style.display = 'block';
+        statusDiv.style.background = '#d1ecf1';
+        statusDiv.style.color = '#0c5460';
+        statusDiv.innerHTML = '⏳ Test-E-Mail wird gesendet...';
+        
+        // Sende nur eine Test-E-Mail
+        fetch('https://automatisierung.frankrath.de/webhook/send-smart-reminder', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                recipients: [{
+                    ...testRecipient,
+                    template: template,
+                    email: 'frank@frankrath.com' // Immer an Test-Adresse
+                }],
+                templates: {
+                    normal: document.getElementById('template-normal').value,
+                    aufbau: document.getElementById('template-aufbau').value,
+                    abbau: document.getElementById('template-abbau').value,
+                    beide: document.getElementById('template-beide').value
+                }
+            })
+        })
+        .then(response => response.json())
+        .then(result => {
+            statusDiv.style.background = '#d4edda';
+            statusDiv.style.color = '#155724';
+            statusDiv.innerHTML = '✅ Test-E-Mail wurde versendet!';
+        })
+        .catch(error => {
+            statusDiv.style.background = '#f8d7da';
+            statusDiv.style.color = '#721c24';
+            statusDiv.innerHTML = '❌ Fehler beim Test-Versand!';
+        });
+    }
 }
 
 // Ausgewählte E-Mails senden
@@ -2213,13 +2265,45 @@ async function sendSelectedEmails() {
     statusDiv.style.borderLeft = '4px solid #17a2b8';
     statusDiv.innerHTML = '⏳ E-Mails werden vorbereitet...';
     
-    // TODO: n8n Webhook implementieren
-    setTimeout(() => {
+    // Bereite Daten für n8n vor
+    const emailData = selectedRecipients.map(r => ({
+        ...r,
+        template: document.getElementById(`template-${r.kategorie}`).value
+    }));
+    
+    // Sende an n8n Webhook
+    fetch('https://automatisierung.frankrath.de/webhook/send-smart-reminder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            recipients: emailData,
+            templates: {
+                normal: document.getElementById('template-normal').value,
+                aufbau: document.getElementById('template-aufbau').value,
+                abbau: document.getElementById('template-abbau').value,
+                beide: document.getElementById('template-beide').value
+            }
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Server-Fehler');
+    })
+    .then(result => {
+        statusDiv.style.background = '#d4edda';
+        statusDiv.style.color = '#155724';
+        statusDiv.style.borderLeft = '4px solid #28a745';
+        statusDiv.innerHTML = `✅ ${selectedRecipients.length} E-Mails wurden erfolgreich versendet!`;
+    })
+    .catch(error => {
+        console.error('Fehler beim Versand:', error);
         statusDiv.style.background = '#f8d7da';
         statusDiv.style.color = '#721c24';
         statusDiv.style.borderLeft = '4px solid #dc3545';
-        statusDiv.innerHTML = '❌ n8n Workflow noch nicht implementiert. E-Mails können noch nicht versendet werden.';
-    }, 2000);
+        statusDiv.innerHTML = '❌ Fehler beim Versand! Bitte prüfen Sie die n8n-Workflows.';
+    });
 }
 
 
