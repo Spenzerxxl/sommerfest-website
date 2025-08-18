@@ -786,38 +786,7 @@
                 console.log('📧 Aktualisiere Teilnehmerzahl für E-Mail-Tab');
                 updateParticipantCount();
             }
-        });
             
-            // Finde und aktiviere den Button
-            document.querySelectorAll('.tab').forEach(button => {
-                const onclickStr = button.getAttribute('onclick');
-                if (onclickStr && onclickStr.includes("'" + tabName + "'")) {
-                    button.classList.add('active');
-                    console.log('Activated button for:', tabName);
-                }
-            });
-            
-            // Zeige den Content
-            const tabContent = document.getElementById('tab-' + tabName);
-            if (tabContent) {
-                tabContent.classList.add('active');
-                tabContent.style.display = 'block';
-                console.log('Showing content for:', tabName);
-            } else {
-                console.error('Tab content not found for:', tabName);
-            }
-            
-            // Spezifische Daten laden
-            if (tabName === 'preferences') {
-                loadPreferences();
-            }
-            
-            // Update participant count when email tab is shown
-            if (tabName === 'email') {
-                updateParticipantCount();
-            }
-        }
-
         // Dashboard-Daten laden
         async function loadDashboardData() {
             try {
