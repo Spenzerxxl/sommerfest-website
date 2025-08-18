@@ -619,8 +619,23 @@
                             🤝 Helfer-Liste
                         </button>
                         <button class="btn btn-warning" id="exportBilling" style="background-color: #f39c12;">
+                        <button class="btn btn-info" id="exportPreferences" style="background-color: #17a2b8;">\n                            🍽️ Präferenzen-Export\n                        </button>
                             💰 Abrechnung (für Kasse)
                         </button>
+                    </div>
+                    
+                    <!-- Logen-Statistik -->
+                    <div style="margin-top: 30px;">
+                        <h3>📊 Logen-Übersicht</h3>
+                        <div id="lodgeStatistics" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 20px;">
+                            <div style="text-align: center; color: #666;">
+                                <i>Lade Daten...</i>
+                            </div>
+                        </div>
+                        <div style="margin-top: 20px; padding: 15px; background-color: white; border-radius: 5px;">
+                            <strong>Gesamt-Teilnehmer:</strong> 
+                            <span id="totalParticipantsCount" style="font-size: 1.2em; color: #27ae60;">0</span> Personen
+                        </div>
                     </div>
                 </div>
             <!-- Tab: E-Mail Versand -->
