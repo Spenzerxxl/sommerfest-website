@@ -372,7 +372,7 @@
                 <button class="tab" onclick="showTab('preferences')">⭐ Präferenzen</button>
                 <button class="tab" onclick="showTab('helpers')">🤝 Helfer</button>
                 <button class="tab" onclick="showTab('export')">📥 Export</button>
-                <button class="tab" onclick="showTab('email')">📧 E-Mail Versand</button>
+                <button class="tab" onclick="showTab('email'); console.log('E-Mail Tab clicked!');">📧 E-Mail Versand</button>
             </div>
 
             <!-- Tab: Teilnehmer -->
@@ -641,7 +641,7 @@
                     </div>
                 </div>
             <!-- Tab: E-Mail Versand -->
-            <div id="tab-email" class="tab-content">
+            <div id="tab-email" class="tab-content" style="padding: 20px;">
                 <h3>📧 E-Mail Reminder versenden</h3>
                 
                 <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #17a2b8;">
@@ -783,7 +783,16 @@
             
             // Update participant count when email tab is shown
             if (tabName === 'email') {
-                console.log('📧 Aktualisiere Teilnehmerzahl für E-Mail-Tab');
+                console.log('📧 E-Mail-Tab speziell behandeln');
+                // Force visibility
+                const emailTab = document.getElementById('tab-email');
+                if (emailTab) {
+                    emailTab.style.display = 'block';
+                    emailTab.style.visibility = 'visible';
+                    emailTab.style.opacity = '1';
+                    emailTab.style.minHeight = '400px'; // Mindesthöhe setzen
+                    console.log('📧 E-Mail-Tab forced visible:', emailTab);
+                }
                 updateParticipantCount();
             }
             
