@@ -738,7 +738,7 @@
 
         // Tab-Funktionalität
         function showTab(tabName) {
-            console.log('Switching to tab:', tabName);
+            console.log('🔄 Switching to tab:', tabName);
             
             // Alle Tabs deaktivieren
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -746,6 +746,47 @@
                 c.classList.remove('active');
                 c.style.display = 'none';
             });
+            
+            // Finde und aktiviere den Button
+            document.querySelectorAll('.tab').forEach(button => {
+                const onclickStr = button.getAttribute('onclick');
+                if (onclickStr && onclickStr.includes("'" + tabName + "'")) {
+                    button.classList.add('active');
+                    console.log('✅ Activated button for:', tabName);
+                }
+            });
+            
+            // Zeige den Content - VERBESSERT für E-Mail-Tab
+            const tabContent = document.getElementById('tab-' + tabName);
+            if (tabContent) {
+                tabContent.classList.add('active');
+                tabContent.style.display = 'block';
+                tabContent.style.visibility = 'visible'; // Extra Sicherheit
+                tabContent.style.opacity = '1'; // Extra Sicherheit
+                console.log('✅ Showing content for:', tabName);
+                
+                // Debug für E-Mail-Tab
+                if (tabName === 'email') {
+                    console.log('📧 E-Mail-Tab wird angezeigt');
+                    console.log('Tab-Element gefunden:', tabContent);
+                    console.log('Display-Style:', tabContent.style.display);
+                    console.log('Klassen:', tabContent.className);
+                }
+            } else {
+                console.error('❌ Tab content not found for:', tabName);
+            }
+            
+            // Spezifische Daten laden
+            if (tabName === 'preferences') {
+                loadPreferences();
+            }
+            
+            // Update participant count when email tab is shown
+            if (tabName === 'email') {
+                console.log('📧 Aktualisiere Teilnehmerzahl für E-Mail-Tab');
+                updateParticipantCount();
+            }
+        });
             
             // Finde und aktiviere den Button
             document.querySelectorAll('.tab').forEach(button => {
