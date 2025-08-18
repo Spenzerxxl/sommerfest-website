@@ -1073,9 +1073,15 @@
             });
             
             // HTML aktualisieren
-            document.getElementById('lodgeStatistics').innerHTML = lodgeHtml || 
-                '<div style="text-align: center; color: #666; grid-column: 1/-1;">Keine Daten verfügbar</div>';
-            document.getElementById('totalParticipantsCount').textContent = totalPersons;
+            const lodgeStatsElement = document.getElementById('lodgeStatistics');
+            if (lodgeStatsElement) {
+                lodgeStatsElement.innerHTML = lodgeHtml || 
+                    '<div style="text-align: center; color: #666; grid-column: 1/-1;">Keine Daten verfügbar</div>';
+            }
+            const totalCountElement = document.getElementById('totalParticipantsCount');
+            if (totalCountElement) {
+                totalCountElement.textContent = totalPersons;
+            }
         }
         
         // Präferenz-Statistik anzeigen
