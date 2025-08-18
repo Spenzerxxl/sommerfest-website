@@ -1,0 +1,30 @@
+        function showTab(tabName, event) {
+            // Alle Tabs deaktivieren
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => {
+                c.classList.remove('active');
+                c.style.display = 'none';
+            });
+            
+            // Aktiven Tab aktivieren
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+            const tabElement = document.getElementById('tab-' + tabName);
+            if (tabElement) {
+                tabElement.classList.add('active');
+                tabElement.style.display = 'block';
+            }
+            
+            // Spezifische Daten laden
+            if (tabName === 'preferences') {
+                loadPreferences();
+            }
+            // E-Mail Tab - Teilnehmerzahl aktualisieren
+            if (tabName === 'email') {
+                const countEl = document.getElementById('participantCount');
+                if (countEl) {
+                    countEl.textContent = currentData.participants.length;
+                }
+            }
+        }

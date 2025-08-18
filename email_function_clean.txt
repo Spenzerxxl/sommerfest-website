@@ -1,0 +1,53 @@
+
+        // E-Mail Reminder Funktion
+        function sendSmartReminder() {
+            // Admin-Check
+            if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+                alert('Nicht autorisiert!');
+                return;
+            }
+            
+            // Teilnehmerzahl
+            const currentCount = currentData.participants.length;
+            
+            // Count anzeigen
+            const countEl = document.getElementById('participantCount');
+            if (countEl) {
+                countEl.textContent = currentCount;
+            }
+            
+            // Bestätigung
+            const message = 'Wirklich personalisierte E-Mails an alle ' + currentCount + ' Teilnehmer versenden?';
+            if (!confirm(message)) {
+                return;
+            }
+            
+            const statusDiv = document.getElementById('emailStatus');
+            if (statusDiv) {
+                statusDiv.style.display = 'block';
+                statusDiv.style.background = '#d4edda';
+                statusDiv.style.color = '#155724';
+                statusDiv.style.borderLeft = '4px solid #28a745';
+                statusDiv.innerHTML = 'E-Mails werden vorbereitet...';
+                
+                // API-Call
+                fetch('https://automatisierung.frankrath.de/webhook/send-smart-reminder', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        statusDiv.innerHTML = 'Personalisierte E-Mails werden an ' + currentCount + ' Teilnehmer versendet...<br><small>Die Versendung läuft im Hintergrund.</small>';
+                    } else {
+                        throw new Error('Server-Fehler');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    statusDiv.style.background = '#f8d7da';
+                    statusDiv.style.color = '#721c24';
+                    statusDiv.style.borderLeft = '4px solid #dc3545';
+                    statusDiv.innerHTML = 'Fehler beim Versand! Bitte prüfen Sie die n8n-Workflows.';
+                });
+            }
+        }

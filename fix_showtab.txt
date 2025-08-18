@@ -1,0 +1,11 @@
+            // Spezifische Daten laden
+            if (tabName === 'preferences') {
+                loadPreferences();
+            }
+            // E-Mail Tab - Teilnehmerzahl aktualisieren
+            if (tabName === 'email') {
+                const countEl = document.getElementById('participantCount');
+                if (countEl) {
+                    countEl.textContent = currentData.participants.length;
+                }
+            }

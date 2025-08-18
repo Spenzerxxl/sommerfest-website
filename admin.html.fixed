@@ -376,7 +376,7 @@
             </div>
 
             <!-- Tab: Teilnehmer -->
-            <div id="tab-participants" class="tab-content">
+            <div id="tab-participants" class="tab-content active" style="display: block;">
                 <div class="table-container">
                     <table>
                         <thead>
@@ -623,6 +623,7 @@
                         </button>
                     </div>
                 </div>
+            </div>
             <!-- Tab: E-Mail Versand -->
             <div id="tab-email" class="tab-content">
                 <h3>📧 E-Mail Reminder versenden</h3>
@@ -646,9 +647,8 @@
                 
                 <div id="emailStatus" style="margin-top: 20px; padding: 15px; border-radius: 5px; display: none;"></div>
             </div>
-
-                    
-                    <!-- Logen-Übersicht -->
+            </div>
+            <!-- Logen-Übersicht -->
                     <div class="lodge-overview" style="margin-top: 40px; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
                         <h3>🏛️ Anmeldungen nach Logen</h3>
                         <div id="lodgeStatistics" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 20px;">
@@ -729,7 +729,6 @@
             document.getElementById('currentUserName').textContent = currentUser || 'Admin';
             
             loadDashboardData();
-            showTab("buffet"); // Standard-Tab beim Login
         }
 
         function logout() {

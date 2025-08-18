@@ -372,11 +372,10 @@
                 <button class="tab" onclick="showTab('preferences')">⭐ Präferenzen</button>
                 <button class="tab" onclick="showTab('helpers')">🤝 Helfer</button>
                 <button class="tab" onclick="showTab('export')">📥 Export</button>
-                <button class="tab" onclick="showTab('email')">📧 E-Mail Versand</button>
             </div>
 
             <!-- Tab: Teilnehmer -->
-            <div id="tab-participants" class="tab-content">
+            <div id="tab-participants" class="tab-content active">
                 <div class="table-container">
                     <table>
                         <thead>
@@ -623,30 +622,6 @@
                         </button>
                     </div>
                 </div>
-            <!-- Tab: E-Mail Versand -->
-            <div id="tab-email" class="tab-content">
-                <h3>📧 E-Mail Reminder versenden</h3>
-                
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #17a2b8;">
-                    <p style="font-size: 16px; margin-bottom: 10px;">📊 Sendet personalisierte Erinnerungen an alle <span id="participantCount" style="font-weight: bold; color: #2a5298;">-</span> Teilnehmer:</p>
-                    <ul style="margin-left: 20px; color: #6c757d;">
-                        <li style="margin: 5px 0;">Normale Teilnehmer → Allgemeine Erinnerung</li>
-                        <li style="margin: 5px 0;">Aufbau-Helfer → Erinnerung + Aufbau-Info (22.08., 16:00)</li>
-                        <li style="margin: 5px 0;">Abbau-Helfer → Erinnerung + Abbau-Info (24.08., 14:00)</li>
-                        <li style="margin: 5px 0;">Aufbau+Abbau → Erinnerung + beide Termine</li>
-                    </ul>
-                </div>
-                
-                <div style="display: flex; flex-direction: column; gap: 20px; margin-top: 30px; max-width: 600px;">
-                    <button onclick="sendSmartReminder()" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border: none; padding: 20px 30px; border-radius: 10px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);">
-                        🚀 Intelligente Reminder versenden
-                        <small style="display: block; font-weight: normal; font-size: 14px; margin-top: 5px; opacity: 0.9;">Jeder Teilnehmer erhält die passende E-Mail-Variante</small>
-                    </button>
-                </div>
-                
-                <div id="emailStatus" style="margin-top: 20px; padding: 15px; border-radius: 5px; display: none;"></div>
-            </div>
-
                     
                     <!-- Logen-Übersicht -->
                     <div class="lodge-overview" style="margin-top: 40px; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
@@ -729,7 +704,6 @@
             document.getElementById('currentUserName').textContent = currentUser || 'Admin';
             
             loadDashboardData();
-            showTab("buffet"); // Standard-Tab beim Login
         }
 
         function logout() {
@@ -740,42 +714,17 @@
 
         // Tab-Funktionalität
         function showTab(tabName) {
-            console.log('Switching to tab:', tabName);
-            
             // Alle Tabs deaktivieren
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => {
-                c.classList.remove('active');
-                c.style.display = 'none';
-            });
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             
-            // Finde und aktiviere den Button
-            document.querySelectorAll('.tab').forEach(button => {
-                const onclickStr = button.getAttribute('onclick');
-                if (onclickStr && onclickStr.includes("'" + tabName + "'")) {
-                    button.classList.add('active');
-                    console.log('Activated button for:', tabName);
-                }
-            });
-            
-            // Zeige den Content
-            const tabContent = document.getElementById('tab-' + tabName);
-            if (tabContent) {
-                tabContent.classList.add('active');
-                tabContent.style.display = 'block';
-                console.log('Showing content for:', tabName);
-            } else {
-                console.error('Tab content not found for:', tabName);
-            }
+            // Aktiven Tab aktivieren
+            event.target.classList.add('active');
+            document.getElementById('tab-' + tabName).classList.add('active');
             
             // Spezifische Daten laden
             if (tabName === 'preferences') {
                 loadPreferences();
-            }
-            
-            // Update participant count when email tab is shown
-            if (tabName === 'email') {
-                updateParticipantCount();
             }
         }
 
@@ -796,7 +745,6 @@
                     updateHelpersTable();
                     updateLodgeStatistics();
                     updateExtendedPreferencesDisplay();
-                    updateParticipantCount();
                 }
             } catch (error) {
                 console.error('Fehler beim Laden der Dashboard-Daten:', error);
@@ -814,7 +762,6 @@
                     const data = await response.json();
                     currentData.preferences = data.preferences || { grillbuffet: {}, getraenke: {} };
                     updateExtendedPreferencesDisplay();
-                    updateParticipantCount();
                 }
             } catch (error) {
                 console.error('Fehler beim Laden der Präferenzen:', error);
@@ -1661,71 +1608,6 @@
                 showLogin();
             }
         });
-    
-        // E-Mail Reminder Function
-        async function sendSmartReminder() {
-            // Admin check
-            if (!isLoggedIn) {
-                alert('Nicht autorisiert! Bitte melden Sie sich an.');
-                return;
-            }
-            
-            // Get current participant count
-            const participantCount = currentData.participants ? currentData.participants.length : 0;
-            
-            if (participantCount === 0) {
-                alert('Keine Teilnehmer gefunden!');
-                return;
-            }
-            
-            // Security confirmation
-            if (!confirm(`Wirklich personalisierte E-Mails an alle ${participantCount} Teilnehmer versenden?\n\nJeder erhält automatisch die passende Variante:\n- Normale Teilnehmer: Nur Fest-Erinnerung\n- Aufbau-Helfer: + Aufbau-Info (22.08., 16:00)\n- Abbau-Helfer: + Abbau-Info (24.08., 14:00)\n- Beide: + beide Termine`)) {
-                return;
-            }
-            
-            const statusDiv = document.getElementById('emailStatus');
-            statusDiv.style.display = 'block';
-            statusDiv.style.background = '#d1ecf1';
-            statusDiv.style.color = '#0c5460';
-            statusDiv.style.borderLeft = '4px solid #17a2b8';
-            
-            try {
-                statusDiv.innerHTML = '⏳ E-Mails werden vorbereitet...';
-                
-                const response = await fetch('https://automatisierung.frankrath.de/webhook/send-smart-reminder', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        participants: currentData.participants
-                    })
-                });
-                
-                if (response.ok) {
-                    const result = await response.json();
-                    statusDiv.style.background = '#d4edda';
-                    statusDiv.style.color = '#155724';
-                    statusDiv.style.borderLeft = '4px solid #28a745';
-                    statusDiv.innerHTML = `✅ Personalisierte E-Mails wurden an ${participantCount} Teilnehmer versendet!<br><small>Die Versendung läuft im Hintergrund und kann einige Minuten dauern.</small>`;
-                } else {
-                    throw new Error('Server-Fehler');
-                }
-            } catch (error) {
-                console.error('Error sending reminder:', error);
-                statusDiv.style.background = '#f8d7da';
-                statusDiv.style.color = '#721c24';
-                statusDiv.style.borderLeft = '4px solid #dc3545';
-                statusDiv.innerHTML = '❌ Fehler beim Versand! Bitte prüfen Sie die n8n-Workflows.';
-            }
-        }
-        
-        // Update participant count in email tab
-        function updateParticipantCount() {
-            const countElement = document.getElementById('participantCount');
-            if (countElement && currentData.participants) {
-                countElement.textContent = currentData.participants.length;
-            }
-        }
-    
     </script>
 </body>
 </html>

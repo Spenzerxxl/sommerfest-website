@@ -376,7 +376,7 @@
             </div>
 
             <!-- Tab: Teilnehmer -->
-            <div id="tab-participants" class="tab-content">
+            <div id="tab-participants" class="tab-content active" style="display: block;">
                 <div class="table-container">
                     <table>
                         <thead>
@@ -729,7 +729,6 @@
             document.getElementById('currentUserName').textContent = currentUser || 'Admin';
             
             loadDashboardData();
-            showTab("buffet"); // Standard-Tab beim Login
         }
 
         function logout() {
