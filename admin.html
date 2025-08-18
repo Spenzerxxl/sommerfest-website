@@ -2050,7 +2050,7 @@ function formatBuffetBeitrag(buffet) {
     try {
         const items = JSON.parse(buffet);
         if (Array.isArray(items) && items.length > 0) {
-            return items.map(item => `${item.gericht} (${item.portionen} Port.)`).join(", ");
+            return items.map(item => `${item.item} (${item.quantity} Port.)`).join(", ");
         }
     } catch (e) {
         return buffet;
