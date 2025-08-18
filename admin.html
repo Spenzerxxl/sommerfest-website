@@ -2351,4 +2351,17 @@ window.showTab = function(tabName) {
         }, 100);
     }
 };
+// Fix: Stelle sicher dass updateRecipientTable beim E-Mail-Tab aufgerufen wird
+if (typeof window.showTab === "function") {
+    const origShowTab = window.showTab;
+    window.showTab = function(tabName) {
+        origShowTab(tabName);
+        if (tabName === "email") {
+            setTimeout(() => {
+                updateRecipientTable();
+                loadTemplates();
+            }, 200);
+        }
+    };
+}
 </script>
